@@ -1,0 +1,171 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/localization/messages_zh.min.js"></script>
+
+	<style type="text/css">
+		input.error {
+			border: 1px solid red;
+		}
+		
+		label.checked {
+			
+			padding-left: 25px;
+		}
+		
+		label.error {
+			padding-left: 25px;
+			padding-bottom: 2px;
+			font-weight: bold;
+			color: #EA5200;
+		}
+	</style>
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- 带验证 form -->
+			<form id="registerForm" class="form-horizontal well validateForm">
+				<fieldset>
+					<legend>
+						新增用户</legend>
+					<div class="form-group">
+						<label for="inputusername" class="col-md-2 col-lg-2 control-label">用户名</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-short" name="username" id="inputusername" placeholder="{:L('PLACEHOLDER_TITLE')}">
+							<div class="help-block">(用户名会作为默认的昵称)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputpassword" class="col-md-2 col-lg-2 control-label">密码</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="password" class="required form-control input-short" name="password" id="password">
+							<div class="help-block">(用户密码不能少于6位)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputrepassword" class="col-md-2 col-lg-2 control-label">确认密码</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="password" class="required form-control input-short" name="repassword" id="inputrepassword">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputemail" class="col-md-2 col-lg-2 control-label">邮箱</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-short" name="email" id="inputemail">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Admin/'.CONTROLLER_NAME.'/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a class="btn btn-default" href="{:U('Admin'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<!-- form -->
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+	<script type="text/javascript">
+		$(function() {
+
+			//是否中文名字
+			$.validator.addMethod("isCnName", function(value, element) {
+				var tel = /[a-z0-9.*?,(!)&amp;%$^……！·￥——（）　#@]/g;
+				return this.optional(element) || !(tel.test(value));
+			}, "请填写正确的姓名");
+			// 联系电话(手机/电话皆可)验证     
+			$.validator.addMethod("isPhone", function(value, element) {
+				var length = value.length;
+				var mobile = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/;
+				var tel = /^\d{3,4}-?\d{7,9}$/;
+				return this.optional(element) || (tel.test(value) || mobile.test(value));
+			}, "请正确填写您的联系电话");
+			// 身份证号码验证         
+			$.validator.addMethod("isIdCardNo", function(value, element) {
+				return this.optional(element) || IdCardValidate(value);
+			}, "请正确输入您的身份证号码");
+			$("#registerForm").validate({
+				errorPlacement: function(error, element) {
+					$(".checked", element.parent()).remove();
+					error.appendTo(element.parent());
+				},
+				success: function(label) {
+					label.removeClass("error").addClass("checked").text("Ok!");
+				},
+				rules: {
+					username: {
+						required: true,
+						minlength: 4,
+						maxlength: 20,
+						remote: {
+							url: "{:U('Member/check_username')}"
+						}
+					},
+					realname: {
+						required: true,
+						isCnName: true,
+					},
+					email: {
+						required: true,
+						email: true,
+						remote: "{:U('Member/check_email')}"
+					},
+					mobile: {
+						required: true,
+						isPhone: true,
+					},
+					password: {
+						required: true,
+						minlength: 6,
+						maxlength: 30,
+					},
+					repassword: {
+						required: true,
+						minlength: 6,
+						maxlength: 30,
+						equalTo: "#password"
+					}
+				},
+				messages: {
+					username: {
+						remote: "登录名被占用，请换一个账号",
+						required: "请输入登录账号",
+						minlength: $.validator.format("账号不能小于{0}个字符"),
+						maxlength: $.validator.format("账号不能超过{0}个字符"),
+					},
+					email: {
+						required: "请输入Email地址",
+						remote: "邮箱被占用，请换一个邮箱",
+						email: "请输入正确的email地址"
+					},
+					password: {
+						required: "请输入密码",
+						minlength: $.validator.format("密码不能小于{0}个字符")
+					},
+					repassword: {
+						required: "请输入确认密码",
+						minlength: "确认密码不能小于6个字符",
+						equalTo: "两次输入密码不一致"
+					}
+				}
+			}); //end validate
+		}); //end ready
+	</script>
+
+</block>

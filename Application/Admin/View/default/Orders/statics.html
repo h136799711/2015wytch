@@ -1,0 +1,45 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+	<link rel="stylesheet" type="text/css" media="all" href="__CDN__/jquery-datetimepicker/jquery.datetimepicker.css">
+	<script type="text/javascript" src="__CDN__/jquery-datetimepicker/jquery.datetimepicker.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				
+				<div class="col-lg-4 col-md-4 col-sm-4 ">
+					待支付订单
+				</div>				
+				
+				<div class="col-lg-4 col-md-4 col-sm-4 ">
+					待发货订单				
+				</div>
+				
+				<div class="col-lg-4 col-md-4 col-sm-4 ">
+					已收货订单					
+				</div>
+				
+				<div class="col-lg-4 col-md-4 col-sm-4 ">
+					总金额0.00			
+				</div>
+				
+			</div>
+			
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

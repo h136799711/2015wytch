@@ -1,0 +1,13 @@
+.nav-tip {
+	border: 1px solid #e9ecf1;
+	margin-top: 0;
+}
+.nav-tip li {
+	width: 50%;
+	display: block;
+	margin: auto;
+	float: left;
+	border: 1px solid #e9ecf1;
+	border-width: 0 1px;
+	margin-left: -1px;
+}

@@ -1,0 +1,26 @@
+<html>
+  <body>
+    <button class="copy-button" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button>
+    <button class="copy-button" data-clipboard-text="Copy Me2!" title="Click to copy me.">Copy to Clipboard</button>
+    <button class="copy-button" data-clipboard-text="Copy Me3!" title="Click to copy me.">Copy to Clipboard</button>
+    <button class="copy-button" data-clipboard-text="Copy Me4!" title="Click to copy me.">Copy to Clipboard</button>
+    <button class="copy-button" data-clipboard-text="Copy Me5!" title="Click to copy me.">Copy to Clipboard</button>
+    <script src="../../jquery/1.11.0/jquery.min.js"></script>
+    <script src="ZeroClipboard.min.js"></script>
+    <script >
+    	var client = new ZeroClipboard( $(".copy-button") );
+
+			client.on( "ready", function( readyEvent ) {
+			  // alert( "ZeroClipboard SWF is ready!" );
+			
+			  client.on( "aftercopy", function( event ) {
+			    // `this` === `client`
+			    // `event.target` === the element that was clicked
+			    event.target.style.display = "none";
+			    alert("Copied text to clipboard: " + event.data["text/plain"] );
+			  } );
+			} );
+    	
+    </script>
+  </body>
+</html>

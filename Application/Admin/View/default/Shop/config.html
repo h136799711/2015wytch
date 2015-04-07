@@ -1,0 +1,104 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/select2.full.js"></script>
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<form action="__SELF__" method="post" class="form-horizontal wxpayopenidForm">
+				<div class="form-group">
+					<label class="control-label col-lg-2 col-md-2">用户</label>
+					<div class="col-lg-10 col-md-10">
+						<select style="width:320px;padding: 10px 15px;font-size: 15px;line-height: 1.42857143;"  id="user_select2" name="uid" class="form-control">
+						</select>
+						<!--<a href="javascript:addOpenid();" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>添加到通知微信号</a>-->
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-lg-2 col-md-2">支付成功后通知微信号</label>
+					<div class="col-lg-10 col-md-10">
+						<textarea name="openids" rows="8" class="openid form-control">{$wxpayopenid}</textarea>
+						<span class="help-block">订单支付成功后，发送通知给这些微信号，不要超过3个！以逗号分割。</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-lg-2 col-md-2">&nbsp;</label>
+					<div class="col-lg-10 col-md-10">
+						<a target-form="wxpayopenidForm" href="{:U('Admin/Shop/config')}" class="ajax-post  btn btn-sm btn-primary"><i class="fa fa-save"></i>保存</a>
+						<a  href="{:U('Admin/Shop/config')}" class="btn btn-sm btn-primary"><i class="fa fa-times-circle"></i>取消</a>
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		 String.prototype.trim=function(){
+	　　    return this.replace(/(^\s*)|(\s*$)/g, "");
+	　　 }
+		function addOpenid() {}
+		$("#user_select2").select2({
+			placeholder: "输入用户uid或昵称查询",
+			language: "zh-CN",
+			ajax: {
+				url: "{:U('Admin/Wxuser/select')}",
+				dataType: 'json',
+				delay: 250,
+				data: function(params) {
+					var queryParameters = {
+						q: params.term
+					}
+					return queryParameters;
+				},
+				processResults: function(data, page) {
+					if (!data.info) {
+						data.info = new Array();
+						data.info['nodata'] = "无相关数据";
+					}
+					return {
+						results: data.info
+					};
+				},
+				cache: true
+			},
+			minimumInputLength: 0,
+			templateSelection: function(repo) {
+				if(!repo.nickname){ return repo.text;}
+				console.log(repo);
+//				console.log(arguments);
+				var txt = $(".openid").text().trim();
+				if(txt.indexOf(repo.openid) == -1){
+						
+					if(txt){
+					 	txt = txt + ","+repo.openid;
+					}else{
+						txt = repo.openid;
+					}
+					$(".openid").text(txt);
+				}
+				var markup = '<div><img style="width:20px" class="avatar" src="' + repo.avatar + '" /> ' + repo.nickname + '</div>';
+				return markup;
+			},
+			templateResult: function(repo) {
+				if (repo.loading) return repo.text;
+				if (repo.nodata) return repo.nodata;
+				var markup = '<div><img style="width:40px" class="avatar" src="' + repo.avatar + '" /> ' + repo.nickname + '</div>';
+				return markup;
+			},
+		});
+	</script>
+</block>

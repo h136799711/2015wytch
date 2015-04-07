@@ -1,0 +1,46 @@
+<!-- 带验证 form -->
+<form class="form-horizontal well validateForm">
+	<fieldset>
+		<legend>
+			{:L('C_CONFIG')}-{:L('BTN_ADD')}</legend>
+		<div class="form-group">
+			<label for="inputtitle" class="col-md-2 col-lg-2 control-label">{:L('TITLE')}</label>
+			<div class="col-md-10 col-lg-10">
+				<input type="text" class="required form-control input-short" name="title" id="inputtitle" placeholder="{:L('PLACEHOLDER_TITLE')}">
+				<div class="help-block">({:L('M_CONFIG_TITLE_HELP')})</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+			<div class="col-lg-10 col-md-10">
+				<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Ucenter/'.CONTROLLER_NAME.'/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+				<a class="btn btn-default" href="{:U('Admin/'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
+			</div>
+		</div>
+	</fieldset>
+</form>
+<!-- form -->
+
+
+<!-- 不带验证 form -->
+<form class="form-horizontal well">
+	<fieldset>
+		<legend>
+			{:L('C_CONFIG')}-{:L('BTN_ADD')}</legend>
+		<div class="form-group">
+			<label for="inputtitle" class="col-md-2 col-lg-2 control-label">{:L('TITLE')}</label>
+			<div class="col-md-10 col-lg-10">
+				<input type="text" class="required form-control input-short" name="title" id="inputtitle" placeholder="{:L('PLACEHOLDER_TITLE')}">
+				<div class="help-block">({:L('M_CONFIG_TITLE_HELP')})</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+			<div class="col-lg-10 col-md-10">
+				<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Admin/'.CONTROLLER_NAME.'/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+				<a class="btn btn-default" href="{:U('Admin/'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
+			</div>
+		</div>
+	</fieldset>
+</form>
+<!-- form -->

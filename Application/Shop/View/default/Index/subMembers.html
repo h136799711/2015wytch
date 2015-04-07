@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<title>我的家族</title>
+		<link rel="stylesheet" type="text/css" href="__CDN__/amazeui/2.2.1/css/amazeui.min.css">
+		<link rel="stylesheet" type="text/css" href="__CSS__/shop.css?v=__APP_VERSION__">
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header am-cf">
+				<div class="avatar">
+					<img class="am-img-thumbnail am-radius" src="{$userinfo.avatar}" alt="我的头像" />
+				</div>
+				<div class="info">
+					昵称：{$userinfo.nickname}
+					<br/> 族长：{$hasright|toYesOrNo}
+					<br/> 关注时间：{$userinfo.subscribe_time|date='Y-m-d',###}
+					<br/> 会员ID: {$userinfo.id} 积分: {$userinfo.score}
+					<br/>
+				</div>
+			</div>
+			<div class="commission">
+				<div class="am-u-sm-12 am-text-center">我的分销</div>
+			</div>
+			<div class="am-cf">
+				<form class="am-form-inline search" method="post" action="__SELF__">
+					<div class="am-form-group">
+				  		<input class="am-form-field" value="{$member.id}" name="memberid" type="text" placeholder="请输入会员ID" >
+				 	</div>
+				  		<button type="submit" class="am-btn am-btn-primary am-btn-sm"><i class="am-search"></i>查找</button>
+				</form>
+			</div>
+			
+			<empty name="member">
+			<ul class="member-list am-list am-list-static">
+ 				<volist name="list" id="vo"> 						
+ 					<li class="member am-cf am-center">
+						<div class="avatar">
+ 							<img class="am-img-thumbnail am-radius" src="{$vo.avatar}" alt="我的头像" />
+ 						</div> 						
+ 						<div class="info">
+ 							昵称：{$vo.nickname}
+							<br/> 族长：{$vo.alloweddistribution|toYesOrNo}
+							<br/> 关注时间：{$vo.subscribe_time|date='Y-m-d',###}
+							<br/> 会员ID: {$vo.id} 积分: {$vo.score}
+							<br/>
+ 						</div>
+ 					</li>
+ 				</volist>
+ 				{$show}
+			</ul>
+			<else/>
+			<eq name="member.notfind" value="1">
+			<ul class="member-list am-list am-list-static">			
+ 					<li class="member am-cf am-center">
+ 						没有找到ID={$member.id}的会员
+ 					</li>
+ 				</ul>
+				
+			<else/>
+			<ul class="member-list am-list am-list-static">			
+ 					<li class="member am-cf am-center">
+						<div class="avatar">
+ 							<img class="am-img-thumbnail am-radius" src="{$member.avatar}" alt="我的头像" />
+ 						</div> 						
+ 						<div class="info">
+ 							昵称：{$member.nickname}
+							<br/> 族长：{$member.alloweddistribution|toYesOrNo}
+							<br/> 关注时间：{$member.subscribe_time|date='Y-m-d',###}
+							<br/> 会员ID: {$member.id} 积分: {$member.score}
+							<br/>
+ 						</div>
+ 					</li>
+			</ul>
+			</eq>
+			</empty>
+			
+
+			<assign name="active" value="6" />
+			<include file="partial/footermenu" />
+		</div>
+		<script src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
+		<script src="__CDN__/amazeui/2.2.1/js/amazeui.min.js"></script>
+		<script>
+			(function() {
+						
+			        })();
+		</script>
+		{__NORUNTIME__}
+	</body>
+
+</html>

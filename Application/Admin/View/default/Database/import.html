@@ -1,0 +1,104 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<div class="table-responsive well">
+				
+				<!-- 标题栏 -->
+				<div class="main-title">
+					<h2>{:L('VIEW_DATA_BACKUP')}</h2>
+				</div>
+				<!-- /标题栏 -->
+				<!-- 应用列表 -->
+				<table class="table table-striped table table-hover table-condensed">
+					<thead>
+						<tr>
+							<th width="200">{:L('VIEW_BACKUP_NAME')}</th>
+							<th width="80">{:L('VIEW_VOLUME_NUMBERS')}</th>
+							<th width="80">{:L('VIEW_COMPRESS')}</th>
+							<th width="80">{:L('VIEW_DATA_SIZE')}</th>
+							<th width="200">{:L('VIEW_BACKUP_TIME')}</th>
+							<th>状态</th>
+							<th width="160">{:L('OPERATOR')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<empty name="list">
+							<tr>
+								<td colspan="7" class="text-center">{:L('NO_DATA')}</td>
+							</tr>
+						</empty>
+						<volist name="list" id="data">
+							<tr>
+								<td>{$data.time|date='Ymd-His',###}</td>
+								<td>{$data.part}</td>
+								<td>{$data.compress}</td>
+								<td>{$data.size|format_bytes}</td>
+								<td>{$key}</td>
+								<td>-</td>
+								<td class="action">
+									<a class="db-import btn-sm btn btn-primary ajax-get" href="{:U('import?time='.$data['time'])}">{:L('BTN_REDUCTION')}</a>&nbsp;
+									<a class="btn-sm btn btn-danger ajax-get confirm" href="{:U('del?time='.$data['time'])}">{:L('BTN_DELETE')}</a>
+								</td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+				<!-- /应用列表 -->
+			</div>
+		</div>
+	</div>
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		$(".db-import").click(function() {
+			var self = this,
+				status = ".";
+			$.get(self.href, success, "json");
+			window.onbeforeunload = function() {
+				return "正在还原数据库，请不要关闭！"
+			}
+			return false;
+
+			function success(data) {
+				if (data.status) {
+					if (data.gz) {
+						data.info += status;
+						if (status.length === 5) {
+							status = ".";
+						} else {
+							status += ".";
+						}
+					}
+					$(self).parent().prev().text(data.info);
+					if (data.part) {
+						$.get(self.href, {
+								"part": data.part,
+								"start": data.start
+							},
+							success,
+							"json"
+						);
+					} else {
+						window.onbeforeunload = function() {
+							return null;
+						}
+					}
+				} else {
+					$.scojs_message(data.info, $.scojs_message.TYPE_ERROR);
+				}
+			}
+		});
+	</script>
+</block>

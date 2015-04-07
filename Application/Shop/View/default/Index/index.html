@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>COS-洁面慕斯+精华</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!-- Set render engine for 360 browser -->
+		<meta name="renderer" content="webkit">
+
+		<!-- No Baidu Siteapp-->
+		<!--<meta http-equiv="Cache-Control" content="no-siteapp"/>-->
+
+		<!--<link rel="icon" type="image/png" href="assets/i/favicon.png">-->
+
+		<!-- Add to homescreen for Chrome on Android -->
+		<!--<meta name="mobile-web-app-capable" content="yes">-->
+		<!--<link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">-->
+
+		<!-- Add to homescreen for Safari on iOS -->
+		<!--<meta name="apple-mobile-web-app-capable" content="yes">
+		  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		  <meta name="apple-mobile-web-app-title" content="COS"/>-->
+		<!--<link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">-->
+
+		<!-- Tile icon for Win8 (144x144 + tile color) -->
+		<!--<meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">-->
+		<!--<meta name="msapplication-TileColor" content="#0e90d2">-->
+		<style type="text/css">
+			html {
+			  font-family: sans-serif;
+			  -ms-text-size-adjust: 100%;
+			  -webkit-text-size-adjust: 100%;
+			}
+			body {
+			  margin: 0;
+			}
+			article,
+			aside,
+			details,
+			figcaption,
+			figure,
+			footer,
+			header,
+			hgroup,
+			main,
+			menu,
+			nav,
+			section,
+			summary {
+			  display: block;
+			}
+			body{
+				font-family: "微软雅黑";
+				margin: 0px;
+				padding: 0px;
+			}
+			.footer{
+				height:40px;
+				background: #ee2e68;
+				position: fixed;
+				bottom: 0px;
+				left: 0px;
+				width:100%;
+				padding:5px 10px;
+				color:#ffffff;
+				font-size: 12px;
+			}
+			.avatar{
+				width:40px;
+				height:40px;
+			}
+			.btn{
+				display: inline-block;
+				border:1px #b4eb3b solid;
+				padding:5px 10px;
+				text-decoration: none;
+				color: #ffffff;
+			}
+			.btn:visited{
+				color: #ffffff;
+			}
+			.buy{
+				margin-top:5px;
+				margin-right: 20px;
+			}
+			.fl{
+				float:left;
+			}
+			.fr{
+				float:right;
+			}
+			.nickname{
+				float:left;
+				display:inline-block;
+				line-height: 20px;
+				padding: 0px 5px;
+			}
+			.loading{
+				width:30px;
+				height:30px;
+			}
+			.img-responsive{
+				max-width: 100%;
+				width:100%;
+			}
+			.body{
+				padding-bottom: 60px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--
+			subscribe : 
+			openid : 
+			nickname : 
+			city : 
+			province : 
+			country : 
+			headimgurl : 
+			subscribe_time : 
+			unionid : 
+			remark : 
+			 -->
+		<empty name="userinfo">
+			<div>
+				无法获取您的信息，请使用微信打开！
+			</div>
+			<else/>
+			<div style="width:100%">
+				
+				<div class="body">
+					<img class="img-responsive" src="__IMG__/demo/1.png?v=10" alt="" />
+					<img class="img-responsive" src="__IMG__/demo/2.png?v=10" alt="" />
+					<img class="img-responsive" src="__IMG__/demo/3.png?v=10" alt="" />
+				</div>
+				<div class="footer">
+					<div class="fl">
+						<img class="fl avatar" src="{$userinfo.avatar}" />
+
+						<span class="nickname"><span style="color:#b3ed3a;">{$userinfo.nickname}</span>
+						<br/><eq name="groupaccess.alloweddistribution" value="1">您已经是族长<else/>请立即购买成为族长</eq>
+						<!--<img src="__IMG__/loading.gif" style="width:30px;height:30px;" alt="..." />-->
+						</span>
+
+					</div>
+					<div class="fr buy">
+						<a href="{:U('Shop/Index/buy',array('pid'=>1))}" class="btn btn-border ">立即购买</a>
+					</div>
+				</div>
+			</div>
+		</empty>
+
+		{__NORUNTIME__}
+	</body>
+
+</html>

@@ -1,0 +1,64 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<div class="well">
+				<form class="form powerForm">
+					<input type="hidden" name="id" value="{$access.id}" />
+					<fieldset>
+						<legend>
+							用户组权限编辑
+						</legend>
+						<div class="form-group">
+							<div class="col-lg-12 col-md-12">
+								<a target-form="powerForm" class="btn btn-sm btn-primary ajax-post" href="{:U('Admin/WxuserGroup/powerEdit')}"><i class="fa fa-save"></i>保存</a>
+								<a class="btn btn-sm btn-default" href="{:U('Admin/WxuserGroup/index')}"><i class="fa fa-reply"></i>返回</a>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-lg-12 col-md-12">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="alloweddistribution" value="1"  <eq name="access.alloweddistribution" value="1">checked="checked"</eq> > 是否允许分销
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-lg-12 col-md-12">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="allowedcomment" value="1" <eq name="access.allowedcomment" value="1">checked="checked"</eq> />是否允许评论商品
+									</label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-lg-12 col-md-12">
+								<a target-form="powerForm" class="btn btn-sm btn-primary ajax-post" href="{:U('Admin/WxuserGroup/powerEdit')}"><i class="fa fa-save"></i>保存</a>
+								<a class="btn btn-sm btn-default" href="{:U('Admin/WxuserGroup/index')}"><i class="fa fa-reply"></i>返回</a>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

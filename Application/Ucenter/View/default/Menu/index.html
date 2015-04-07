@@ -1,0 +1,73 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<div class="table-responsive well">
+				<div class="h4">
+					<present name="parentMenu">
+					<a href="{:U('Ucenter/Menu/index',array('pid'=>$parentMenu['pid']))}">{$parentMenu.title}</a>-{:L('VIEW_SUBMENU')}
+					</present>
+				</div>
+				<div class="controls">
+					<a href="{:U('Ucenter/Menu/add',array('pid'=>I('get.pid',0)))}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+					<present name="parentMenu">
+					<a href="{:U('Ucenter/Menu/index',array('pid'=>$parentMenu['pid']))}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>{:L('BTN_BACK')}</a>
+					</present>
+				</div>
+				<table class="table table-striped table table-hover  table-condensed">
+					<thead>
+						<tr>
+							<th>
+								{:L('ID')}
+							</th>
+							<th>
+								{:L('TITLE')}
+							</th>
+							<th>
+								{:L('VIEW_ISHIDE')}
+							</th>
+							<th>
+								{:L('SORT')}
+							</th>
+							<th>
+								{:L('OPERATOR')}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="list" id="vo">
+							<tr>
+								<td>{$vo.id}</td>
+								<td><a class="" href="{:U('Ucenter/Menu/index',array('pid'=>$vo['id']))}">{$vo.title}</a></td>
+								<td>{:yesorno($vo['hide'])}</td>
+								<td>{$vo.sort}</td>
+								<td>
+									<a href="{:U('Ucenter/Menu/view',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>{:L('BTN_VIEW')}</a>
+									<a href="{:U('Ucenter/Menu/edit',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> {:L('BTN_EDIT')}</a>
+									<a href="{:U('Ucenter/Menu/delete',array('id'=>$vo['id'],'pid'=>$vo['pid']))}" class="btn btn-danger btn-sm ajax-get confirm" ><i class="fa fa-trash-o"></i> {:L('BTN_DELETE')}</a>
+								</td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+				<div>
+					{$show}
+				</div>
+			</div>
+		</div>
+
+	</div>
+</block>
+
+<block name="area_footer">
+
+</block>

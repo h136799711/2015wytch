@@ -1,0 +1,44 @@
+<form action="{:U('Ucenter/Config/set')}" method="post" class="configSetForm col-lg-12 form-horizontal">
+	<volist name="list" id="config">
+		<div class="form-group">
+			<label class="control-label">{$config.title}</label>
+			<span class="help-block">（{$config.remark}）</span> 
+			<div class="controls">
+				<switch name="config.type">
+					<case value="0">
+						<input type="text" class="form-control input-short" name="config[{$config.name}]" value="{$config.value}">
+					</case>
+					<case value="1">
+						<input type="text" class="form-control input-normal" name="config[{$config.name}]" value="{$config.value}">
+					</case>
+					<case value="2">
+							<textarea class="form-control" rows="5" name="config[{$config.name}]">{$config.value}</textarea>
+					</case>
+					<case value="3">
+						<label class="textarea input-large">
+							<textarea class="form-control" rows="5" name="config[{$config.name}]">{$config.value}</textarea>
+						</label>
+					</case>
+					<case value="4">
+						<select class="form-control" name="config[{$config.name}]">
+							<volist name=":parse_config_attr($config['extra'])" id="vo">
+								<option value="{$key}" <eq name="config.value" value="$key">selected</eq>>{$vo}</option>
+							</volist>
+						</select>
+					</case>
+				</switch>
+
+			</div>
+		</div>
+	</volist>
+	<div class="form-item">
+		<label class="item-label"></label>
+		<div class="controls">
+			<empty name="list">
+			<else/>
+				<button type="submit" class="btn btn-primary submit-btn ajax-post" target-form="configSetForm">{:L('BTN_SAVE')}</button>
+			</empty>
+		</div>
+	</div>
+</form>
+{__NORUNTIME__}

@@ -1,0 +1,97 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/cosmo-skin.css" />
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<form action="{:U('Admin/Wxuser/sendText')}" method="post" class="sendForm form-horizontal form">
+				<div class="form-group">
+					<label class="control-label col-lg-2 col-md-2">选择用户</label>
+					<div class="col-lg-10 col-md-10">
+						<select style="width:220px;padding: 10px 15px;font-size: 15px;line-height: 1.42857143;" id="user_select2" name="uid" class="form-control">
+							<option></option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-lg-2 col-md-2">发送文本消息内容</label>
+					<div class="col-lg-10 col-md-10">
+						<textarea name="text" rows="3" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-lg-2 col-md-2">&nbsp;</label>
+					<div class="col-lg-10 col-md-10">
+						<a href="{:U('Admin/Wxuser/sendText')}" class="btn btn-sm ajax-post btn-primary" target-form="sendForm" >发送</a>
+						<a href="{:U('Admin/Wxuser/sendText',array('qf'=>1))}" class="btn btn-sm ajax-post btn-primary" target-form="sendForm" >群发</a>
+					</div>
+				</div>
+		</form>
+
+		<script type="text/javascript">
+			$(function() {
+			});
+		</script>
+	</div>
+	<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+<script src="__CDN__/select2/4.0.0/js/select2.min.js"></script>
+	<script src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$("#user_select2").select2({
+			placeholder: "输入用户id或昵称查询"	,
+			language: "zh-CN",
+			ajax: {
+			    url: "{:U('Admin/Wxuser/select')}",
+			    dataType: 'json',
+			    delay: 250,
+			    data: function (params) {
+			    	var queryParameters = {
+				      q: params.term
+				    }
+    				return queryParameters;
+			      
+			    },
+			    processResults: function (data, page) {
+			    	if(!data.info){
+			    		data.info = new Array();
+			    		data.info['nodata']="无相关数据";
+			    	}
+			      	// parse the results into the format expected by Select2.
+			      	// since we are using custom formatting functions we do not need to
+			      	// alter the remote JSON data
+			      	return {
+			        	results: data.info
+			      	};
+			    },
+			    cache: true
+		  	}, 
+			  	minimumInputLength: 0,
+				templateSelection: function (repo) {	
+	  				return repo.nickname || repo.text;
+				},
+			  templateResult: function (repo) {
+			   		
+      				if (repo.loading) return repo.text;
+					if(repo.nodata) return repo.nodata;
+//    				var markup = '<div>'+repo.nickname+'</div>';
+      				var markup = '<div><img src="'+repo.avatar+'" style="width:30px;height:30px;"/>[id:'+repo.id+'] '+repo.nickname+'</div>';
+      				return markup;
+    			},
+		});
+	});	
+	</script>
+</block>

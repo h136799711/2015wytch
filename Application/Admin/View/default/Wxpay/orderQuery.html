@@ -1,0 +1,97 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- 过滤\查询按钮 -->
+				<div class="filter-controls clearfix">
+					<!-- 日期查询 -->
+					<form action="{:U('Admin/Wxpay/orderQuery')}" method="post" class="form-inline">
+						<div class="form-group">
+							<label class="control-label">订单编号</label>
+							<input type="text" class="form-control" style="width:300px;" name="orderid" value="{$out_trade_no}" />
+						</div>
+						<button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>{:L('BTN_SEARCH')}</button>
+					</form>
+				</div>
+				<div class="form clearfix well" style="padding: 0px;">
+					<empty name="error">
+						<div class="form-group col-lg-12 col-md-12 bg-primary" style="padding: 15px;">
+							订单：{$out_trade_no}的交易状态信息
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">交易状态</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult.trade_state}
+								
+							</div>
+						</div>
+						<div class="form-group  col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">用户标识</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['openid']}  						
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">微信支付订单号</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['transaction_id']} 			
+							</div>
+						</div>
+						<div class="form-group  col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">是否关注公众账号</div>
+							<div class="col-lg-10 col-md-10">
+								<eq name="orderQueryResult.is_subscribe" value="Y">是<else/>否</eq> 							
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">交易类型</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['trade_type']}  					
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">付款银行</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['bank_type']}  					
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">总金额</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['total_fee']}  (单位:分)					
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">货币种类</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['fee_type']} 					
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12">
+							<div class="col-lg-2 col-md-2 text-muted">支付完成时间</div>
+							<div class="col-lg-10 col-md-10">
+								{$orderQueryResult['time_end']}				
+							</div>
+						</div>
+					<else/>
+						<h2 class="text-danger">{$error}</h2>
+					</empty>
+				</div>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

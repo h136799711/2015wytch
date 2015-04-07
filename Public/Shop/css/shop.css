@@ -1,0 +1,249 @@
+.wrapper{
+	padding-bottom: 100px;
+}
+.footermenu {
+	background: #ee2e6a;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+	font-size: 1em;
+	
+}
+.footermenu i{
+	font-size: 1.6em;
+}
+.footermenu .am-btn-warning {
+	color: #FFFFFF;
+	border: 0px;
+	background: #ee2e6a;
+	font-size: 0.8em;
+}
+.footermenu a.am-btn-warning {
+	color:#FFFFFF;
+	padding:0.625em;
+}
+.footermenu .am-btn.am-active {
+	box-shadow: inset 0 0px 28px rgba(0, 0, 0, 0.3);
+}
+.footermenu a:visited {
+	color:#FFFFFF;
+}
+.footermenu .am-u-sm-3{
+	width:25%;
+	padding:0em;
+}
+.header {
+	 padding: 5px;
+	 background: #fcefcf;
+}
+.header .avatar{
+	margin-right: 10px;	
+	margin-left: 5px;
+}
+.header .avatar,.header .info{
+	float:left;
+}
+.info{
+	font-size:.8em;
+}
+.avatar{
+	width:80px;
+	height:80px;
+	
+}
+.member{
+	/*float:left;*/
+	width:80%;
+	
+}
+.member .avatar{
+	margin-right: 10px;	
+	margin-left: 5px;
+	width:60px;
+	height:60px;
+}
+.member .avatar,.member .info{
+	float:left;
+	font-size:.6em;
+}
+.commission{
+	background-color: #e61944;
+  	height: 2.5em;
+  	line-height: 2.5em;
+  	width: 100%;
+  	vertical-align: middle;
+  	font-size: 1em;
+  	color: #FFFFFF;
+}
+.order-page .header{
+	background: none;
+}
+.order-page hr{
+	margin: 0px;
+}
+.referrer{
+	height: 2.5em;
+	color:#000000;
+	font-size:1em;
+}
+#accordion .am-panel-hd a,#accordion  .am-panel-title{
+	color:#000000;
+}
+#accordion .am-panel-hd{
+	position: relative;
+}
+#accordion .am-panel-hd .am-panel-title{
+	padding-left: 2em;
+}
+#accordion i{
+  vertical-align: top;
+  position: absolute;
+  left: 1em;
+  top: 2px;
+  color: #666;
+}
+#accordion i.am-icon-plus{
+	top:auto;
+}
+#accordion .am-list span{
+	padding-left: 2em;
+}
+#accordion .am-list>li>a{
+	display: inline-block;
+	padding: 0px;
+}
+.search{
+	  width: 80%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+.member-list nav{
+	font-size:0.8em;  
+	width: 80%;
+	margin: 0 auto;
+}
+.loading{
+	margin-top: 5px;
+}
+.order-list #container li{
+	padding: 0px 0px;
+	float:none;
+  	border-width: 1px;
+  	margin-bottom: 10px;
+  	font-size:0.8em;
+}
+.am-form-group .am-btn.am-btn-danger{
+	color: #FFFFFF;
+}
+a.am-btn-danger:visited{
+	color: #FFFFFF;
+}
+
+.am-bg-success{
+	background: #5eb95e;
+	color:#FFFFFF;
+}
+.am-bg-danger{
+	background: #dd514c;
+	color:#FFFFFF;
+}
+.am-bg-info{
+	background: #0e90d2;
+	color:#FFFFFF;
+}
+.withdrawcash {
+	font-size: 0.8em;
+}
+.error{
+	color:#ff4400;
+}
+
+/* ==========================================================================
+   Component: Pagination
+ ============================================================================ */
+.pagination {
+  padding-left: 0;
+  margin: 1.5rem 0;
+  list-style: none;
+  color: #999999;
+  text-align: left;
+}
+.pagination:before,
+.pagination:after {
+  content: " ";
+  display: table;
+}
+.pagination:after {
+  clear: both;
+}
+.pagination > li {
+  display: inline-block;
+}
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  display: block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  line-height: 1.2;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  margin-right: 0;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  background-color: #eeeeee;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 2;
+  color: #ffffff;
+  background-color: #0e90d2;
+  border-color: #0e90d2;
+  cursor: default;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #999999;
+  background-color: #ffffff;
+  border-color: #dddddd;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.pagination .pagination-prev {
+  float: left;
+}
+.pagination .pagination-prev a {
+  border-radius: 0;
+}
+.pagination .pagination-next {
+  float: right;
+}
+.pagination .pagination-next a {
+  border-radius: 0;
+}
+.pagination-centered {
+  text-align: center;
+}
+.pagination-right {
+  text-align: right;
+}

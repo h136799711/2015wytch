@@ -1,0 +1,115 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<div class="table-responsive well">
+	<!-- 过滤\查询按钮 -->
+	<div class="filter-controls">
+		<form action="{:U('Ucenter/Member/index')}" class="memberForm form-inline" method="post">
+			<div class="form-group">
+				<label class="control-label">用户昵称或ID</label>
+				<div class="input-group">
+						<input class="form-control" type="text" name="nickname" placeholder="请输入用户昵称或用户ID" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label">&nbsp;</label>
+				<div class="input-group">
+					<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>查询</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 操作按钮 -->
+	<div class="btn-controls">
+		<a class="btn btn-sm btn-primary" href="{:U('Ucenter/Member/add')}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+		<a target-form="selectitem" class="ajax-post btn btn-sm btn-primary" href="{:U('Ucenter/Member/enable')}"><i class="fa fa-check-circle"></i>{:L('BTN_ENABLE')}</a>
+		<a target-form="selectitem" class="ajax-post btn btn-sm btn-primary" href="{:U('Ucenter/Member/disable')}"><i class="fa fa-minus-circle"></i>{:L('BTN_DISABLE')}</a>
+	</div>
+
+	<table class="table table-striped table table-hover  table-condensed">
+		<thead>
+			<tr>
+				<th style="width:40px;">							
+					<input type="checkbox" class="selectall" onclick="myUtils.selectall(this,'.selectitem');" /> 
+				</th>
+				<th>
+					UID
+				</th>
+				<th>
+					昵称
+				</th>
+				<th>
+					积分
+				</th>
+				<th>
+					登录次数
+				</th>
+				<th>
+					最后登录时间
+				</th>
+				<th>
+					最后登录IP
+				</th>
+				<th>
+					状态
+				</th>
+				<th>
+					{:L('OPERATOR')}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<empty name="list">
+				<tr>
+					<td colspan="8" class="text-center">{:L('NO_DATA')}</td>
+				</tr>
+				<else/>
+				<volist name="list" id="vo">
+					<tr>
+						<td>
+							<input type="checkbox" value="{$vo.uid}" name="uids[]" class="selectitem" /></td>
+						
+						<td>
+							{$vo.uid}</td>
+						<td>
+							{$vo.nickname}</td>
+						<td>
+							{$vo.score}</td>
+						<td>
+							{$vo.login}</td>
+						<td>
+							{$vo.last_login_time|date='Y-m-d H:i:s',###}</td>
+						<td>
+							{$vo.last_login_ip|long2ip}</td>
+
+						<td>{$vo.status|getStatus}</td>
+						<td>
+							<a href="{:U(CONTROLLER_NAME .'/disable',array('uid'=>$vo['uid']))}" class="btn btn-danger btn-sm ajax-get" ><i class="fa fa-minus-circle"></i> {:L('BTN_DISABLE')}</a>
+							<a href="{:U(CONTROLLER_NAME .'/delete',array('uid'=>$vo['uid']))}" class="btn btn-danger btn-sm ajax-get confirm" ><i class="fa fa-trash-o"></i> {:L('BTN_DELETE')}</a>
+						</td>
+					</tr>
+
+				</volist>
+			</empty>
+		</tbody>
+	</table>
+	<div>{$show}</div>
+</div>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

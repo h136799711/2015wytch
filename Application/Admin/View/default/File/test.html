@@ -1,0 +1,59 @@
+<extend name="template/base_index" />
+
+<block name="area_header">	
+	<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.css" /
+	>
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<div class="controls">
+				<input type="file" id="upload_picture">
+				<input type="hidden" name="picurl" id="cover_id" value="" />
+				<div class="upload-img-box">
+				</div>
+			</div>
+			<script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件  */
+								$("#upload_picture").uploadify({
+							        "height"          : 30,
+							        "swf"             : "__CDN__/jquery-uploadify/3.2.1/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传图片",
+							        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							        "onUploadSuccess" : uploadPicture
+							    });
+								function uploadPicture(file, data){
+							    	var data = $.parseJSON(data);
+							    	var src = '';
+							        if(data.status){
+							        	$("#cover_id").val(data.id);
+							        	src = data.url || '__ROOT__' + data.path;
+							        	$("#cover_id").parent().find('.upload-img-box').html(
+							        		'<div class="upload-pre-item"><img src="' + src + '"/></div>'
+							        	);
+							        } else {
+							        	
+										$.scojs_message(data.info , $.scojs_message.TYPE_OK);
+							        	
+							        }
+							    }
+			</script>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

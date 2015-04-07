@@ -1,0 +1,65 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	<div class="container">
+		<div class="form-horizontal">
+
+
+			<div class="form-group">
+				<label class="control-label col-lg-2 col-md-2">省份</label>
+				<div class="col-lg-10 col-md-10">
+					<select id="province" class="form-control" name="province">
+							<option value="">请选择省份</option>
+						<volist name="provinces" id="vo">
+							<option value="{$vo.provinceid}">{$vo.province}</option>
+						</volist>
+					</select>
+				</div>
+
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2 col-md-2">城市</label>
+				<div class="col-lg-10 col-md-10">
+					<select id="city" class="form-control" name="city">
+							<option value="">请先选择省份</option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</block>
+
+<block name="area_footer">
+	<script>
+		function appendToCity(data){
+				var city = $("#city");
+				city.empty();//.append("<option value=''>请先选择省份</option>")
+				for(var i in data){
+					var ele = $("<option></option>");
+					ele.text(data[i].city).attr("value",data[i].cityid).appendTo(city);
+				}
+		}
+		$(function(){
+			$("#province").change(function(){
+				var provinceID = $("#province").val();
+				console.log(provinceID);
+				if(provinceID){
+					$.post("{:U('TestCity/getCitys')}",{provinceid:provinceID}).done(function(data){
+						console.log(data);
+						if(data.status){
+							appendToCity(data.info);
+						}else{
+							
+						}
+					});
+				}
+			});
+		})
+	</script>
+</block>

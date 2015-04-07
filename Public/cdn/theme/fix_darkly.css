@@ -1,0 +1,31 @@
+/*调整cosmo样式*/
+
+#confirm_modal .modal-body{
+	background: #000000;
+}
+
+.admin-header .avatar {
+	height: 60px;
+	padding-top: 10px;
+}
+.admin-main {
+	margin-top: 60px;
+}
+
+
+/* 小屏幕（平板，大于等于 768px） */
+
+@media (min-width: 768px) {
+	
+}
+	
+
+/* 中等屏幕（桌面显示器，大于等于 992px） */
+
+@media (min-width: 992px) {
+}
+
+
+/* 大屏幕（大桌面显示器，大于等于 1200px） */
+@media (min-width: 1200px) {
+	}

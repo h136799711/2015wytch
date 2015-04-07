@@ -1,0 +1,169 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
+	<link type="text/css" rel="stylesheet" href="__CDN__/jquery-jstree/3.0.9/themes/default/style.min.css" />
+
+	
+	<!--<script type="text/javascript" src="__CDN__/select2/4.0.0/js/select2.full.js"></script>
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>-->
+	<style type="text/css">
+		.checkbox{
+			margin: 0px;
+		}
+		.panel-default{
+			margin-bottom: 10px;
+		}
+	</style>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<div class="table-responsive well ">
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation"><a href="{:U('Ucenter/AuthManage/user')}" role="tab">成员授权</a>
+					</li>
+					<li role="presentation" class="active"><a href="{:U('Ucenter/AuthManage/access')}" role="tab">访问授权</a>
+					</li>
+					<li role="presentation">
+					 <a href="{:U('Ucenter/AuthManage/apiaccess')}" >API授权</a>
+					</li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane " id="user">
+						loading...
+					</div>
+
+					<div role="tabpanel" class="clearfix tab-pane active" id="access">
+						<div class="clearfix">
+							<!-- 过滤\查询按钮 -->
+							<div class="filter-controls pull-left">
+								<form action="__SELF__" class="form-inline groupForm" method="post">
+									<div class="form-group-sm">
+										<label class="control-label">用户组</label>
+										<select id="groups" name="groupid" class="form-control">
+											<volist name="groups" id="vo">
+												<option <eq name="groupid" value="$vo.id">selected="selected"</eq> value="{$vo.id}" >{$vo.title}</option>
+											</volist>
+										</select>
+									</div>
+								</form>
+
+							</div>
+
+							<!-- 过滤\查询按钮 -->
+							<div class="filter-controls pull-left clearfix">
+								<!--<form action="__SELF__" class="form-inline moduleForm" method="post">
+									<div class="form-group-sm">
+										<label class="control-label">所属模块</label>
+										<select id="modules" name="modulename" class="form-control">
+											<option value="ucenter">ucenter</option>
+											<volist name="modules" id="vo">
+												<option <eq name="modulename" value="$vo">selected="selected"</eq> value="{$vo}" >{$vo}</option>
+											</volist>
+										</select>
+									</div>
+								</form>-->
+
+							</div>
+						</div>
+						<form class="clearfix rulesForm form" method="post" enctype="application/x-www-form-urlencoded">
+							<input type="hidden" name="groupid" value="{$groupid}" />
+							<input  type="hidden" name="menulist" value="" id="menulist"  />	
+							<fieldset>
+								<legend>访问权限配置
+							</legend>
+							<div class="form-group">
+								<a target-form="rulesForm" href="{:U('Ucenter/AuthGroup/writeMenuList')}" class="ajax-post btn btn-sm btn-primary" ><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
+								<a href="{:U('Ucenter/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
+							</div>		
+								<div class="menuTree">
+								  {$tree}
+								</div>
+							
+							<div class="form-group">
+								<a target-form="rulesForm" href="{:U('Ucenter/AuthGroup/writeRules')}" class="ajax-post btn btn-sm btn-primary"><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
+								<a href="{:U('Ucenter/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
+							</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	
+	<script type="text/javascript" src="__CDN__/jquery-jstree/3.0.9/jstree.min.js"></script>
+	<script type="text/javascript">
+		function selectSubs(id) {
+			if ($("#rules" + id).prop("checked")) {
+				$(".parent" + id).prop("checked", "checked");
+			} else {
+				$(".parent" + id).prop("checked", "");
+			}
+		}
+
+		
+		$(function() {
+			$("#groups").change(function() {
+				$(".groupForm").submit();
+			});
+			
+			$(".menuTree") // listen for event
+			  .on('changed.jstree', function (e, data) {
+			    var i, j, r = [];
+			    for(i = 0, j = data.selected.length; i < j; i++) {
+			    	var id = data.instance.get_node(data.selected[i]).id;
+			    	id = id.replace("jstree_","");
+			      r.push(id);
+			    }
+			    $("#menulist").val(r.join(",")+",");
+			    
+			  }).jstree({
+				
+				"types" : {
+//				    "#" : {
+//				      "max_children" : 1, 
+//				      "max_depth" : 4, 
+//				      "valid_children" : ["root"]
+//				    },
+//				    "root" : {
+//				      "valid_children" : ["default"]
+//				    },
+//				    "default" : {
+//				      "valid_children" : ["default","file"]
+//				    },
+					"default" : {
+				        "icon" : "fa fa-glass"
+				      },
+				      "demo" : {
+				        "icon" : "fa fa-ok"
+				      },
+				    "file" : {
+				      "icon" : "fa fa-folder",
+				      "valid_children" : []
+				    }
+				  },
+  
+			  "plugins" : ["checkbox", "state", "types", "wholerow","sort" ]
+			});
+			
+			
+		})
+	</script>
+</block>

@@ -1,0 +1,108 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+	<link rel="stylesheet" type="text/css" media="all" href="__CDN__/jquery-datetimepicker/jquery.datetimepicker.css">
+	<script type="text/javascript" src="__CDN__/jquery-datetimepicker/jquery.datetimepicker.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- 过滤\查询按钮 -->
+			<div class="filter-controls">
+				<!-- 日期查询 -->
+				<form action="{:U('Admin/Wxpay/downloadBill')}" method="post" class="billForm form-inline">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">
+								时间
+								<i class="fa fa-calendar"></i>
+							</div>
+							<input type="text" name="billdate" id="startdatetime" class="form-control input-short" value="{$billdate}" />
+
+						</div>
+					</div>
+					<button type="submit" class="normal-get confirm btn btn-default btn-sm"><i class="fa fa-search"></i>查询</button>
+					<a href="{:U('Admin/Wxpay/downloadBill',array('d'=>1))}"  class="btn btn-default btn-sm"><i class="fa fa-download"></i>下载</a>
+				</form>
+			</div>
+			<div class="help-block">注意:
+				<br/> <span class="text-danger">1.查询那天订单若很多，请不要进行[查询]操作！可能会卡住！	</span>
+				<br/> 2.微信侧未成功下单的交易不会出现在对账单中。支付成功后撤销的交易会出现在对账 单中,跟原支付单订单号一致,bill_type 为 REVOKED;
+				<br/> 3.微信在次日 9 点启动生成前一天的对账单,建议商户 9 点半后再获取;
+				<br/>￼ ￼4.对账单中涉及金额的字段单位为“元”。
+			</div>
+			<empty name="error">
+				<h4 class="bg-primary text-center padding-md">{$billdate}所有订单列表</h4>
+				<div class="table-responsive">
+				<table class="table table-striped table table-hover  table-condensed">
+					<thead>
+						<tr>
+							<volist name="header" id="vo">
+								<th class="text-center">
+									{$vo}
+								</th>
+							</volist>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="rows" id="vo2">
+							<tr>
+								<volist name="vo2" id="vo3">
+									<td class="text-center">
+										{:ltrim($vo3,'`')}
+									</td>
+								</volist>
+							</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<volist name="footertitle" id="vo">
+								<td class="text-center">
+									{$vo}
+								</td>
+							</volist>
+						</tr>
+						<tr>
+							<volist name="footercont" id="vo">
+								<td class="text-center">
+									{$vo}
+								</td>
+							</volist>
+						</tr>
+					</tfoot>
+				</table>
+				</div>
+			<else/>
+				<h2 class="text-danger">{$error}</h2>
+			</empty>
+
+			<script type="text/javascript">
+				$(function() {
+					$('#startdatetime').datetimepicker({
+						lang: 'ch',
+						format: 'Ymd',
+						timepicker: false,
+						maxDate: '{:date("Y/m/d",time()-24*3600)}'
+					});
+					//						$('#enddatetime').datetimepicker({
+					//							lang: 'ch',
+					//							format:'Y-m-d',
+					//							timepicker:false,
+					//						});
+				});
+			</script>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

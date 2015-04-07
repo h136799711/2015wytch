@@ -1,0 +1,7 @@
+<ol class="breadcrumb">
+  <li><a href="{:U('Admin/Index/index')}"><i class="fa fa-home"></i>{:L('HOME_PAGE')}</a></li>
+  <volist name="breadcrumb" id="vo">
+  <li><a href="{$vo.url}">{$vo.title}</a></li>
+  </volist>
+</ol>
+{__NORUNTIME__}

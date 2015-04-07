@@ -1,0 +1,121 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- 带验证 form -->
+			<form class="form-horizontal well wxaccountForm">
+				<input type="hidden" name="id" value="{$wxaccount.id}"  />
+				<fieldset>
+					<legend>
+						公众号资料-编辑</legend>
+						
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="wxaccountForm" class="ajax-post btn btn-primary" href="{:U('Admin/'.CONTROLLER_NAME.'/store')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a href="{:U('Admin/Wxaccount/help',array('id'=>$wxaccount['id']))}" class="btn btn-default">公众号绑定信息</a>
+							<!--<a class="btn btn-default" href="{:U('Admin'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>-->
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">公众号昵称</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.wxname}" class="required form-control input-short" name="wxname" placeholder="请输入公众号昵称">
+							<div class="help-block">(公众号昵称)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">微信号</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.weixin}"  class="required form-control input-short" name="weixin"placeholder="请输入微信号">
+							<div class="help-block">(微信号)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">原始ID</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.wxuid}"  class="required form-control input-short" name="wxuid" placeholder="请输入原始ID">
+							<div class="help-block">(原始ID)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">二维码地址</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.qrcode}"  class="required form-control" name="qrcode"  placeholder="请输入二维码地址">
+							<div class="help-block">(二维码地址)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">头像地址</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.headerpic}"  class="required form-control" name="headerpic"  placeholder="请输入头像地址">
+							<div class="help-block">(头像地址)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">公众号APPID</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.appid}"  class="required form-control input-short" name="appid" placeholder="请输入公众号APPID">
+							<div class="help-block">(公众号APPID)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">公众号APPSECRET</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" value="{$wxaccount.appsecret}"  class="required form-control" name="appsecret" placeholder="请输入公众号APPSECRET">
+							<div class="help-block">(公众号APPSECRET)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">EncodingAESKey</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" readonly="readonly" value="{$wxaccount.encodingaeskey}"  class="required form-control" name="encodingAESKey" id="encodingAESKey" placeholder="请输入EncodingAESKey">
+							 <a href="javascript:createEncodingAESKey();" class="btn btn-primary">重新生成</a> 
+							<div class="help-block">(请慎重更改，更改后必须重新配置微信开发者中心中的服务器配置！)</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="wxaccountForm" class="ajax-post btn btn-primary" href="{:U('Admin/'.CONTROLLER_NAME.'/store')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<!--<a class="btn btn-default" href="{:U('Admin'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>-->
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<!-- form -->
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		
+		 function createEncodingAESKey(){
+        var encodingAESKey  = randomString();
+        $("#encodingAESKey").val(encodingAESKey);
+    }
+    function randomString(len) {
+　　len = len || 43;
+　　var $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+　　var maxPos = $chars.length;
+　　var pwd = '';
+　　for (i = 0; i < len; i++) {
+　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+　　}
+　　return pwd;
+}
+		
+	</script>
+</block>

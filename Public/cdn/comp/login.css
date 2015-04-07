@@ -1,0 +1,35 @@
+/* 登录样式 START */
+
+.login {
+	width: 280px;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.login .modal {
+	position: relative;
+	display: block;
+}
+.login .modal-dialog {
+	width: 100%;
+	margin: 0px;
+}
+.login .fa{
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	z-index: 10;
+	color:#000;
+}
+.login .username,
+.login .password,
+.login .verify {
+	padding-left: 30px;
+}
+/* 登录样式 END */
+/* 重写bootstrap样式 START */
+
+.input-group-addon {
+	padding: 6px 12px;
+}
+/* 重写bootstrap样式 END */

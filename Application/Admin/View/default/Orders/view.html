@@ -1,0 +1,89 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+	<link rel="stylesheet" type="text/css" media="all" href="__CDN__/jquery-datetimepicker/jquery.datetimepicker.css">
+	<script type="text/javascript" src="__CDN__/jquery-datetimepicker/jquery.datetimepicker.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			
+			<form>
+			  <a href="javascript:history.back(-1);" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
+			  <div class="form-group">
+			    <label class="control-label" >订单编号</label>
+			    <div class="control-label " >{$order.orderid}</div>
+			  </div> 
+			  <div class="form-group">
+			    <label class="control-label" >订单总价</label>
+			    <div class="control-label " >{$order.price}元</div>
+			  </div>
+			  <div class="form-group">
+			    <label class="control-label" >订单状态</label>
+			    <div class="control-label " >{$order.order_status|getOrderStatus}</div>
+			  </div>
+			  <div class="form-group">
+			    <label class="control-label" >支付状态</label>
+			    <div class="control-label " >{$order.pay_status|getPayStatus}</div>
+			  </div>
+			  <div class="form-group">
+			    <label class="control-label" >联系地址</label>
+			    <div class="control-label " >{$order.country},{$order.province},{$order.city},{$order.area},{$order.detailinfo}</div>
+			  </div>
+			   <div class="form-group">
+			    <label class="control-label" >下单时间</label>
+			    <div class="control-label " >{$order.createtime|date='Y-m-d',###}</div>
+			  </div>
+			 <div class="form-group">
+			    <label class="control-label" >备注</label>
+			    <div class="control-label" >{$order.note}</div>
+			  </div>
+			  
+			  
+			</form>
+			
+			<table class="table">
+				<tr>
+					<th>序号</th>
+					<th>商品名称</th>
+					<th>商品主图</th>
+					<th>购买价格</th>
+					<th>购买数量</th>
+				</tr>
+				<empty name="items">
+					<tr>
+						<td colspan="5">
+							没有相关信息
+						</td>
+					</tr>
+				<else/>
+				
+				<volist name="items" id="vo">
+					<tr>
+						<td>{$key+1}</td>
+						<td>{$vo.item}</td>
+						<td><a href="{$vo.pic}"><img src="{$vo.pic}" alt="商品图片" style="width:60px;"/></a></td>
+						<td>{$vo.price}元</td>
+						<td>{$vo.n}</td>
+					</tr>
+				</volist>
+				
+				</empty>
+			</table>
+
+			  <a href="javascript:history.back(-1);" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

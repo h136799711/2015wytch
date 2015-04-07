@@ -1,0 +1,40 @@
+<div class="admin-sidebar">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+		<volist name="left_menu" id="vo">
+			<if condition="isset($vo['dynamic_hide'])">
+				
+			<else />
+				<!-- 单个块 START  -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<if condition="empty($vo['url']) or $vo['url'] = '#'">
+							<a class="panel-title" href="#collapse{:$vo['id']}" data-toggle="collapse" data-parent="#accordion">{$vo.title}<i class="fa fa-angle-right"></i></a>
+					</div>
+					<div id="collapse{:$vo['id']}" class="panel-collapse collapse in">
+						<div class="panel-body">
+							<ul class="list-group">
+								<volist name="vo['children']" id="child">
+									<li class="list-group-item {:isActiveSubMenuURL($child['id'])}"><a href="{:getURL($child['url'],'activesubmenuid='.$child['id'])}">{$child.title}</a>
+									</li>
+								</volist>
+							</ul>
+						</div>
+					</div>
+					<else/>
+					<a class="panel-title" href="{$vo.url|getURL}" data-toggle="collapse" data-parent="#accordion">
+					{$vo.title}</a>
+					</div>
+					</if>
+
+			</div>
+			<!-- 单个块 END  -->
+			</if>
+
+	</volist>
+
+</div>
+
+</div>
+
+{__NORUNTIME__}

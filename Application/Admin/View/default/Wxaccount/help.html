@@ -1,0 +1,33 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<form class="form well clearfix">
+				<fieldset>
+					<legend>（{$wxaccount['wxname']}）的服务器配置参数如下</legend>
+
+					<div class="form-group"><span class="text-info ">URL(服务器地址)</span>{:C('SITE_URL')}{:U('Weixin/Connect/index',array('token'=>$wxaccount['token']))}</div>
+					<div class="form-group"><span class="text-info ">TOKEN(令牌)</span> {:md5($wxaccount['token'])}</div>
+					<div class="form-group"><span class="text-info ">EncodingAESKey(消息加解密密钥)<sup><i class="fa fa-question" data-toggle="tooltip" data-placement="top" title="用于安全模式下。"></i></sup></span>{$wxaccount['encodingaeskey']}</div>
+					<div class="form-group">
+						<a class="btn btn-primary" href="http://mp.weixin.qq.com" target="_blank">前往微信公众平台</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

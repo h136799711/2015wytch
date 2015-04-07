@@ -1,0 +1,46 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist" id="configTab">
+				
+				<foreach name="config_groups" item="vo">					
+					  <li role="presentation" class="">
+					  	<a href="#tab{$key}" role="tab" data-toggle="tab">{$vo}</a>
+					  </li>
+				</foreach>
+			</ul>
+			
+			<!-- Tab panes -->
+			<div class="tab-content ">				
+				<foreach name="config_groups" item="vo">
+			  		<div role="tabpanel" class="tab-pane fade clearfix" id="tab{$key}">
+			  			{:W('Partials/config_set',array($key))}
+			  		</div>
+				</foreach>
+			</div>
+
+		</div>
+
+	</div>
+</block>
+
+<block name="area_footer">
+<script>
+  $(function () {
+  		
+      	$('#configTab a:first').tab('show');
+      
+  })
+</script>
+</block>

@@ -1,0 +1,87 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+	<link rel="stylesheet" type="text/css" media="all" href="__CDN__/jquery-datetimepicker/jquery.datetimepicker.css">
+	<script type="text/javascript" src="__CDN__/jquery-datetimepicker/jquery.datetimepicker.js"></script>
+	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/localization/messages_zh.min.js"></script>
+	<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/uploadify.css" /
+	>
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- 带验证 form -->
+			<form class="form-horizontal well validateForm">
+				<input type="hidden" name="id" value="{$product.id}" />
+				<fieldset>
+					<legend>
+						商品编辑</legend>
+					<div class="form-group">
+						<label for="inputname" class="col-md-2 col-lg-2 control-label">商品名称</label>
+						<div class="col-md-10 col-lg-10">							
+							<label  class="control-label  input-short" >{$product.name}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputprice" class="col-md-2 col-lg-2 control-label">销售价格</label>
+						<div class="col-md-10 col-lg-10">
+							<label  class="control-label input-short" >{$product.price}</label>
+						</div>
+					</div>
+					<div class="form-group hidden">
+						<label for="inputdis_price" class="col-md-2 col-lg-2 control-label">促销价格</label>
+						<div class="col-md-10 col-lg-10">
+							<label  class="control-label input-short" >{$product.dis_price}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="input_stock" class="col-md-2 col-lg-2 control-label">库存量</label>
+						<div class="col-md-10 col-lg-10">
+							<label  class="control-label  input-short" >{$product.stock}</label>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="inputsale_num" class="col-md-2 col-lg-2 control-label">销量</label>
+						<div class="col-md-10 col-lg-10">
+							<label  class="control-label input-short" >{$product.sale_num}</label>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">商品主图</label>
+						<div class="col-md-10 col-lg-10">
+							<div class="controls">
+								<div class="upload-img-box">		
+										<img class="img-responsive thumbnail" src="{$product.tburl}" />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a class="btn btn-default" href="{:U('Admin/'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i>返回</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<!-- form -->
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+</block>

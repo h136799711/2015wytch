@@ -1,0 +1,50 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<form class="form-horizontal well validateForm">
+				<fieldset>
+					<legend>
+						用户组-添加</legend>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">用户组名称</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-short" name="title" id="inputtitle" placeholder="请输入用户组名称">
+							<div class="help-block">用户组名称</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputnotes" class="col-md-2 col-lg-2 control-label">{:L('TITLE')}</label>
+						<div class="col-md-10 col-lg-10">
+							<textarea rows="5" class="required form-control input-short" name="notes" id="inputnotes" placeholder="请输入用户组描述信息"></textarea>
+							<div class="help-block">用户组描述信息</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Ucenter/'.CONTROLLER_NAME.'/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a class="btn btn-default" href="{:U('Ucenter/'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>
