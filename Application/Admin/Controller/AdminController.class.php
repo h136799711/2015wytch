@@ -12,7 +12,8 @@ use Common\Controller\CheckLoginController;
 class AdminController extends CheckLoginController {
 
 	protected $NOT_SUPPORT_METHOD = "不支持的请求方法！";
-
+	protected $appid = "";
+	protected $appsecret = "";
 	protected function _initialize() {
 		parent::_initialize();
 		$this -> assign("user", session("global_user"));
@@ -106,6 +107,8 @@ class AdminController extends CheckLoginController {
 			$result = apiCall("Admin/Wxaccount/getInfo",array($map));
 			if($result['status'] && is_array($result['info'])){
 				session("wxaccountid",$result['info']['id']);
+				$this->appid = $result['info']['appid'];
+				$this->appsecret = $result['info']['appsecret'];
 			}
 		}
 	}
