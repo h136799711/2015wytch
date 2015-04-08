@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
+		<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+		<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+	</head>
+
+	<body>
+		
+
+		<form action="__SELF__" method="post"
+		enctype="multipart/form-data">
+		<label for="file">Filename:</label>
+		<input type="file" name="file" id="file" /> 
+		<br />
+		<input type="submit"  value="Submit" />
+		</form>
+		
+		<!--<form action="__SELF__" method="post" >
+
+			<div class="controls">
+				<input type="file" id="upload_picture">
+				<input type="hidden" name="pictureid" id="cover_id" value="" />
+				<input type="hidden" name="picurl" id="picurl" value="" />
+				<div class="upload-img-box">
+				</div>
+			</div>
+			<script type="text/javascript">
+				//上传图片
+			    /* 初始化上传插件  */
+				$("#upload_picture").uploadify({
+					'buttonClass' : 'btn btn-primary btn-sm',
+			        "height"          : "100%",
+			        "swf"             : "__CDN__/jquery-uploadify/3.2.1/uploadify.swf",
+			        "fileObjName"     : "download",
+			        "buttonText"      : "上传图片",
+			        "uploader"        : "{:U('Home/WxShopUpload/upload',array('session_id'=>session_id()))}",
+			        "width"           : 120,
+			        'removeTimeout'	  : 1,
+			        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+			        "onUploadSuccess" : uploadPicture
+			    });
+				function uploadPicture(file, data){
+			    	var data = $.parseJSON(data);
+			    	var src = '';
+			        if(data.status){	
+				        	alert(data.info);
+			        } else {					
+				        	alert(data.info);
+//						$.scojs_message(data.info , $.scojs_message.TYPE_OK);											        	
+			        }
+			    }
+			</script>
+			
+		</form>-->
+	</body>
+
+</html>

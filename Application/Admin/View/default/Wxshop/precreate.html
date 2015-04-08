@@ -1,0 +1,249 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<div class="col-main">
+				<div class="main-hd">
+					<h2>添加商品</h2>
+				</div>
+				<div class="main-bd">
+					<form class="cateForm" method="get" action="{:U('Admin/Wxshop/create')}">
+						<input type="hidden" id="cates" name="cates" value="" />
+						<input type="hidden" id="catename" name="catename" value="" />
+					<div class="category clearfix">
+						<div class="category-txt">你当前选择的是：
+							<span class="js_catetxt1 js_catetxt" style=""></span>
+							<span class="js_catetxt2 hidden js_catetxt"></span>
+							<span class="js_catetxt3 hidden js_catetxt"></span>
+							<span class="js_catetxt4 hidden js_catetxt"></span>
+							<span class="desc">（商品上架后不可修改，请谨慎选择）</span>
+						</div>
+
+						<div class="category-item col-lg-3 col-md-3 js_catelist0 js_catelist clearfix">
+							<div class="search-wrapper">
+								<div class="input-group">
+									<input type="text" placeholder="请输入类目名称" value="" class=" input-sm form-control js_search">
+									<div class="input-group-addon input-group-sm"><i class="fa fa-search "></i>
+									</div>
+								</div>
+							</div>
+							<ul class="js_sec_0">
+
+								<volist name="rootcate" id="vo">
+									
+									<li><a href="javascript:;" data-id="{$vo->id}" title="{$vo->name}"  >{$vo->name}</a>
+									</li>
+									
+								</volist>
+
+
+							</ul>
+						</div>
+
+						<div class="category-item col-lg-3 col-md-3 js_catelist1 js_catelist clearfix hidden">
+							<div class="search-wrapper">
+								<div class="input-group">
+									<input type="text" placeholder="请输入类目名称" value="" class=" input-sm form-control js_search">
+									<div class="input-group-addon input-group-sm"><i class="fa fa-search "></i>
+									</div>
+								</div>
+							</div>
+							<ul class="js_sec_1"></ul>
+						</div>
+
+						<div class="category-item col-lg-3 col-md-3 js_catelist2 js_catelist clearfix hidden">
+							<div class="search-wrapper">
+								<div class="input-group">
+									<input type="text" placeholder="请输入类目名称" value="" class=" input-sm form-control js_search">
+									<div class="input-group-addon input-group-sm"><i class="fa fa-search "></i>
+									</div>
+								</div>
+							</div>
+							<ul class="js_sec_2"></ul>
+						</div>
+
+						<div class="category-item col-lg-3 col-md-3 js_catelist3 js_catelist clearfix hidden">
+							<div class="search-wrapper">
+								<div class="input-group">
+									<input type="text" placeholder="请输入类目名称" value="" class=" input-sm form-control js_search">
+									<div class="input-group-addon input-group-sm"><i class="fa fa-search "></i>
+									</div>
+								</div>
+							</div>
+							<ul class="js_sec_3"></ul>
+						</div>
+						
+					</div>
+					<div class="tool-bar text-center border">
+						<button type="submit" class="btn btn-primary disabled" id="js_submit"><i class="fa fa-check"></i>确定</button>
+					</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		function appendTo(ele,data){
+			ele.empty();
+			for(var i=0;i<data.length;i++){
+				$item = $("<a href='javascript:void(0)'></a>").attr('data-id',data[i].id).attr("title",data[i].name).text(data[i].name);
+				ele.append($("<li></li>").append($item));
+			}
+		}
+		
+		function cateClick(index,$ele){
+//				console.log(	window.ajax_post);
+//				if(window.ajax_post){
+//					window.ajax_post.abort();
+//					window.ajax_post.done();
+//					window.ajax_post = null;
+//				}
+				if(window.postTimeout != 0){
+					window.clearTimeout(window.postTimeout);
+				}
+				$(".category-txt span.js_catetxt").each(function(ind,item){
+					if(ind > index){
+						$(item).addClass("hidden");
+					}
+				})
+				$(".category-item").each(function(ind,item){
+					if(ind > index){
+						$(item).addClass("hidden");
+					}
+				})
+				if(index > 0){
+					$(".js_catetxt"+(index+1)).removeClass("hidden").html("&nbsp;&gt;&nbsp;"+$ele.text());
+				}else{
+					$(".js_catetxt"+(index+1)).removeClass("hidden").html($ele.text());
+				}
+				$(".js_catelist"+index+" .selected").removeClass("selected");
+				$ele.parent().addClass("selected");
+				//	
+				var data = $ele.attr("data-id");
+				getCates();
+				if(index < 4){
+					window.postTimeout = setTimeout(function(){
+							window.ajax_post = $.post("{:U('Admin/Wxshop/cate')}",{cateid:data}).done(function(data){
+						if(data.status){
+							if(data.info && data.info.length > 0){
+								appendTo($(".js_sec_"+(index+1)),data.info);
+								$(".js_catelist"+(index+1)).removeClass("hidden");
+								
+							}else{
+								$(".js_catelist"+(index+1)).addClass("hidden");
+							}
+							$("#js_submit").addClass("disabled");
+							
+						}else if(data.info == null){
+//							alert(data.info);
+							$("#js_submit").removeClass("disabled");
+							$(".js_catelist"+(index+1)).addClass("hidden");
+							$(".js_catetxt"+(index+2)).addClass("hidden").html("");
+						}else{
+							alert(data.info);
+							$("#js_submit").addClass("disabled");
+						}
+					});
+					
+					},300);
+				}
+				
+				
+				
+				
+		}
+		
+		function getCates(){
+			
+			var cates = $(".js_sec_0 .selected a").attr("data-id");
+			var cate_1 = $(".js_sec_1 .selected a").attr("data-id");
+			var cate_2 = $(".js_sec_2 .selected a").attr("data-id");
+			var cate_3 = $(".js_sec_3 .selected a").attr("data-id");
+			var catename = $(".js_sec_0 .selected a").text();
+			if(cate_1){
+				cates = cates+"_"+cate_1;
+				catename = $(".js_sec_1 .selected a").text();;
+			}
+			if(cate_2){
+				cates = cates+"_"+cate_2;
+				catename = $(".js_sec_2 .selected a").text();;
+			}
+			if(cate_3){
+				cates = cates+"_"+cate_3;
+				catename = $(".js_sec_3 .selected a").text();;
+				
+			}
+			$("#cates").val(cates);
+			$("#catename").val(catename);
+			console.log($("#cates").val());
+		}
+		
+		function filter(target,ele){
+			var text = target.val().trim().toLowerCase();
+//			text = text.trim().toLowerCase();
+			$("a",ele).each(function(index,ele){
+//				console.log(text,$(ele).text())
+				if(text && $(ele).text().toLowerCase().indexOf(text) == -1){
+					$(ele).parent().addClass("hidden");
+				}else{
+					$(ele).parent().removeClass("hidden");
+				}
+				
+			});
+			console.log(window.timeoutInterval);
+			window.timeoutInterval = 0;
+		}
+		
+		$(function(){
+			window.timeoutInterval = 0
+			$(".search-wrapper input").keydown(function(ev){
+				$ele = $(ev.target).parents(".category-item").find("ul");
+//				console.log(newvalue);
+				if(window.timeoutInterval != 0){
+					clearTimeout(window.timeoutInterval);
+				}
+				window.timeoutInterval = setTimeout(function(){					
+					filter($(ev.target),$ele);
+				},300);
+			});
+			$(".js_catelist0 a").click(function(ev){
+				$ele = $(ev.target);
+				cateClick(0,$ele);
+				
+			});
+			$(".js_sec_1").click(function(ev){
+				$ele = $(ev.target);
+				cateClick(1,$ele);
+			});
+			
+			$(".js_sec_2").click(function(ev){
+				$ele = $(ev.target);
+				cateClick(2,$ele);
+			});
+			$(".js_sec_3").click(function(ev){
+				$ele = $(ev.target);
+				cateClick(3,$ele);
+				
+			});
+			
+			
+			
+		})
+		
+	</script>
+</block>

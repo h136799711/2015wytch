@@ -107,9 +107,12 @@ class AdminController extends CheckLoginController {
 			$result = apiCall("Admin/Wxaccount/getInfo",array($map));
 			if($result['status'] && is_array($result['info'])){
 				session("wxaccountid",$result['info']['id']);
-				$this->appid = $result['info']['appid'];
-				$this->appsecret = $result['info']['appsecret'];
+				session("appid",$result['info']['appid']);
+				session("appsecret",$result['info']['appsecret']);
 			}
+		}else{
+			$this->appid = session("appid");
+			$this->appsecret = session("appsecret");
 		}
 	}
 	

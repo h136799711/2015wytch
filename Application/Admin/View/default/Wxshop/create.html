@@ -1,0 +1,258 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<div class="col-main">
+				<div class="main-hd">
+					<h2>添加商品</h2>
+				</div>
+				<div class="main-bd clearfix">
+					<form class="productForm form-horizontal" method="post">
+						<input type="hidden" name="cates" value="{$cates}" />
+						<h3><i>●</i>基本信息</h3>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">选择类目</label>
+							<div class="col-lg-10 col-md-10">
+								<div class="category_select pt5" id="js_category_txt">
+									<span class="category_txt">{$catename}</span>
+									<a href="{:U('Admin/Wxshop/precreate')}" class="js_categorychange">修改</a>
+								</div>
+								<span class="help-block">商品上架后不可修改，请谨慎选择</span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品属性<br/><span class="help-block">(选填)</span></label>
+							<div class="col-lg-10 col-md-10">
+								<div class="loading"></div>
+								<span class="help-block">商品上架后不可修改，请谨慎选择</span>
+							</div>
+						</div>
+						<div class="js_group form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品分组<br/><span class="help-block">(选填)</span></label>
+							<div class="col-lg-10 col-md-10">
+								<div class="well">
+									<div class="loading"><img src="__CDN__/common/loading.gif"/></div>
+									<div class="shop-group-list">
+										
+									</div>
+									<hr>
+									<div class="btn-controls">
+										<a href="javascript:void(0)" class="js_group_new" >新建分组</a><i class="verticl-line"></i><a href="javascript:void(0)" class="js_group_rfs" > 刷新分组</a>										
+									</div>
+									<div class="js_group_new_from hidden">
+										<input type="text" id="" class="form-control input-sm js_group_name"  maxlength="10"   /><a class="js_group_new_submit btn btn-sm btn-weixin">确定</a><a class="js_group_new_cancel btn btn-default btn-sm">取消</a>
+										<p class="text-muted">请填写分组名称，不超过5个汉字</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品名称</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="product_name" maxlength="60" class="form-control input-normal input-sm" />
+								<span class="help-block">限30个字</span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品规格</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+								  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" checked="checked" value="0"> 统一规格
+								</label>
+								<label class="radio-inline">
+								  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">多规格
+								</label>
+
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">微信价</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="wxprice" maxlength="60" class="form-control input-short input-sm" />元
+								<span class="help-block">销售价,需低于原价</span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">原价<br/><span class="help-block">(选填)</span></label>
+							<div class="col-lg-10 col-md-10">
+								<input name="price" maxlength="60" class="form-control input-short input-sm" />元
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<!--<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">价格&库存</label>
+							<div class="col-lg-10 col-md-10">
+								<span class="help-block">请选择规格</span>
+							</div>
+						</div>-->
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品图片</label>
+							<div class="col-lg-10 col-md-10">
+								主图<span class="text-muted">(建议尺寸为640像素*640像素，大小不超过500kb)<i class="fa fa-question"></i></span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">&nbsp;</label>
+							<div class="col-lg-10 col-md-10">
+								其他图片<span class="text-muted">(选传，单张图片大小不超过500kb，最多10张) <i class="fa fa-question" data-toggle="tooltip" title="将出现在商品图片库，方便用户更好的了解您的商品。"></i></span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">是否限购</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+								  <input type="radio" name="xiangou" checked="checked" value="0">不限购
+								</label>
+								<label class="radio-inline">
+								  <input type="radio" name="xiangou" value="1">限购
+								</label>
+
+							</div>
+						</div>
+						
+						<h3 class="pull-left"><i>●</i>物流信息</h3>
+						
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">所在地</label>
+							<div class="col-lg-10 col-md-10">
+							</div>
+							
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">运费</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+								  <input type="radio" name="carriage" checked="checked" value="0">卖家承担费用
+								</label>
+								<label class="radio-inline">
+								  <input type="radio" name="carriage" value="1">买家承担费用
+								</label>
+
+							</div>
+							
+						</div>
+						<h3 class="pull-left"><i>●</i>售后信息</h3>
+							
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">发票</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+								  <input type="radio" name="receipt" checked="checked" value="0">无
+								</label>
+								<label class="radio-inline">
+								  <input type="radio" name="receipt" value="1">有
+								</label>
+								
+							</div>
+							
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">保修</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+								  <input type="radio" name="warranty" checked="checked" value="0">无
+								</label>
+								<label class="radio-inline">
+								  <input type="radio" name="warranty" value="1">有
+								</label>
+
+							</div>
+							
+						</div>
+						
+						<h3 class="pull-left"><i>●</i>上架设置</h3>
+						
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">上架时间</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+								  <input type="radio" name="warranty" checked="checked" value="0">暂不上架，放入我的商品中
+								</label>
+								<label class="radio-inline">
+								  <input type="radio" name="warranty" value="1">立即上架<span class="text-warning">(上架后商品类目、商品属性及商品名称将不能再修改，请确认已填写无误)</span> 
+								</label>
+
+							</div>
+							
+						</div>
+						
+						<div class="form-group col-lg-12 col-md-12 clearfix tool-bar text-center border">
+							<a href="{:U('Admin/Wxshop/add')}" class="ajax-post btn btn-primary disabled" id="js_submit">确定</a>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		function queryGroups(){
+			$(".js_group .loading").show();
+			$(".js_group .shop-group-list").empty();
+			$.post("{:U('Admin/Wxshop/groups')}").done(function(data){
+//				console.log(data);
+				if(data.status){
+					if(data.info){
+						$cont = $(".shop-group-list");
+						data = data.info;
+						for(var i=0;i<data.length;i++){
+							
+							var html = '<input type="checkbox" id="'+ data[i].group_id+'"  value="'+data[i].group_id+'"  />'+data[i].group_name;
+//							console.log(html.html());
+//							html.val(data[i].group_id);
+//							console.log(html.html());
+							$ele = $('<label class="checkbox-inline"></label>').html(html);	
+							$cont.append($ele);
+						}
+						
+					}
+					
+				}else{
+					
+				}
+			}).always(function(){
+				$(".js_group .loading").hide();
+			});
+		}
+		//商品分组处理
+		function productGroups(){
+			setTimeout(queryGroups,500);
+			$("js_group .js_group_rfs").click(function(){
+				queryGroups();
+			});
+			$(".js_group .js_group_new_cancel").click(function(){
+				$(".js_group .js_group_new_form").addClass("hidden");
+			});
+			$(".js_group .js_group_new").click(function(){
+				$(".js_group .js_group_new_from").removeClass("hidden");
+			});
+			$(".js_group .js_group_new_submit").click(function(){
+				var group_name = $(".js_group .js_group_name").val();
+//				if()
+				//TODO:检测分组名称
+			});
+		}
+		
+		
+	
+		$(function(){
+			productGroups();
+		})
+		
+		
+	</script>
+</block>

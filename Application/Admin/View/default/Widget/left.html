@@ -17,8 +17,12 @@
 					<div class="panel-body">
 						<ul class="list-group">
 							<volist name="vo['children']" id="child">
+								<if condition="isset($vo['dynamic_hide'])">
+									
+								<else />
 								<li class="list-group-item {:isActiveSubMenuURL($child['id'])}"><a href="{:getURL($child['url'],'activesubmenuid='.$child['id'])}">{$child.title}</a>
 								</li>
+								</if>
 							</volist>
 						</ul>
 					</div>

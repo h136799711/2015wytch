@@ -51,6 +51,13 @@ class MenusWidget extends AdminController {
 							if (!$hasSubmenuID && !empty($vo['children']) && count($vo['children']) > 0) {
 								$hasSubmenuID = true;
 							}
+							
+							foreach ($vo['children'] as &$child) {
+								//不在菜单id中且非超级管理员	
+								if(strpos($current_menus, $child['id'].',') === false  && !IS_ROOT){							
+									$child['dynamic_hide'] = 1;
+								}
+							}
 						}
 					}
 					//					if (!defined('APP_DEBUG') || !APP_DEBUG) {
