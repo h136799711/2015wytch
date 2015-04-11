@@ -46,6 +46,9 @@ class Page{
         $this->listRows   = $listRows;  //设置每页显示行数
         $this->parameter  = empty($parameter) ? $_GET : $parameter;
         $this->nowPage    = empty($_GET[$this->p]) ? 1 : intval($_GET[$this->p]);
+		if(IS_POST){//如果时POST请求，通常为AJAX
+        		$this->nowPage    = empty($_POST[$this->p]) ? 1 : intval($_POST[$this->p]);
+		}
         $this->nowPage    = $this->nowPage>0 ? $this->nowPage : 1;
         $this->firstRow   = $this->listRows * ($this->nowPage - 1);
     }
