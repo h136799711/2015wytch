@@ -97,10 +97,8 @@ class MenusWidget extends AdminController {
 				$current_menus = session("CURRENT_USER_".UID."_MENU");	
 				
 				foreach ($list as &$vo) {
-//				dump($vo['id'].',');
 					//不在菜单id中且非超级管理员					
 					if(strpos($current_menus, $vo['id'].',') === false && !IS_ROOT){
-						//dump($vo['id'].',');
 						//动态隐藏无权限的菜单												
 						$vo['dynamic_hide'] = 1;
 					}
@@ -113,7 +111,11 @@ class MenusWidget extends AdminController {
 			}
 		}
 		if (!is_null($list) && count($list) > 0 && !session('?activemenuid') && I('get.activemenuid', 0) === 0) {
-			session('activemenuid', $list[0]['id']);
+			for($k=0;$k<count($list);$k++){
+				if(!isset($list[$k]['dynamic_hide'])){
+					session('activemenuid', $list[$k]['id']);
+				}
+			}
 		}
 		$this -> assign('topbar_menu', $list);
 		echo $this -> fetch("Widget:topbar");

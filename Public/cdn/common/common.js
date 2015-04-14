@@ -48,7 +48,38 @@
 		alertTODO: alertTODO,
 		exitFullscreen: exitFullscreen,
 		requestFullscreen: requestFullScreen,
-		selectall:selectall
+		selectall:selectall,
+		ajaxpost:function ajaxpost(that, target, query) {
+				$(that).button("loading");
+				$.post(target, query).always(function() {
+					setTimeout(function(){
+							$(that).button("reset");
+						},1400);
+				}).done(function(data) {
+					if (data.status == 1) {
+						if (data.url) {
+							$.scojs_message(data.info + ' 页面即将自动跳转~', $.scojs_message.TYPE_OK);
+						} else {
+							$.scojs_message(data.info, $.scojs_message.TYPE_OK);
+						}
+						setTimeout(function() {
+							if (data.url) {
+								location.href = data.url;
+							} else if ($(that).hasClass('no-refresh')) {} else {
+								location.reload();
+							}
+						}, 1500);
+					} else {
+
+						$.scojs_message(data.info, $.scojs_message.TYPE_OK);
+						setTimeout(function() {
+							if (data.url) {
+								location.href = data.url;
+							} else {}
+						}, 1500);
+					}
+				});
+			}
 	};
 
 
@@ -270,56 +301,22 @@
 					$(this).scojs_confirm({
 						content: '确认要执行该操作吗',
 						action: function() {
-							ajaxpost(that, target, query);
+							myUtils.ajaxpost(that, target, query);
 						}
 					}).show();
 				} else {
-					ajaxpost(that, target, query);
+					myUtils.ajaxpost(that, target, query);
 				}
 				return false;
 			}); //END ajax-post
 			
-			function ajaxpost(that, target, query) {
-				//					return true;
-				$(that).button("loading");
-//				console.log("query=",query);
-//				return ;
-				$.post(target, query).always(function() {
-					setTimeout(function(){
-							$(that).button("reset");
-						},1400);
-//					$(that).button("reset");
-				}).done(function(data) {
-					if (data.status == 1) {
-						if (data.url) {
-							$.scojs_message(data.info + ' 页面即将自动跳转~', $.scojs_message.TYPE_OK);
-						} else {
-							$.scojs_message(data.info, $.scojs_message.TYPE_OK);
-						}
-						setTimeout(function() {
-							if (data.url) {
-								location.href = data.url;
-							} else if ($(that).hasClass('no-refresh')) {} else {
-								location.reload();
-							}
-						}, 1500);
-					} else {
-
-						$.scojs_message(data.info, $.scojs_message.TYPE_OK);
-						setTimeout(function() {
-							if (data.url) {
-								location.href = data.url;
-							} else {}
-						}, 1500);
-					}
-				});
-			}
 
 			$(window).resize();
 		}) //end $.ready
-
+		
 		$(function () {
-		  $('[data-toggle="tooltip"]').tooltip()
+		  $('[data-toggle="tooltip"]').tooltip();
+		  $('[data-toggle="popover"]').popover();
 		})
 
 

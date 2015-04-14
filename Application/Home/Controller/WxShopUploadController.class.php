@@ -18,7 +18,51 @@ class WxShopUploadController extends Controller{
 		$this->wxshopapi = new \Common\Api\WxShopApi($appid,$appsecret);
 		dump("initialize");
 	}
+	//===商品管理
 	
+	public function productCreate(){
+		
+		$product = '{
+					"product_base":	{
+								"name":"123",
+								"category_id":["537070972"],
+								"main_img":"537070972",
+								"datail":[],
+								"property":[],
+								"sku_info":[],
+								"buy_limit":0
+					},
+					"attrext":{"isPostFee":1,"isHasReceipt":"0","isUnderGuaranty":"0",
+		"isSupportReplace":0,"location":{"country":"中国","province":"四川省","city":"内江市","address":"威远县"}},
+		"sku_list":{"sku_id":"","ori_price":"","price":"","quantity":"","product_code":""}}';
+		
+		$product = json_decode($product,JSON_UNESCAPED_UNICODE);
+		
+		$base_attr = $this->getBaseAttr();
+		
+		$attrext = array(
+		'isPostFee'=>1,
+		'isHasReceipt'=>0,
+		'isUnderGuaranty'=>0,
+		'isSupportReplace'=>0,
+		'location'=>array(
+			'country'=>'中国',
+			'province'=>'四川省',
+			'city'=>'内江市',
+			'address'=>'威远县'
+			)
+		); 
+		
+		$sku_list = $this->getSKUList();
+		
+		$product = array(
+			'product_base'=>$base_attr,
+			'attrext'=>$attrext,
+			'sku_list'=>$sku_list,
+			''
+		);
+		$this->wxshopapi($product);	
+	}
 	
 	public function index(){
 		$this->display();

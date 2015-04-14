@@ -8,7 +8,7 @@
 namespace Common\Model;
 use Think\Model;
 class WeixinLogModel extends Model{
-	protected $tablePrefix = "cjfx_";
+	
 	//自动验证
 	protected $_validate = array(
 		

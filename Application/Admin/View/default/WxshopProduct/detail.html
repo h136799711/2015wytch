@@ -1,0 +1,293 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+	<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+	<style type="text/css">
+		.preview-detail{
+			width:480px;
+			height: auto;
+			border: 1px solid #DEDEDE;
+		}
+		.preview-detail img{
+			width:100%;
+		}
+		.preview-detail .preview-item{
+			position: relative;
+			margin: 5px 0px;
+		}
+		.preview-detail .preview-item i.fa{
+			 display:none;
+		}
+		.preview-detail .preview-item:hover i.fa{
+			 display:block;
+			 position: absolute;
+			 right: 0px;
+			 top: 0px;
+			 font-size: 72px;
+			 text-align: center;
+			 cursor: pointer;
+			 width: 100%;
+			 background: rgba(240, 232, 232, 0.51);
+			 height: 100%;
+		}
+		.preview-detail .preview-item i.fa:before{
+			height: 100%;
+		  	width: 100%;
+		  	position: absolute;
+		  	left: 0px;
+		  	top: 50%;
+		  	margin-top: -40px;
+		}
+		.js_add_text{
+			  width: 100px;
+			  line-height: 100px;
+			  height: 100px;
+			  text-align: center;
+			  border: 2px dotted #d9dadc;
+			  color: #d9dadc;
+			  float: left;
+			  margin-right: 10px;
+			cursor: pointer;
+		}
+		.js_add_text a{
+			  color: #d9dadc;
+		}
+		.js_add_text:hover{
+			border-color:#d9d9d9;
+		}
+		.js_add_text a:hover{
+			text-decoration: none;
+			color: #2780e3;
+		}
+
+		.wxuploaderimg .add:hover{
+			color:#2780e3;
+		}
+		.wxuploaderimg .add{
+			color:#d9d9d9;
+		}
+		
+	</style>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content" style=";">
+			{:W('Menus/breadcrumb')}
+			<form class="detailForm form" method="post" style="background: #FFFFFF;">
+				<fieldset>
+					<legend>商品详情信息添加</legend>
+					<input type="hidden" name="productid" value="{$productid}" />
+					<input type="hidden" name="storeid" value="{$storeid}" />
+					<input type="hidden" name="detail" id="detail" value="" />
+					
+					<div class="form-group">
+						<label class="control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="detailForm" href="{:U('Admin/WxshopProduct/detail')}" onclick="getData();" class="ajax-post btn btn-primary btn-sm"><i class="fa fa-save"></i>保存</a>
+							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-primary btn-sm ajax-get"><i class="fa fa-send-o"></i>商品发送到微信</a>
+									
+							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-times"></i>取消</a>
+							
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label">商品详情</label>
+						<div class="col-lg-12 col-md-12">
+							<div class="help-block">还可以输入<span class="max-text-len">5000</span>字</div>
+							<div class="col-lg-3 col-md-3">
+								<div class="js_add_text">
+										<a href="#"  ><i class="fa fa-text-width"></i>添加文字</a>
+								</div>
+								<!-- 图片选择DOM结构 -->
+								<div class="wxuploaderimg clearfix" data-maxitems="9">
+									<div class="img-preview clearfix" >
+										
+									</div>
+									<div class="add">
+										<i class="fa fa-file-image-o"></i>添加图片
+									</div>
+								</div>
+								<!-- 图片选择DOM结构 -->
+								
+							</div>
+							<div class=" col-lg-9 col-md-9 preview-detail">
+								<volist name="detail" id="vo">
+									<eq name='vo.type' value='text'>
+									<div class="preview-item text">{$vo.ct}<i class="fa fa-times"></i></div>
+									<else/>
+									<div class="preview-item image"><img src='{$vo.ct}' /><i class="fa fa-times"></i></div>
+									</eq>
+								</volist>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="detailForm" href="{:U('Admin/WxshopProduct/detail')}" onclick="getData();" class="ajax-post btn btn-primary btn-sm"><i class="fa fa-save"></i>保存</a>
+							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-times"></i>取消</a>
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+			<include file="template/wxpicture" />
+			
+			<div class="modal fade" id="textModal" tabindex="-1" role="dialog" aria-labelledby="textModal" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="textModalLabel">添加文字</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form>
+			          <div class="form-group">
+			            <label for="recipient-name" class="control-label">单个文本框字数不得给超过500字。</label>
+			            <textarea class="form-control message-text" rows="5" ></textarea>
+			            <div class="help-block input-len">还可以输入500字</div>
+			          </div>
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+			        <a type="button" href="javascript:void(0)" class="btn btn-primary" id="js_text_sure" ><i class="fa fa-check"></i>确定</a>
+			        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>取消</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+	<script type="text/javascript">
+		window.countTextInterval = 0;
+		function getData(){
+			var data = new Array();
+			$(".preview-detail .preview-item").each(function(index,item){
+				console.log(item);
+				if($(item).hasClass("text")	){
+					data.push({type:'text',ct:$(item).text()});
+				}else{
+					data.push({type:'img',ct:$("img",item).attr("src")});
+				}
+			});
+			
+			console.log(data);
+			console.log(JSON.stringify(data));
+			$("#detail").val(JSON.stringify(data));
+			
+		}
+		
+		//统计单次文字输入字数
+		function countText(){
+			var txt = $("#textModal .message-text").val();
+			var len = txt.replace(/[^\x00-\xff]/g,"xx").length;
+			if(len - 500 > 0){
+				$(".input-len").html("已超出<span class='text-warning' >"+(len-500)+"</span>字");
+			}else{
+				$(".input-len").text("还可以输入"+(500-len)+"字");
+			}
+			window.countTextInterval = 0;
+		}
+		
+		//检验单次文字输入字数
+		function checkText(){
+			var txt = $("#textModal .message-text").val();
+			var len = txt.length;
+			if(len - 500 > 0){
+				return false;
+			}
+			if(len == 0){
+				return false;
+			}
+			
+			return true;
+		}
+		
+		function appendText(text){
+			
+			var len = parseInt($(".max-text-len").text());			
+			var left = len - text.length;
+			if(left >= 0){
+				$(".max-text-len").text(left);				
+				$cont = $(".preview-detail");
+				$text = $("<div class='text preview-item'>"+text+"<i class='fa fa-times'></i></div>");
+				$cont.append($text);			
+			}else{
+				$.scojs_message("文字最多5000字",$.scojs_message.TYPE_ERROR);
+			}
+//			$text.append();
+		}
+		function appendImage(img){
+			$cont = $(".preview-detail");
+			for(var i=0;i<img.length;i++){
+				$cont.append("<div class='image preview-item'><img src='"+$(img[i]).attr("src")+"'/><i class='fa fa-times'></i></div>");
+			}
+		}
+		
+		
+		$(function() {
+			var total_len = $(".preview-detail .text").text().length;
+//			console.log(total_len);
+			$(".max-text-len").text(5000-total_len);
+			$(".preview-detail").click(function(ev){
+				
+				if($(ev.target).hasClass("fa")){
+					console.log($(ev.target).parent().hasClass("text"));
+					if($(ev.target).parent().hasClass("text")){
+						var add = $(ev.target).parent().text().replace(/[^\x00-\xff]/g,"xx").length;
+						$(".max-text-len").text(parseInt($(".max-text-len").text())+add);		
+					}else{
+						$(".wxuploaderimg").attr("data-maxitems",parseInt($(".wxuploaderimg").attr("data-maxitems"))+1);
+					}
+					$(ev.target).parent().remove();
+					
+				}
+			})
+			$(".js_add_text").click(function(){
+				$("#textModal .message-text").val("");
+				$("#textModal").modal("show");
+			});
+			$("#textModal .message-text").keydown(function(){
+				if(window.countTextInterval > 0){
+					clearTimeout(window.countTextInterval);
+				}
+				window.countTextInterval = setTimeout(countText,700);
+			});
+			$("#textModal #js_text_sure").click(function(ev){	
+				if(!checkText()){
+					$.scojs_message("文字必须为1到500字",$.scojs_message.TYPE_ERROR);
+					ev.stopPropagation();
+					ev.preventDefault();
+					return false;
+				}
+//				console.log(ev);
+				$("#textModal").modal("hide");
+				appendText($("#textModal .message-text").val());
+			});
+			wxuploadimg.init({cont:".wxuploaderimg",callback:function(){
+//				console.log(data);
+				var data  = arguments;
+				appendImage(data);
+				var len = $(".preview-detail img").length;
+				
+				var max = parseInt($(".wxuploaderimg").attr("data-maxitems"));
+				
+				$(".wxuploaderimg").attr("data-maxitems",max-len);
+				
+			}});
+		})
+	</script>
+
+</block>

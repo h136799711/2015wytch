@@ -1,0 +1,121 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+	<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<!-- 过滤\查询按钮 -->
+			<div class="filter-controls">
+				<!-- 日期查询 -->
+				<form action="{:U('Admin/WxshopProduct/index')}" method="post" class="form-inline">
+					<input type="hidden" name="storeid" value="{$storeid}" />
+					<div class="form-group">
+						<label>商品状态</label>
+						<label class="radio-inline">
+							<input type="radio" name="onshelf" value="1" class="onshelf" <eq name="onshelf" value="1">checked="checked"</eq> />已上架
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="onshelf" value="0" class="onshelf" <eq name="onshelf" value="0">checked="checked"</eq>  />未上架
+						</label>
+					</div>
+					<div class="form-group">
+						<label>商品名称</label>
+						<input type="text" name="name" class="form-control input-sm" value="{$name}" placeholder="请输入商品名称" />
+					</div>
+					<button type="submit" class="btn btn-default btn-sm" id="searchFormSubmit"><i class="fa fa-search"></i>{:L('BTN_SEARCH')}</button>
+				</form>
+			</div>
+			<!-- 操作按钮 -->
+			<div class="btn-controls">
+				<a class="btn btn-primary btn-sm" href="{:U('Admin/WxshopProduct/precreate',array('storeid'=>$storeid))}"><i class="fa fa-plus"></i>添加商品</a>
+				<!--<if condition="$onself == 0" >-->
+				<!--<a href="{:U('Admin/WxshopProduct/self',array('id'=>$vo['id'],'on'=>'1'))}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-up"></i>上架</a>-->
+				<!--<a href="{:U('Admin/WxshopProduct/bulkDelete')}" target-form="selectitem" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>删除</a>-->
+				<!--<else/>-->										
+				<!--<a href="{:U('Admin/WxshopProduct/self',array('id'=>$vo['id'],'on'=>'0'))}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-down"></i>下架</a>-->
+				<!--</if>-->
+			</div>
+
+
+			<table class="table table-striped table table-hover  table-condensed">
+				<thead>
+					<tr>
+						<th>
+							<input type="checkbox" class="selectall" onclick="myUtils.selectall(this,'.selectitem');" />ID
+						</th>
+						<th>
+							商品名称
+						</th>
+						<th>
+							商品主图
+						</th>
+						<th>
+							商品设置
+						</th>
+						<th>
+							操作
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<empty name="list">
+						<tr>
+							<td colspan="5" class="text-center">{:L('NO_DATA')}</td>
+						</tr>
+						<else/>
+						<volist name="list" id="vo">
+							<tr>
+								<td>
+									<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" />{$vo.id}</td>
+								<td>{$vo.name}</td>
+								<td><a href="{$vo.main_img}" target="_blank" title="点击查看原图" data-toggle="tooltip"><img style="max-width: 120px;" class="thumbnail" src="{$vo.main_img}" /></a>
+								</td>
+								<td>
+									<a href="{:U('Admin/WxshopProduct/express',array('storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">运费</a>
+									<a href="{:U('Admin/WxshopProduct/detail',array('id'=>$vo['id'],'storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">商品详情</a>
+									<a href="{:U('Admin/WxshopProduct/sku',array('id'=>$vo['id'],'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">商品规格<i title="规格一般指 颜色、款式等" class="fa fa-question" data-toggle="tooltip"></i></a></td>
+								<td>
+									<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$vo['id']))}" class="btn btn-primary btn-sm ajax-get"><i class="fa fa-send-o"></i>商品发送到微信</a>
+									
+									<if condition="$vo['onshelf'] == 0" >
+									<a href="{:U('Admin/WxshopProduct/shelf',array('productid'=>$vo['product_id'],'on'=>1))}" class="ajax-get btn btn-primary btn-sm"><i class="fa fa-arrow-up"></i>同步上架</a>
+									<else/>										
+									<a href="{:U('Admin/WxshopProduct/shelf',array('productid'=>$vo['product_id'],'on'=>0))}" class="ajax-get confirm btn btn-primary btn-sm"><i class="fa fa-arrow-down"></i>同步下架</a>
+									</if>
+									<!--<a href="{:U('Admin/WxshopProduct/edit',array('productid'=>$vo['product_id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>{:L('BTN_EDIT')}</a>-->
+									<a href="{:U('Admin/WxshopProduct/delete',array('productid'=>$vo['product_id']))}" class="btn btn-danger btn-sm ajax-get confirm"><i class="fa fa-trash-o"></i>同步{:L('BTN_DELETE')}</a>
+									
+								</td>
+							</tr>
+
+						</volist>
+					</empty>
+				</tbody>
+			</table>
+			<div>{$show}</div>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+	$(function(){
+		$(".onshelf").click(function(){
+			$("#searchFormSubmit").click();
+		})
+	})
+	</script>
+</block>

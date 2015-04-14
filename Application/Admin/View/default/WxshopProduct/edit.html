@@ -1,0 +1,531 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+	<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<div class="col-main">
+				<div class="main-hd">
+					<h2>添加商品</h2>
+				</div>
+				<div class="main-bd clearfix">
+					<form class="productForm form-horizontal" method="post">
+						<input type="hidden" name="storeid" value="{$storeid}" />
+						<input type="hidden" name="cates" value="{$cates}" />
+						<input type="hidden" name="property" value="" class="property" />
+						<input type="hidden" name="main_img" value="" class="main_img" />
+						<input type="hidden" name="img" value="" id="img" />
+						<h3><i>●</i>基本信息</h3>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">选择类目</label>
+							<div class="col-lg-10 col-md-10">
+								<div class="category_select pt5" id="js_category_txt">
+									<span class="category_txt">{$catename}</span>
+									<a href="{:U('Admin/WxshopProduct/precreate',array('storeid'=>$storeid))}" class="js_categorychange">修改</a>
+								</div>
+								<span class="help-block">商品上架后不可修改，请谨慎选择</span>
+							</div>
+						</div>
+						<div class="js_prop form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品属性
+								<br/><span class="help-block">(选填)</span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<div class="well">
+									<div class="loading">
+										<img src="__CDN__/common/loading.gif" />
+									</div>
+									<div class="prop-list clearfix">
+										
+									</div>
+									<hr>
+									<!--<div class="btn-controls">
+										<a href="javascript:void(0)" class="js_prop_new">添加属性</a>
+									</div>
+									<div class="js_prop_new_form hidden">
+										<input type="text" id="" class="form-control input-sm js_group_name" maxlength="10" />
+										<a href="javascript:void(0)" class="js_group_new_submit btn btn-sm btn-weixin">确定</a>
+										<a href="javascript:void(0)" class="js_group_new_cancel btn btn-default btn-sm">取消</a>
+									</div>-->
+								</div>
+								<span class="help-block">商品上架后不可修改，请谨慎选择</span>
+
+							</div>
+						</div>
+						<div class="js_group form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品分组
+								<br/><span class="help-block">(选填)</span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<div class="well">
+									<div class="loading">
+										<img src="__CDN__/common/loading.gif" />
+									</div>
+									<div class="shop-group-list">
+
+									</div>
+									<hr>
+									<div class="btn-controls">
+										<a href="javascript:void(0)" class="js_group_new">新建分组</a><i class="verticl-line"></i>
+										<a href="javascript:void(0)" class="js_group_rfs">刷新分组</a>
+									</div>
+									<div class="js_group_new_form hidden">
+										<input type="text" id="" class="form-control input-sm js_group_name" maxlength="10" />
+										<a href="javascript:void(0)" class="js_group_new_submit btn btn-sm btn-weixin">确定</a>
+										<a href="javascript:void(0)" class="js_group_new_cancel btn btn-default btn-sm">取消</a>
+										<p class="text-muted">请填写分组名称，不超过5个汉字</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品名称</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="product_name" maxlength="60" class="js_product_name form-control input-normal input-sm" />
+								<span class="help-block">限30个字</span>
+							</div>
+						</div>
+						<div class="js_sku form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品规格</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="has_sku" class="has_sku" checked="checked" value="0"> 统一规格
+								</label>
+								<!--<label class="radio-inline">
+									<input type="radio" name="has_sku" class="has_sku" value="1">多规格
+								</label>-->
+								<div class="well js_sku_list" style="display: none;">
+									<div class="loading">
+										<img src="__CDN__/common/loading.gif" />
+									</div>
+									<div class="sku-list clearfix">
+										
+									</div>
+									<hr>
+									<!--<div class="btn-controls">
+										<a href="javascript:void(0)" class="js_sku_new">添加规格</a>
+									</div>
+									<div class="js_sku_new_form hidden">
+										<input type="text" id="" class="form-control input-sm js_sku_name" maxlength="10" />
+										<a href="javascript:void(0)" class="js_sku_new_submit btn btn-sm btn-weixin">确定</a>
+										<a href="javascript:void(0)" class="js_sku_new_cancel btn btn-default btn-sm">取消</a>
+									</div>-->
+								</div>
+								<span class="help-block">商品上架后不可修改，请谨慎选择</span>
+							</div>
+						</div>
+						<!--<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2">价格&库存</label>
+							<div class="col-lg-10 col-md-10">								
+								<div class="help-block">请选择规格</div>
+								<div class="sku-price-stock">
+									<div class="help-block">微信价需低于原价，图片选传，单张图片大小不超过30kb。</div>
+									
+								</div>
+							</div>
+						</div>-->
+						
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2">微信价</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="price" class="price form-control input-short input-sm" />元
+								<span class="help-block">销售价,需低于原价</span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2">原价
+								<br/><span class="help-block">(选填)</span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="ori_price" maxlength="60" class="oriprice form-control input-short input-sm" />元
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2 ">商品库存
+								<br/><span class="help-block"></span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="quantity" maxlength="60" class="oriprice form-control input-short input-sm" />
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2">商品条码<i data-toggle="tooltip" class="fa fa-question" title="填写商品条码后，用户可通过扫码查找到你的商品，建议填写"></i>
+								<br/><span class="help-block">(选填)</span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="product_code" maxlength="60" class="oriprice form-control input-short input-sm" />
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<!--<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">价格&库存</label>
+							<div class="col-lg-10 col-md-10">
+								<span class="help-block">请选择规格</span>
+							</div>
+						</div>-->
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">商品图片</label>
+							<div class="col-lg-10 col-md-10">
+								主图<span class="text-muted">(建议尺寸为640像素*640像素，大小不超过500kb)<i data-toggle="tooltip" class="fa fa-question" title="商品主图将会作为商品的默认图片出现在货架及商品详情页。"></i></span>
+								<!-- 图片选择DOM结构 -->
+								<div class="wxuploaderimg clearfix main_img"  data-maxitems="1">
+									<div class="img-preview clearfix" >
+										
+									</div>
+									<div class="add">
+										<i class="fa fa-plus"></i>
+									</div>
+								</div>
+								
+								<!-- 图片选择DOM结构 -->
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">&nbsp;</label>
+							<div class="col-lg-10 col-md-10">
+								其他图片<span class="text-muted">(选传，单张图片大小不超过500kb，最多10张)<i class="fa fa-question" data-toggle="tooltip" title="将出现在商品图片库，方便用户更好的了解您的商品。"></i></span>
+								<!-- 图片选择DOM结构 -->
+								<div class="wxuploaderimg clearfix product-imglist"  data-maxitems="10">
+									<div class="img-preview clearfix" >
+										
+									</div>
+									<div class="add">
+										<i class="fa fa-plus"></i>
+									</div>
+								</div>
+								
+								<!-- 图片选择DOM结构 -->
+							</div>
+						</div>
+						
+						<!--<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">详情描述</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="xiangou" checked="checked" value="0">不限购
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="xiangou" value="1">限购
+								</label>
+
+							</div>
+						</div>-->
+						
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_buylimit">
+							<label for="" class="control-label col-lg-2 col-md-2">是否限购</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="isbuylimit" checked="checked" value="0">不限购
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="isbuylimit" value="1">限购
+								</label>
+
+								<input type="text" style="width: 100px;" name="buylimit" value=""  class="hidden input-sm" />
+							</div>
+						</div>
+
+						<!--<h3 class="pull-left"><i>●</i>物流信息</h3>
+
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">所在地</label>
+							<div class="col-lg-10 col-md-10">
+							</div>
+
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">运费</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="ispostfree" checked="checked" value="0">卖家承担费用
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ispostfree" value="1">买家承担费用
+								</label>
+
+							</div>
+
+						</div>-->
+						
+						<h3 class="pull-left"><i>●</i>售后信息</h3>
+
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">发票</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="ishasreceipt" checked="checked" value="0">无
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ishasreceipt" value="1">有
+								</label>
+
+							</div>
+
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">保修</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="isunderguaranty" checked="checked" value="0">无
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="isunderguaranty" value="1">有
+								</label>
+
+							</div>
+
+						</div>
+						
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">退换货</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="issupportreplace" checked="checked" value="0">不支持
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="issupportreplace" value="1">支持
+								</label>
+
+							</div>
+
+						</div>
+
+						<!--<h3 class="pull-left"><i>●</i>上架设置</h3>
+
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">上架时间</label>
+							<div class="col-lg-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio" name="warranty"  value="0">暂不上架，放入我的商品中
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="warranty" checked="checked" value="1">立即上架<span class="text-warning">(上架后商品类目、商品属性及商品名称将不能再修改，请确认已填写无误)</span>
+								</label>
+
+							</div>
+
+						</div>-->
+
+						<div class="form-group col-lg-12 col-md-12 clearfix tool-bar text-center border">
+							<a target-form="productForm" href="{:U('Admin/WxshopProduct/create')}" onclick="return check();"  class="ajax-post btn btn-primary" id="js_submit"><i class="fa fa-check"></i>确定</a>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<include file="template/wxpicture" />
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript" ></script>
+	
+	
+	<script type="text/javascript">
+		window.ServicesURL = {
+			groupGetAll:"{:U('Admin/WxshopGroup/groups')}",	
+			groupAdd:"{:U('Admin/WxshopGroup/add')}",	
+			cateAllProp:"{:U('Admin/WxshopProduct/cateAllProp')}",	
+			skulist:"{:U('Admin/WxshopProduct/skulist')}",	
+		};
+	</script>
+	<script type="text/javascript" src="__JS__/product.js?v=__APP_VERSION__"></script>
+	<script type="text/javascript">
+		function getData(){
+			$(".property").val("");
+			$(".prop-list .selected").each(function(index,item){
+				$propid = $(item).parents(".prop-item").attr("data-id");
+				$propvalueid = $(item).parents(".propvalue-item").attr("data-id");
+				$(".property").val($(".property").val()+$propid+","+$propvalueid+";");
+			});
+			
+			var main_img = $(".main_img .img-preview img").attr("src");
+			if(main_img){
+				$(".main_img").val(main_img);
+			}
+			$("#img").val("");
+			$(".product-imglist .img-preview img").each(function(index,item){
+				$("#img").val($("#img").val()+$(item).attr("src")+",");
+			});
+			
+			
+			
+		}
+		
+		
+		function check(){
+			getData();
+//			return false;
+			var txt = $(".js_product_name").val();
+			var len = txt.replace(/[^\x00-\xff]/g, 'xx').length ; 
+//			console.log(txt);
+//			if(len == 0){					
+//				$.scojs_message('商品名称必须填写', $.scojs_message.TYPE_ERROR);
+//				return false;
+//			}
+			if(len > 30){
+				$.scojs_message('商品名称不能超过30个字', $.scojs_message.TYPE_ERROR);
+				return false;
+			}
+			return true;
+		}
+	
+		function appendProp(list){
+//			console.log(list);
+			$ele = $(".js_prop .prop-list");
+			for(var i=0;i<list.length;i++){
+				//创建一个dropdown
+				$dropdown = $("<button type='button' data-toggle='dropdown' class='btn btn-primary dropdown-toggle'>选择<span class='caret'></span></button>")
+				$propName = $('<span>'+list[i].name+'</span>');
+				$prop = $('<div class="dropdown dropdown-toggle"></div>');
+				$prop.append($dropdown);
+				$ele.append($("<div class='prop-item' ></div>").attr("data-id",list[i].id).append($propName).append($prop));
+
+				if(list[i].property_value){
+//					console.log(list[i].property_value);
+					$propValue = $("<ul class='propvalue-list dropdown-menu'></ul>");
+					$prop.append($propValue);
+					var propvaluelist = list[i].property_value;
+					for(var j=0;j<propvaluelist.length;j++){
+						$propValueItem = $("<li class='propvalue-item'></li>");
+						$propValueItem.attr("data-id",propvaluelist[j].id).html("<a class='btn link_a' onclick='return false' href='javascript:' >"+propvaluelist[j].name+"</a>");
+						$propValue.append($propValueItem);
+					}
+//					$propValue.append("<li class='propvalue-item'><a class='btn prop-custom js_propnewname' href='javascript:void(0);' >自定义</a></li>");
+				}
+
+			}	
+			
+			
+		}
+		
+		
+		
+		
+		
+		 //商品属性
+		function queryProp() {
+			
+			$(".js_prop .prop-list").click(function(ev){
+				$ele = $(ev.target);
+				if(!$ele.hasClass('link_a')){
+					return ;
+				}
+				$propitem = $ele.parents(".prop-item");
+//				$propid = $ele.attr("data-id");
+//				$propvalueid = $propitem.attr("data-id");
+				$ele.addClass("selected");
+				$propitem.find("button.dropdown-toggle").html($ele.text()+"<span class='caret'></span>");
+			});
+			
+			
+			$(".js_prop .loading").show();
+			var cates = "{$cates}";
+			var last_cate = cates.substring(cates.lastIndexOf("_") + 1);
+			$.post(window.ServicesURL.cateAllProp, {
+				cate_id: last_cate
+			}).done(function(data) {
+				//
+				if (data.status) {
+					appendProp(data.info);
+				} else {
+					$.scojs_message('添加失败!', $.scojs_message.TYPE_ERROR);
+				}
+			}).always(function(){
+				$(".js_prop .loading").hide();
+			});
+		}
+		//SKU
+		function appendSku(data){
+//			console.log(data);
+//			$cont = $(".js_sku .sku-list");
+//			for(var i=0;i<data.length;i++){
+//				$ele = $("<div class='sku_wrp'></div>");
+//				$cont.append($ele);
+//				$ele.append("<p data-id='"+data[i].id+"'>"+data[i].name+"</p>");
+//				var valuelist = data[i].value_list;
+//				$valuelist = $("<div class='skuvalue_wrp'></div>");
+//				$ele.append($valuelist);
+//				for(var j=0;j<valuelist.length;j++){
+//					var html = '	<label class="checkbox-inline"><input type="checkbox"   value="'+valuelist[j].id+'">'+valuelist[j].name+'</label>';
+//					$valuelist.append(html);
+//				}
+//			}
+		}
+		
+		//SKU
+		function querySku(){
+//			
+//			$(".js_sku .loading").show();
+//			var cates = "{$cates}";
+//			var last_cate = cates.substring(cates.lastIndexOf("_") + 1);
+//			$.post(window.ServicesURL.skulist, {
+//				cate_id: last_cate
+//			}).done(function(data) {
+//				//
+//				if (data.status) {
+//					appendSku(data.info);
+//				} else {
+//					$(".js_sku .sku-list").html("<div class='help-block'>无规格,请先添加.</div>");
+//				}
+//			}).always(function(){
+//				$(".js_sku .loading").hide();
+//			});
+		}
+		
+		function productProp(){
+			setTimeout(queryProp,700);
+		}
+		
+		function productSku(){
+			
+//			setTimeout(querySku,1000);
+		}
+		
+		$(function() {
+			productGroups();
+			productProp();
+			productSku();
+			//图片上传
+			wxuploadimg.init({cont:".wxuploaderimg"});
+			//
+			$(".js_frm_gp_buylimit input[type=radio]").click(function(){
+				console.log($(this).val());
+				console.log($(".js_frm_gp_buylimit input[type=text]"));
+				if($(this).val() == 1){
+					$(".js_frm_gp_buylimit input[type=text]").removeClass("hidden");
+				}else{
+					$(".js_frm_gp_buylimit input[type=text]").addClass("hidden");
+				}
+			});
+			
+			$(".has_sku").click(function(ev){
+				if($(this).val() == 1){
+					//多规格
+					$(".js_frm_gp_sku").hide();
+					$(".js_sku_list").show();
+				}else{
+					//
+					$(".js_frm_gp_sku").show();
+					$(".js_sku_list").hide();
+				}
+			})
+		})
+		
+	</script>
+	
+</block>

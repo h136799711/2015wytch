@@ -134,3 +134,9 @@ function getLogInfo($info){
 	
 	return $str;
 }
+/**
+ * 获取当前公众号信息
+ */
+function getWxaccount(){
+	return session("user_"+UID+"_wxaccount");
+}

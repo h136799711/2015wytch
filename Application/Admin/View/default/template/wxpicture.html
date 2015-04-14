@@ -1,0 +1,268 @@
+<!-- Modal -->
+<div class="modal " id="wxuploadimg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">选择图片</h4>
+			</div>
+			<div class="modal-body clearfix">
+				<!--<div class="col-lg-2 col-md-2">
+								
+							</div>-->
+				<div class="col-lg-12 col-md-12">
+					<div class="btns pull-right"><a href="javascript:void(0);" id="upload_picture"><i class="fa fa-upload"></i>本地上传</a>
+					</div>
+					<div class="imgs-container pull-left">
+						<div class="loading">
+							<img src="__CDN__/common/loading.gif" />
+						</div>
+						<div class="imgs-list clearfix"></div>
+						<div class="pager"></div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="pull-left">已选<span class="js_checked"></span>张,可选<span class="js_total"></span>张</div>
+				<button type="button" class="btn btn-primary js_check_img"><i class="fa fa-check"></i>确定</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i>取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	window.wxuploadimg = (function() {
+		var pager = {
+			index: 0,
+			size: 10, //页面数
+		};
+		var checked = 0;
+		var hadBind = false;
+		/**
+		 * 将数据组合成HTML
+		 */
+		function appendImgList(list) {
+			if (list) {
+				$cont = $("#wxuploadimg .imgs-list").empty();
+				for (var i = 0; i < list.length; i++) {
+					$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + list[i].imgurl + "'/><p class='img-desc'>"+list[i].ori_name+"</p></div>");
+					$cont.append($item);
+				}
+			}else{
+				$("#wxuploadimg .imgs-list").html("<div style='width:100%'>没有图片！</div>");
+			}
+		}
+		
+	/**
+	 * 处理分页点击事件
+	 */
+	function pagerClick(){
+		
+		$("#wxuploadimg .imgs-container").click(function(ev){
+//			console.log(ev);
+			$target = $(ev.target);
+			if($target.hasClass("img-selected")){
+				$target.removeClass("img-selected");
+				checked--;
+				$("#wxuploadimg .js_checked").text(parseInt($("#wxuploadimg .js_checked").text())-1);
+			}
+			if($target.hasClass("js_img_click")){
+				if(checked == window.wxuploadimg.setting.MaxChecked){					
+					var len = $(".img-preview img",window.wxuploadimg.current).length;
+					$.scojs_message('最多可选'+(wxuploadimg.setting.MaxChecked-len)+'张!', $.scojs_message.TYPE_OK);
+				}
+				
+				if(checked < window.wxuploadimg.setting.MaxChecked){
+					$target.parent().addClass("img-selected");
+					checked++;
+					$("#wxuploadimg .js_checked").text(parseInt($("#wxuploadimg .js_checked").text())+1);
+				}
+			}
+//			console.log($target);
+				ev.preventDefault();
+			if($target.hasClass("num")){
+				pager.index = parseInt($target.text());
+				queryImgList();
+				ev.preventDefault();
+			}else if($target.hasClass("next")){
+				pager.index = pager.index+1;
+				queryImgList();		
+				ev.preventDefault();
+			}else if($target.hasClass("prev")){
+				pager.index = pager.index-1;		
+				if(pager.index <0 ){
+					pager.index = 0;
+				}
+				queryImgList();
+				ev.preventDefault();
+			}
+			
+			});
+		}
+		/**
+		 * 向服务器请求数据
+		 */
+		function queryImgList() {
+			$.ajax({
+				type: "post",
+				url: "{:U('Admin/Wxshop/picturelist')}",
+				data: {
+					p: wxuploadimg.pager.index,
+					size: wxuploadimg.pager.size
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$("#wxuploadimg .imgs-container .loading").removeClass("hidden");
+				}
+			}).done(function(data) {
+				if (data.status) {
+					var info = data.info;
+					var list = info.list;
+					var show = info.show;
+					appendImgList(list);
+					$("#wxuploadimg .imgs-container .pager").html(show);
+				}
+			}).always(function() {
+				$("#wxuploadimg .imgs-container .loading").addClass("hidden");
+			});
+		}
+		
+		function clearSelected(){			
+			$("#wxuploadimg .img-item.img-selected").removeClass("img-selected");			
+		}
+		/**
+		 * callback
+		 * @param {Object} cont 触发模态框的选择器
+		 * @param {Object} callback 选中图片后的触发器
+		 */
+		function init(setting){
+//			console.log(hadBind);
+			if(setting.callback){
+				wxuploadimg.callBack = setting.callback;
+			}
+			wxuploadimg.setting = $.extend({},wxuploadimg.setting, setting);
+			pager.size = setting.size || pager.size;
+			//上传按钮点击处理
+			$(".add",wxuploadimg.setting.cont).each(function(index,item){
+				$(item).click(function(ev){
+//					console.log(this);
+					$ele = $(this);
+//					if($ele.hasClass('add')){
+						window.wxuploadimg.current =  $ele.parent();
+						open($(window.wxuploadimg.current).attr("data-maxitems"));					
+						clearSelected();
+//					}
+				});	
+			});
+			queryImgList();
+			if(!hadBind){
+				//使用此标志来防止 当调用多次init方法来初始化时，#wxuploadimg绑定了多次click监听器
+				pagerClick();
+				//选中图片
+				$("#wxuploadimg .js_check_img").click(function(){
+					
+					window.wxuploadimg.setting.callback = wxuploadimg.setting.callback || callback;
+					
+					window.wxuploadimg.setting.callback.apply(this,$("#wxuploadimg .img-selected img"));
+					
+					if(checked == wxuploadimg.setting.MaxChecked){
+						$(".add",window.wxuploadimg.current).hide();
+					}
+					$('#wxuploadimg').modal("hide");
+					
+				});
+				// 预览图片
+				$(".img-preview",window.wxuploadimg.current).click(function(ev){
+					
+					if($(ev.target).hasClass("js_delete")){
+	//					console.log($(ev.target));
+						$(ev.target,window.wxuploadimg.current).parents(".img-item").remove();
+						var len = $(".img-preview img",window.wxuploadimg.current).length;
+	//					console.log(len);
+						//已全部选择
+						if(len == 0){
+							$(".img-preview",window.wxuploadimg.current).hide();
+							$(window.wxuploadimg.current).removeClass("checked");
+							$(".add",window.wxuploadimg.current).show();
+						}
+						
+						//还剩余
+						if(len < wxuploadimg.setting.MaxChecked){
+							$(".add",window.wxuploadimg.current).show();
+						}
+						
+					}
+					ev.preventDefault();
+					ev.stopPropagation();
+				})
+			}
+			hadBind = true;
+		}
+		
+		function open(maxchecked){
+//			checked = 0;
+			checked = $(".img-preview img",wxuploadimg.current).length ;
+			wxuploadimg.setting.MaxChecked = maxchecked || wxuploadimg.setting.MaxChecked;
+//			console.log(checked,wxuploadimg.setting.MaxChecked);
+			$("#wxuploadimg .js_checked").text(0);
+			$("#wxuploadimg .js_total").text(wxuploadimg.setting.MaxChecked - checked);
+			$('#wxuploadimg').modal("show");
+		}
+		function callback(){
+			var data = arguments;
+			console.log(data);
+			for(var i=0;i<data.length;i++){
+				var $ele = $('<div class="pull-left clearfix img-item"><div class="edit_pic_wrp"><a href="javascript:;" class="fa fa-lg fa-trash js_delete"></a></div></div>');
+				$(".img-preview",wxuploadimg.current).append($ele).css("display","inline-block");//.show();
+				$ele.prepend($(data[i]).clone());
+			}
+			
+		}
+		return {
+			setting: {
+				
+				MaxChecked:1,//最多可选图片数
+				size: 10, //每页图片数					
+				callback:null //默认回调函数
+			},
+			current:null,
+			pager: pager,
+			appendImgList:appendImgList,
+			pagerClick:pagerClick,
+			queryImgList:queryImgList,
+			init:init,
+		};
+		
+	})();
+	
+		//上传图片
+		/* 初始化上传插件  */
+	$("#wxuploadimg #upload_picture").uploadify({
+		'buttonClass': 'btn btn-primary btn-sm',
+		"height": "30px",
+		"swf": "__CDN__/jquery-uploadify/3.2.1/uploadify.swf",
+		"fileObjName": "wxshop", //wxshop
+		"buttonText": "<i class='fa fa-upload'></i>本地上传",
+		"uploader": "{:U('Admin/Wxshop/uploadPicture',array('session_id'=>session_id()))}",
+		"width": 120,
+		'removeTimeout': 1,
+		'fileTypeExts': '*.jpg; *.png; *.gif;',
+		"onUploadSuccess": uploadPicture
+	});
+
+	function uploadPicture(file, data) {
+		var data = $.parseJSON(data);
+		var src = '';
+		if (data.status) {
+			
+			$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + data.imgurl + "'/><p class='img-desc'>"+data.savename+"</p></div>");
+			$(".imgs-list").prepend($item);
+			
+		} else {
+			$.scojs_message(data.info, $.scojs_message.TYPE_OK);
+		}
+	}
+</script>

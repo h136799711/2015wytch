@@ -125,6 +125,7 @@ class AuthManageController extends AdminController {
 
 		$map = array();
 		$map_access = array();
+		
 		$groupid = I('groupid', -1);
 		//模块标识
 		$modulename = I('modulename', '');

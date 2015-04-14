@@ -16,7 +16,6 @@ class AdminController extends CheckLoginController {
 	protected $appsecret = "";
 	protected function _initialize() {
 		parent::_initialize();
-		$this -> assign("user", session("global_user"));
 		// 当前一级导航激活menu
 		if (I('get.activemenuid', 0) !== 0) {
 			session('activemenuid', I('get.activemenuid'));
@@ -53,6 +52,9 @@ class AdminController extends CheckLoginController {
 		}
 		$this->get_current_usermenu();
 		$this->getWxaccount();
+		$this -> assign("user", session("global_user"));
+		$this -> assign("wxaccount", session("user_"+UID+"_wxaccount"));
+		
 	}
 
 	//===================权限相关START=======================
@@ -106,6 +108,7 @@ class AdminController extends CheckLoginController {
 			$map = array("uid"=>UID);
 			$result = apiCall("Admin/Wxaccount/getInfo",array($map));
 			if($result['status'] && is_array($result['info'])){
+				session("user_"+UID+"_wxaccount",$result['info']);
 				session("wxaccountid",$result['info']['id']);
 				session("appid",$result['info']['appid']);
 				session("appsecret",$result['info']['appsecret']);
@@ -211,7 +214,7 @@ class AdminController extends CheckLoginController {
 		$cfg = array('owner' => C('WEBSITE_OWNER'), 'statisticalcode' => C('WEBSITE_STATISTICAL_CODE'), 'theme' => getSkin(C('DEFAULT_SKIN')), );
 		//若是晚上 则固定为darkly样式
 		if (isNight()) {
-			$cfg['theme'] = "darkly";
+//			$cfg['theme'] = "darkly";
 		}
 		//
 		$this -> assignVars($seo, $cfg);

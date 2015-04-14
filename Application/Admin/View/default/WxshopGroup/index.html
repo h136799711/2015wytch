@@ -1,0 +1,107 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<div>
+				<p class="text-info"><i class="fa fa-info"></i>合理设置商品分类能方便将商品填写到货架，并进行及时的管理</p>
+			</div>
+			<div class="btn-controls">
+				<button class="btn btn-sm btn-primary js_group_new" data-content="<form class='js_group_new_form' ><input type='text' class='form-control input-sm' name='group_name'  /><a target-form='js_group_frm' class='btn btn-sm btn-weixin' onclick='checkLen(this)'  href='#' >确定</a><a href=javascript:$('.js_group_new').popover('hide'); class='btn btn-sm btn-default'>取消</a></form>" data-toggle="popover" title="新建分组" data-html="true"><i class="fa fa-plus"></i>新建分组</button>
+				<a href="__SELF__" class="btn btn-sm btn-primary"><i class="fa fa-refresh"></i>刷新</a>
+			</div>
+			<table class="table table-bordered table-striped table-hover">
+				<tr>
+				<th>
+					分组名称
+				</th>
+				<th>
+					操作
+				</th>
+				</tr>
+				<volist name="groups" id="vo">					
+					<tr class="group-item">		
+						<td>
+							<span class="js_grp_name_{$vo.group_id}">{$vo['group_name']}</span>
+							<input type="text" class="hidden js_grp_name_{$vo.group_id}" value="{$vo.group_name}" />
+						</td>
+						<td>
+							<a href="#{:U('Admin/WxshopGroup/product',array('group_id'=>$vo['group_id']))}" class="btn btn-sm btn-primary "><i class="fa fa-th-list"></i>管理分组商品</a>
+							<a href="#" class="btn btn-sm btn-primary" onclick="edit(this,{$vo.group_id})" ><i class="fa fa-edit"></i>编辑</a>							
+							<a href="{:U('Admin/WxshopGroup/del',array('group_id'=>$vo['group_id']))}" class="ajax-get btn btn-sm btn-danger confirm" ><i class="fa fa-trash"></i>删除</a>
+						</td>
+					</tr>
+				</volist>
+				
+			</table>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		function edit(ele,id){
+			id = id.toString();
+			var group_name = $("input.js_grp_name_"+id).val();
+			var len = group_name.replace(/[^\x00-\xff]/g, 'xx').length;
+			if(len > 10 || len <= 0){
+					$.scojs_message('分组名称应为1-5个字', $.scojs_message.TYPE_ERROR);
+					return false;
+			}
+			if($("input.js_grp_name_"+id).is(":hidden")){
+				$("span.js_grp_name_"+id).addClass("hidden");
+				$("input.js_grp_name_"+id).removeClass("hidden");
+				//保存
+				$(ele).html("<i class='fa fa-save'></i>保存");
+			}else{
+				$("span.js_grp_name_"+id).removeClass("hidden");
+				$("input.js_grp_name_"+id).addClass("hidden");
+				$.post("{:U('Admin/WxshopGroup/edit')}",{group_id:id,group_name:group_name}).done(function(data){
+					if(data.status){
+						$("span.js_grp_name_"+id).text($("input.js_grp_name_"+id).val());
+						$.scojs_message('保存成功!', $.scojs_message.TYPE_OK);
+						$(ele).html("<i class='fa fa-edit'></i>编辑分组名称");	
+					}
+				});
+			}
+			
+		}
+		
+		function checkLen(ele){
+			
+			var group_name = $(".js_group_new_form input").val();
+			
+			var len = group_name.replace(/[^\x00-\xff]/g, 'xx').length;
+			if(len > 10 || len <= 0){
+					$.scojs_message('分组名称应为1-5个字', $.scojs_message.TYPE_ERROR);
+					return false;
+			}
+			
+			$.post("{:U('Admin/WxshopGroup/add')}",{group_name:group_name}).done(function(data){
+					//
+					if(data.status){
+						$.scojs_message('添加成功!', $.scojs_message.TYPE_OK);
+						$(ele).popover("hide");
+						setTimeout(function(){window.location.href = "{:U('Admin/WxshopGroup/index')}"+"?r="+(new Date()).getTime()},500);
+					}else{
+						$.scojs_message('添加失败!', $.scojs_message.TYPE_ERROR);
+					}
+				});
+			
+			
+		}
+		
+	</script>
+
+</block>

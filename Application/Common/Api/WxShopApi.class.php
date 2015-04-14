@@ -10,6 +10,7 @@ namespace Common\Api;
 
 class WxShopApi extends WeixinApi{
 	
+	
 	//==================分组管理
 	/**
 	 * 分组所属商品管理
@@ -31,7 +32,7 @@ class WxShopApi extends WeixinApi{
 		$accessToken = $this->getAccessToken();
 		$data = json_encode(array('group_id'=>$group_id,'product'=>$product_list),JSON_UNESCAPED_UNICODE);
 		$url = "https://api.weixin.qq.com/merchant/group/productmod?access_token=$accessToken";
-				
+		
 		$result = $this->curlPost($url,$data);
 		
 		if($result['status']){
@@ -188,14 +189,162 @@ class WxShopApi extends WeixinApi{
 	
 	//==================商品管理
 	
+	/**
+	 * 商品修改
+	 */
+	public function productMod($product){
+		
+		$accessToken = $this->getAccessToken();
+		$data = json_encode($product,JSON_UNESCAPED_UNICODE);
+		$url = "https://api.weixin.qq.com/merchant/update?access_token=$accessToken";
+		$result = $this->curlPost($url,$data);
+		
+		if($result['status']){
+			if ($result['msg'] -> errcode == 0) {
+				return array('status' => true, 'info' => $result['msg']);
+			} else {
+				$index = $result['msg'] -> errcode;
+				return array('status' => false, 'info' => $this -> errcode[$index]);
+			}
+		}else{
+			return array('status' => false, 'info' => $result['msg']);
+		}
+	}	
+		
+	
+	/**
+	 * 商品上下架/单个
+	 * @param product_id 数组
+	 * @param $status 0:下架，1:上架
+	 */
+	public function productStatus($product_id,$status){
+		
+		$accessToken = $this->getAccessToken();
+		$data = json_encode(array('product_id'=>$product_id,'status'=>$status),JSON_UNESCAPED_UNICODE);
+		$url = "https://api.weixin.qq.com/merchant/modproductstatus?access_token=$accessToken";
+		
+		$result = $this->curlPost($url,$data);
+		
+		if($result['status']){
+			if ($result['msg'] -> errcode == 0) {
+				return array('status' => true, 'info' => $result['msg']);
+			} else {
+				$index = $result['msg'] -> errcode;
+				return array('status' => false, 'info' => $this -> errcode[$index]);
+			}
+		}else{
+			return array('status' => false, 'info' => $result['msg']);
+		}
+	}
+	
+	/**
+	 * 商品删除/单个
+	 * @param product_id 数组
+	 */
+	public function productDel($product_id){
+		
+		
+		$accessToken = $this->getAccessToken();
+		$data = json_encode(array('product_id'=>$product_id),JSON_UNESCAPED_UNICODE);
+		$url = "https://api.weixin.qq.com/merchant/del?access_token=$accessToken";
+		
+		$result = $this->curlPost($url,$data);
+		
+		if($result['status']){
+			if ($result['msg'] -> errcode == 0) {
+				return array('status' => true, 'info' => $result['msg']);
+			} else {
+				$index = $result['msg'] -> errcode;
+				return array('status' => false, 'info' => $this -> errcode[$index]);
+			}
+		}else{
+			return array('status' => false, 'info' => $result['msg']);
+		}
+	}
+	
+	/**
+	 * 商品添加
+	 * @param $prodcut 商品信息
+	 */
+	public function productCreate($product){
+		
+		$accessToken = $this->getAccessToken();
+		$data = json_encode($product,JSON_UNESCAPED_UNICODE);
+		$url = "https://api.weixin.qq.com/merchant/create?access_token=$accessToken";
+		
+		$result = $this->curlPost($url,$data);
+		
+		if($result['status']){
+			if ($result['msg'] -> errcode == 0) {
+				return array('status' => true, 'info' => $result['msg']);
+			} else {
+				$index = $result['msg'] -> errcode;
+				return array('status' => false, 'info' => $this -> errcode[$index]);
+			}
+		}else{
+			return array('status' => false, 'info' => $result['msg']);
+		}
+	}
+	
+	/**
+	 * 获取指定分类的属性值
+	 *  [
+		    {
+		      "id": "1075741879",
+		      "name": "品牌",
+		      "property_value": [
+		        {
+		          "id": "200050867",
+		          "name": "VIC&#38"
+		        },
+		        {
+		          "id": "200050868",
+		          "name": "Kate&#38"
+		        },
+		        {
+		          "id": "200050971",
+		          "name": "M&#38"
+		        },
+		        {
+		          "id": "200050972",
+		          "name": "Black&#38"
+		        }
+		      ]
+		    }, 
+		    {
+		        "id": "123456789", 
+		        "name": "颜色", 
+		        "property_value": ...
+		    }
+		 ]
+	 * 
+	 */
+	public function cateAllProp($cate_id){
+		$accessToken = $this->getAccessToken();
+		$data = json_encode(array('cate_id'=>($cate_id)));
+		$url = "https://api.weixin.qq.com/merchant/category/getproperty?access_token=$accessToken";
+		$result = $this->curlPost($url,$data);
+//		dump($data);
+		if($result['status']){
+			if ($result['msg'] -> errcode == 0) {
+				return array('status' => true, 'info' => $result['msg']->properties);
+			} else {
+				$index = $result['msg'] -> errcode;
+				return array('status' => false, 'info' => $this -> errcode[$index]);
+			}
+		}else{
+			return array('status' => false, 'info' => $result['msg']);
+		}
+	}
 	
 	
 	/**
-	 * 获取商品SKU
+	 * 获取指定分类的SKU
 	 */
 	public function getSKU($cate_id=1){
 		$accessToken = $this->getAccessToken();
-		$data = json_encode(array('cate_id'=>intval($cate_id)));
+		$data = json_encode(array('cate_id'=>($cate_id)),JSON_UNESCAPED_UNICODE);
+		
 		$url = "https://api.weixin.qq.com/merchant/category/getsku?access_token=$accessToken";
 		$result = $this->curlPost($url,$data);
 //		dump($data);
