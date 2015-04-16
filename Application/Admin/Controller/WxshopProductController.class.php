@@ -11,6 +11,122 @@ namespace Admin\Controller;
 class WxshopProductController extends AdminController {
 	
 	/**
+	 * 商品运费设置
+	 */
+	public function express(){
+		if(IS_GET){
+			
+			$productid = I('get.productid','');
+			$id = I('get.id',0);
+			
+			$result = apiCall("Admin/Wxproduct/getInfo", array(array('product_id'=>$productid) ));
+			
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			
+			if(is_null($result['info'])){
+				$this->error("警告：商品信息获取失败！");
+			}
+			
+			$location = $result['info']['loc_country'].">>".$result['info']['loc_province'].">>".$result['info']['loc_city'].">>".$result['info']['loc_address'];
+			
+			$this->assign("storeid",$result['info']['storeid']);
+			$this->assign("location",$location);
+			$this->assign("delivery_type",$result['info']['delivery_type']);
+			$tmp = json_decode($result['info']['express'],JSON_UNESCAPED_UNICODE);
+			$this->assign("express",$tmp);
+			if(count($tmp) > 0){
+				foreach($tmp as $vo){
+					$express[$vo['id']] = $vo['price']/100.0;
+				}
+				$this->assign("express",$express);
+			}
+			$this->assign("template_id",$result['info']['template_id']);
+			
+			$result = apiCall("Tool/Province/queryNoPaging", array(array('countryid'=>1017) ));
+			if($result['status']){				
+				$this->assign("province",$result['info']);
+			}else{
+				$this->error("警告：省份信息获取失败！");
+			}
+			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+			
+			$result = $wxshopapi->expressGetAll();
+//			dump($result);
+			if($result['status']){	
+				$this->assign("expresslist",$result['info']);				
+			}else{
+				$this->error("警告：运费信息获取失败！");
+			}
+			
+			$this->assign("countrylist",C('COUNTRY_LIST'));
+			$this->assign("productid",$productid);
+			$this->assign("id",$id);
+			$this->display();
+		}else{
+//			delivery_info		
+//					delivery_type	
+//					template_id	
+//					express	= []
+//						id
+//						price	
+			$query = I('post.query','','htmlspecialchars_decode');
+			$query = json_decode($query,JSON_UNESCAPED_UNICODE);
+			
+//			dump($query);
+			
+			$productid = I('post.productid','');
+			if(empty($productid)){
+				$this->error("商品ID失效！");
+			}
+			
+			$flag =  $query['islocchange'];
+			$entity = array();
+			if($flag){
+				$entity['loc_country'] = $query['country'];
+				$entity['loc_province'] = $query['province'];
+				$entity['loc_city'] = $query['city'];
+				$entity['loc_address'] = $query['area'];
+			}
+			
+			$flag = $query['haspostfee'];
+			$templateid = intval($query['templateid']);
+			if($flag){
+				$entity['attrext_ispostfree'] = 0;
+				if($templateid > 0){
+					$entity['delivery_type'] = 1;
+					$entity['template_id'] = $templateid;
+					$entity['express'] = '';
+				}else{
+					$entity['delivery_type'] = 0;
+					foreach($query['express'] as &$vo){
+						$vo['price'] = $vo['price']*100.0;
+						$vo['id'] = intval($vo['id']); 
+					}
+					$entity['express'] = json_encode($query['express'],JSON_UNESCAPED_UNICODE);
+					$entity['template_id'] = 0;
+				}
+			}else{
+				$entity['attrext_ispostfree'] = 1;
+				$entity['delivery_type'] = -1;
+			}
+			
+//			dump($entity);
+			
+			$result = apiCall("Admin/Wxproduct/save", array(array('product_id'=>$productid),$entity));
+			
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			
+			$this->success("操作成功！");
+			
+		}
+	}
+	
+	
+	/**
 	 * 商品SKU 管理
 	 */
 	public function sku(){
@@ -23,6 +139,10 @@ class WxshopProductController extends AdminController {
 			
 			if(!$result['status']){
 				$this->error($result['info']);
+			}
+			
+			if(is_null($result['info'])){
+				$this->error("警告：商品信息获取失败！");
 			}
 			
 			if($result['info']['has_sku'] == 1){
@@ -38,9 +158,7 @@ class WxshopProductController extends AdminController {
 				}
 			}
 			
-			if(is_null($result['info'])){
-				$this->error("警告：商品信息获取失败！");
-			}
+			$this->assign("storeid",$result['info']['storeid']);
 			
 			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
 			
@@ -54,7 +172,6 @@ class WxshopProductController extends AdminController {
 			
 			$this->assign("productid",$productid);
 			$this->assign("id",$id);
-			$this->assign("storeid",$result['info']['storeid']);
 			$this->display();
 		}else{
 			
@@ -72,12 +189,32 @@ class WxshopProductController extends AdminController {
 //			$sku_info = json_encode($sku_info);
 			$result = apiCall("Admin/WxproductSku/addSkuList", array($productid,$sku_info,$sku_list));
 			if(!$result['status']){
+				
 				$this->error($result['info']);
+				
 			}else{
-				$this->success("保存成功！");
+				
+				$result = apiCall("Admin/Wxproduct/getInfo", array(array('product_id'=>$productid) ));
+				if($result['status']){
+					$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+					$localproduct = $result['info'];
+					$localproduct = $this->toWeixinproduct($localproduct);	
+					$localproduct['product_id'] = $productid;	
+					$result = $wxshopapi->	productMod($localproduct);		
+					if($result['status']){
+						$this->success("保存成功！");
+					}else{						
+						$this->error($result['info']);
+					}
+				}else{
+					$this->error($result['info']);
+				}
+				
 			}
 		}
 	}
+
+	
 	
 	/**
 	 * 
@@ -457,7 +594,8 @@ class WxshopProductController extends AdminController {
 				$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
 				$wxproduct = $this->toWeixinproduct($result['info']);
 				$wxproduct['product_id'] = $result['info']['product_id'];
-				
+//				var_dump(json_encode($wxproduct,JSON_UNESCAPED_UNICODE));
+//				return ;
 				$result = $wxshopapi->productMod($wxproduct);
 //				var_dump(json_encode($wxproduct,JSON_UNESCAPED_UNICODE));
 				if($result['status']){
@@ -588,32 +726,21 @@ class WxshopProductController extends AdminController {
 	}
 
 	private function getSKUList() {
-		/**
-		 * "sku_list": [
-		 {
-		 "sku_id": "1075741873:1079742386",
-		 "price": 30,
-		 "icon_url": "http://mmbiz.qpic.cn/mmbiz/4whpV1VZl28bJj62XgfHPibY3ORKicN1oJ4CcoIr4BMbfA8LqyyjzOZzqrOGz3f5KWq1QGP3fo6TOTSYD3TBQjuw/0",
-		 "product_code": "testing",
-		 "ori_price": 9000000,
-		 "quantity": 800
-		 },
-		 ],
-		 */
+		
 		$has_sku = I('post.has_sku', '0');
 
 		if ($has_sku == "0") {
 			$ori_price = I('post.ori_price', 0, 'intval');
 			$price = I('post.price', 0, 'intval');
 			//统一规格
-			$sku = array('sku_id' => '', //暂时为统一规格
+			$sku = array('sku_id' => '', //商品添加时默认为统一规格
 			'icon_url' => I('post.main_img', ''),
 			 'ori_price' => $ori_price * 100, 'price' => $price * 100, 
 			 'quantity' => I('post.quantity', 0, 'intval'), 
 			 'product_code' => I('post.product_code', "")
 			  );
 		} else {
-			//TODO:多规格
+			//商品添加页面不增加多规格功能
 			//post.ori_price[]
 
 		}
@@ -636,23 +763,8 @@ class WxshopProductController extends AdminController {
 		}
 		//处理SKU_INFO
 		
-		$sku_info = $localproduct['sku_info'];
-		$sku_arr = explode(";", $sku_info);
-		$sku_infolist = array();
-				
-		foreach ($sku_arr as $vo) {
-			$sku = explode(":", $vo);
-			if (count($sku) == 2) {
-				$value_arr = array();
-				$vallist = explode(",", $sku[1]);
-				
-				foreach ($vallist as $val) {
-					array_push($value_arr,$val);
-				}
-				
-				array_push($sku_infolist,array('id'=>$sku[0],'vid'=>$value_arr));
-			}
-		}
+		$sku_info = json_decode($localproduct['sku_info']);
+		
 		
 		//处理商品属性
 		$property = $localproduct['properties'];
@@ -672,7 +784,7 @@ class WxshopProductController extends AdminController {
 		 	'img' => $imglist, 
 		 	'main_img' => $localproduct['main_img'], 
 			'property' => $properties, 
-			'sku_info' => $sku_infolist, 
+			'sku_info' => $sku_info, 
 			'buy_limit' => intval($localproduct['buy_limit']), 
 			'detail'=>array(),
 		);
@@ -716,16 +828,42 @@ class WxshopProductController extends AdminController {
 			'icon_url'=>$localproduct['main_img']
 			));
 		}else{
-			//TODO:多规格情况下处理
+			//多规格情况下处理
 			//去wxproduct_sku 查询
-			
+			$skulist = apiCall("Admin/WxproductSku/queryNoPaging", array(array('product_id'=>$localproduct['product_id'])));
+			$sku_list = $skulist['info'];
+			foreach($sku_list as &$vo){
+				unset($vo['id']);
+				unset($vo['product_id']);
+				unset($vo['createtime']);
+			}
 		}
 		
-		return  array(
+		$delivery_info = [];
+		
+		if($localproduct['attr_ispostfree'] == 0){
+			if($localproduct['delivery_type'] == 1){
+				$delivery_info['delivery_type'] = 1;
+				$delivery_info['template_id'] = intval($localproduct['template_id']);
+				$delivery_info['express'] = [];
+			}else{
+				$delivery_info['delivery_type'] = 0;
+				$delivery_info['template_id'] = 0;
+				$delivery_info['express'] = json_decode($localproduct['express']);
+			}
+		}
+		
+		$return = array(
 			'product_base' => $base_attr, 
 			'attrext' => $attrext, 
 			'sku_list' => $sku_list
 		);
+		
+		if(count($delivery_info) > 0){
+			$return['delivery_info'] = $delivery_info;
+		}
+		
+		return $return;
 	}
 	
 	/**

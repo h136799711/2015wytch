@@ -81,7 +81,7 @@
 								<td><a href="{$vo.main_img}" target="_blank" title="点击查看原图" data-toggle="tooltip"><img style="max-width: 120px;" class="thumbnail" src="{$vo.main_img}" /></a>
 								</td>
 								<td>
-									<a href="{:U('Admin/WxshopProduct/express',array('storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">运费</a>
+									<a href="{:U('Admin/WxshopProduct/express',array('id'=>$vo['id'],'storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">运费</a>
 									<a href="{:U('Admin/WxshopProduct/detail',array('id'=>$vo['id'],'storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">商品详情</a>
 									<a href="{:U('Admin/WxshopProduct/sku',array('id'=>$vo['id'],'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">商品规格<i title="规格一般指 颜色、款式等" class="fa fa-question" data-toggle="tooltip"></i></a></td>
 								<td>

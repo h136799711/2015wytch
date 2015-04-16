@@ -1,0 +1,334 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<style type="text/css">
+		.location .form-control,.express-tmpl .form-control{
+			width: auto;
+			display: inline-block;
+		}
+		@keyframes rotate{
+			0%{
+				transform: rotateZ(0deg);
+			}
+			50%{
+				transform: rotateZ(180deg);
+			}
+			100%{
+				transform: rotateZ(360deg);
+			}
+		}
+		@-webkit-keyframes rotate{
+			0%{
+				transform: rotateZ(0deg);
+			}
+			50%{
+				transform: rotateZ(180deg);
+			}
+			100%{
+				transform: rotateZ(360deg);
+			}
+		}
+		.fa-rotate-90{
+			animation-name: rotate;
+			animation-duration: 1s; 
+			animation-iteration-count: infinite;
+			-webkit-animation-name: rotate;
+			-webkit-animation-duration: 3s; 
+			-webkit-animation-iteration-count: infinite;
+			
+		}
+		.express-union{
+			padding: 20px;
+		}
+		.express-union .checkbox{
+			display: inline-block;
+			  width: 120px;
+		}
+		.express-union input{
+			margin-right: 5px;
+			text-align: right;
+		}
+	</style>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+
+			<form class="form form-horizontal">
+				<fieldset>
+					<legend>运费设置<div class="help-block">1. 先点击[保存]。<br/> 2. 再[同步到微信]</div></legend>
+					<div class="form-group">
+						<div class="col-lg-2 col-md-2 control-label">&nbsp;</div>
+						<div class="col-lg-10 col-md-10">
+							<a href="javascript:void(0)" class="btn btn-primary js_submit btn-sm"><i class="fa fa-save" ></i>保存</a>							
+							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
+							
+							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-danger pull-right  ajax-get"><i class="fa fa-send-o"></i>同步到微信</a>
+							
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-2 col-md-2 control-label">商品所在地区</div>
+						
+						<div class="col-lg-10 col-md-10 curlocation">
+							{$location}
+							<a href="javascript:void(0)" class="btn btn-link js_location_edit">编辑</a>
+						</div>
+						
+						<div class="col-lg-10 col-md-10 location" style="display: none;">
+							<select id="country" name="country" class="form-control">
+								<volist name="countrylist" id="country">
+									<option value="{$key}">{$country}</option>
+								</volist>
+							</select>
+							<select id="province" name="province" class="form-control">
+								<option value=''>请选择省份</option>
+								<volist name="province" id="vo">
+									<option value="{$vo.provinceid}">{$vo.province}</option>
+								</volist>
+							</select>
+							<select id="city" name="city" class="form-control hidden">
+
+							</select>
+							<select id="area" name="area" class="form-control hidden">
+
+							</select>
+							<span id="pcaloading" class="load8" style="display: none;"><i class="fa fa-spinner loader bg-primary" style=""></i></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-2 col-md-2 control-label">运费</div>
+						<div class="col-lg-10 col-md-10 ">
+							<label class="radio-inline">
+								<input type="radio" value="0" name="express" class="js_express_choose" <eq name="delivery_type" value="-1">checked="checked"</eq>  />免运费
+							</label>
+							<label class="radio-inline">
+								<input type="radio" value="1" name="express" class="js_express_choose" <neq name="delivery_type" value="-1">checked="checked"</neq> />需要运费
+							</label>
+							<div class="choose-express well" <eq name="delivery_type" value="-1">style="display: none;"</eq> >
+								<label class="radio-inline">
+									<input type="radio" value="0" name="express_tmpl" class="js_express_tmpl" <eq name="delivery_type" value="0">checked="checked"</eq> checked="checked" />统一运费
+								</label>
+								<label class="radio-inline">
+									<input type="radio" value="1" name="express_tmpl" class="js_express_tmpl" <eq name="delivery_type" value="1">checked="checked"</eq> />使用运费模板
+								</label>
+								<div class="express-union"  <eq name="delivery_type" value="1">style="display: none;"</eq>>
+									<div class="">
+										<label class="checkbox">
+											<input type="checkbox" value="10000027" <if condition="isset($express['10000027'])">checked="checked"</if> name="express_tmpl" />平邮
+										</label>
+										<input type="text" name="surface" value="<if condition="isset($express['10000027'])">{$express['10000027']}</if>" style="width: 60px;"/><span>元</span>
+									</div>
+									<div class="">
+										<label class="checkbox">
+											<input type="checkbox" value="10000028" <if condition="isset($express['10000028'])">checked="checked"</if> name="express_tmpl" />普通快递
+										</label>
+										<input type="text" name="normal" value="<if condition="isset($express['10000028'])">{$express['10000028']}</if>" style="width: 60px;" /><span>元</span>
+									</div>
+									<div class="">
+										<label class="checkbox">
+											<input type="checkbox" value="10000029" <if condition="isset($express['10000029'])">checked="checked"</if> name="express_tmpl" />EMS
+										</label>
+										<input type="text" name="ems" value="<if condition="isset($express['10000029'])">{$express['10000029']}</if>" style="width: 60px;" /><span>元</span>
+									</div>
+								</div>
+								<div class="express-tmpl" <eq name="delivery_type" value="0">style="display: none;"</eq> >
+									<select class="form-control" >
+										<volist name="expresslist" id="vo">
+											<option value="{$vo.Id}" <eq name="vo['Id']" value="$template_id">selected="selected"</eq> >{$vo.Name}</option>
+										</volist>
+									</select>
+									<div class="help-block">若要新增邮费模板，请到微信公众平台操作！</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-2 col-md-2 control-label">&nbsp;</div>
+						<div class="col-lg-10 col-md-10">
+							<a href="javascript:void(0)" class="btn btn-primary js_submit btn-sm"><i class="fa fa-save" ></i>保存</a>
+							
+							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
+							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-danger pull-right  ajax-get"><i class="fa fa-send-o"></i>同步到微信</a>
+							
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		function appendToCity(data){
+					var city = $("#city");
+					city.empty();
+					city.append($("<option value=''>请先选择省份</option>"));
+					
+					if(!data){
+						city.addClass("hidden");
+						return ;
+					}
+					if(data.length > 0){
+						city.removeClass("hidden");
+					}
+					for(var i=0;i<data.length;i++){
+						var ele = $("<option></option>");
+						ele.text(data[i].city).attr("value",data[i].cityid).appendTo(city);
+					}
+			}
+			function appendToArea(data){
+					$("#area").removeClass("txt-gray");
+					var area = $("#area");
+					area.empty();
+					if(!data){
+						area.addClass("hidden");
+						return ;
+					}
+					if(data.length > 0){
+						area.removeClass("hidden");
+					}
+					for(var i=0;i<data.length;i++){
+						var ele = $("<option></option>");
+						ele.text(data[i].area).attr("value",data[i].areaid).appendTo(area);
+					}
+			}
+			
+			
+			
+		$(function(){
+				$(".js_submit").click(function(){
+					
+					var query = {
+						islocchange:false,
+						country:'',
+						province:'',
+						city:'',
+						area:'',
+						haspostfee:false,
+						templateid:0,
+						express:[
+						]
+					};
+					if(!$(".location").is(":hidden")){
+						var val = $(".location #country").val(); 						
+						query.country = $(".location #country option[value='"+val+"']").text();
+						var val = $(".location #province").val(); 
+						query.province = $(".location #province option[value='"+val+"']").text();
+						var val = $(".location #city").val(); 
+						query.city = $(".location #city option[value='"+val+"']").text();
+						var val = $(".location #area").val(); 
+						query.area = $(".location #area option[value='"+val+"']").text();
+						query.islocchange = true;
+					}
+					
+					if(!$(".choose-express").is(":hidden")){
+						//需要运费
+						//1. 统一运费
+						query.haspostfee = true;
+						if(!$(".express-union").is(":hidden")){
+							$(".express-union input[type='checkbox']").each(function(index,item){
+//									console.log($(item).attr("checked"));
+								if($(item).prop("checked")){
+									var price = parseFloat($(item).parent().next().val());
+									
+									if(isNaN(price)){
+										price = 0;
+									}
+									
+									//1. 统一运费
+									query.express.push({'id':$(item).val(),'price':price});
+									
+									
+								}
+							});
+							
+						}else{						
+							//2. 运费模板
+							query.templateid =  $(".express-tmpl select").val();
+						}
+					}
+					
+					query = JSON.stringify(query);
+					var target = "{:U('Admin/WxshopProduct/express')}";
+					var that = $(".js_submit");
+					var productid = "{$productid}";
+					window.myUtils.ajaxpost(that,target,{query:query,productid:productid});
+					
+				})
+				$(".js_location_edit").click(function(){
+					$(".location").show();
+					$(".curlocation").hide();
+				});
+				$(".js_express_choose").click(function(){
+					var value = $(this).val();		
+					if(value == 1){
+						$(".choose-express").show();
+					}else{
+						$(".choose-express").hide();
+					}
+				});
+				$(".js_express_tmpl").click(function(){
+					var value = $(this).val();
+					console.log(value);
+					if(value == 1){
+						$(".express-tmpl").show();
+						$(".express-union").hide();
+						
+					}else{
+						$(".express-tmpl").hide();
+						$(".express-union").show();
+					}
+				});
+				$("#country").change(function(){
+					console.log($("#country").val());
+					if(	$("#country").val() == "1017"){
+						$("#province").show();
+					}else{
+						$("#province").hide();
+					}
+				});
+				$("#province").change(function(){
+					var provinceID = $("#province").val();
+//					console.log(provinceID);
+					if(provinceID){
+						$("#pcaloading").show();
+						$.post("{:U('Tool/City/getCitys')}",{provinceid:provinceID},function(data){
+//							console.log(data);
+							if(data.status){
+								appendToCity(data.info);								
+							}else{
+								
+							}
+							$("#pcaloading").hide();
+						});
+					}
+				});
+				
+				$("#city").change(function(){
+					$("#city").removeClass("txt-gray");
+					var cityID = $("#city").val();
+//					console.log(cityID);
+					if(cityID){
+						$("#pcaloading").show();
+						$.post("{:U('Tool/City/getArea')}",{cityid:cityID},function(data){
+//							console.log(data);
+							if(data.status){
+								appendToArea(data.info);					
+							}else{
+								
+							}
+							$("#pcaloading").hide();
+						});
+					}
+				});
+		})
+	</script>
+</block>

@@ -88,10 +88,10 @@
 					<div class="form-group">
 						<label class="control-label">&nbsp;</label>
 						<div class="col-lg-10 col-md-10">
-							<a target-form="detailForm" href="{:U('Admin/WxshopProduct/detail')}" onclick="getData();" class="ajax-post btn btn-primary btn-sm"><i class="fa fa-save"></i>保存</a>
-							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-primary btn-sm ajax-get"><i class="fa fa-send-o"></i>商品发送到微信</a>
-									
-							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-times"></i>取消</a>
+							<a target-form="detailForm" href="{:U('Admin/WxshopProduct/detail')}" onclick="getData();" class="ajax-post btn btn-primary btn-sm"><i class="fa fa-save"></i>本地保存</a>
+							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-primary btn-sm ajax-get"><i class="fa fa-send-o"></i>同步保存</a>
+								
+							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
 							
 						</div>
 					</div>

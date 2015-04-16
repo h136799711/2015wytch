@@ -10,6 +10,26 @@ namespace Common\Api;
 
 class WxShopApi extends WeixinApi{
 	
+	//==================运费模板
+	
+	public function expressGetAll(){
+	
+		$accessToken = $this->getAccessToken();
+		$url = "https://api.weixin.qq.com/merchant/express/getall?access_token=$accessToken";
+		$result = $this->curlGet($url);
+		$result = json_decode($result,JSON_UNESCAPED_UNICODE);
+//		dump($result);
+		if(isset($result['errcode'])){
+			if($result['errcode'] == 0){
+				return array('status'=>true,'info'=>$result['templates_info']);
+			}else{
+				$index = $result['errcode'];
+				return array('status' => false, 'info' => $this -> errcode[$index]);
+			}
+		}else{
+			return array('status'=>false,'info'=>$result);
+		}
+	}
 	
 	//==================分组管理
 	/**

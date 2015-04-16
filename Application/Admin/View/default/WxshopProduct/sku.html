@@ -20,7 +20,7 @@
 					<div class="form-group">
 					<label class="control-label">&nbsp;</label>
 					<div class="">
-						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)" ><i class="fa fa-save"></i>保存</a>
+						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)" ><i class="fa fa-save"></i>同步保存</a>
 						<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
 					</div>
 				</div>
@@ -29,14 +29,33 @@
 						<?php for($i=0;$i<count($skulist);$i++) { ?>
 						<div class='sku_wrp' data-skuname='<?php echo $skulist[$i]->name; ?>' data-id='<?php echo $skulist[$i]->id; ?>'>
 							<p>
-								<?php echo $skulist[$i]->name; ?></p>
+								<?php echo $skulist[$i]->name; ?><a href="javascript:void(0);"  class="btn btn-link js_sku_edit">编辑</a></p>
 							<div class='skuvalue_wrp'>
 								<?php for($j=0;$j<count($skulist[$i]->value_list);$j++) { ?>
 								<label class="checkbox-inline">
-									<input type="checkbox" {:(strpos($skuinfo,$skulist[$i]->value_list[$j]->id.',')  === false ?'':'checked')} class="js_sku_value {:(strpos($skuinfo,$skulist[$i]->value_list[$j]->id.',')  === false ?'':'checked')}" data-skuname='<?php echo $skulist[$i]->name; ?>' data-valuename='<?php	echo $skulist[$i]->value_list[$j]->name; ?>' data-sku='<?php echo $skulist[$i]->id; ?>' value="<?php	 echo $skulist[$i]->value_list[$j]->id; ?>">
+									<input type="checkbox" {:(strpos($skuinfo,$skulist[$i]->value_list[$j]->id.',')  === false ?'':'checked')} class="js_sku_value {:(strpos($skuinfo,$skulist[$i]->value_list[$j]->id.',')  === false ?'':'checked')}" data-valuename='<?php	echo $skulist[$i]->value_list[$j]->name; ?>' value="<?php	 echo $skulist[$i]->value_list[$j]->id; ?>">
 									<?php echo $skulist[$i]->value_list[$j]->name; ?>
 								</label>
 								<?php } ?>
+							</div>
+							<div class='skuvalue_edit_wrp well clearfix hidden'>
+								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'><label>规格值</label><input type='text'  class="input-sm" />
+									<a href="javascript:void(0)" class="btn btn-primary js_sku_add btn-sm" >添加</a></div>
+								<div class='skuvalue-preview'>
+								<?php for($j=0;$j<count($skulist[$i]->value_list);$j++) { ?>
+								<label class="bg-muted">
+									<?php echo $skulist[$i]->value_list[$j]->name; ?>
+									
+									<?php echo (strpos($skulist[$i]->value_list[$j]->id,"$") === 0?"<i class='fa fa-times js_delete'></i>":"") ?>
+									
+								</label>
+								<?php } ?>
+								</div>
+								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'>
+									<a href="javascript:void(0)"  class="btn btn-primary js_sku_sure btn-sm" >确定</a>
+									<a href="javascript:void(0)" class="btn btn-default js_sku_cancel btn-sm" >取消</a>
+								</div>
+								
 							</div>
 						</div>
 						<?php } ?>
@@ -53,7 +72,7 @@
 				<div class="form-group">
 					<label class="control-label">&nbsp;</label>
 					<div class="">
-						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)"  ><i class="fa fa-save"></i>保存</a>
+						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)"  ><i class="fa fa-save"></i>同步保存</a>
 						<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
 					</div>
 				</div>
@@ -70,6 +89,108 @@
 
 <block name="area_footer">
 	<script type="text/javascript">
+		window.skumanage = {
+			'deleted':[],
+			'added':[],
+		};
+
+		function manageSkuClick(ev){			
+			
+			$ele = $(ev.target);
+			if($ele.hasClass("js_sku_cancel")){
+				$ele.parents(".skuvalue_edit_wrp").addClass("hidden");
+			}
+			
+			if($ele.hasClass("js_sku_edit")){
+				$ele.parent().siblings(".skuvalue_wrp").addClass("hidden");
+				$ele.parent().siblings(".skuvalue_edit_wrp").removeClass("hidden");
+			}
+			
+			
+			if($ele.hasClass("js_sku_sure")){
+				var cont = $ele.parents(".skuvalue_edit_wrp").prev();
+				var label = cont.find("label");
+				for(var del in window.skumanage.deleted){
+//					console.log(label.length);
+					for(var i=0;i< label.length;i++){
+//						console.log($(label[i]).text().trim(), window.skumanage.deleted[del].trim());
+						if($(label[i]).text().trim() == window.skumanage.deleted[del].trim() ){
+							console.log("remove");
+							$(label[i]).remove();
+							break;
+						}
+					}
+				}
+
+				
+				for(var add in window.skumanage.added){
+					var check = '<label class="checkbox-inline">	<input type="checkbox" class="js_sku_value" value="$'+window.skumanage.added[add]+'" >'+window.skumanage.added[add]+'</label>';
+					cont.append(check);
+				}
+				window.skumanage.deleted = [];
+				window.skumanage.added = [];
+				$par = $ele.parents(".skuvalue_edit_wrp").addClass("hidden");
+				$par.prev().removeClass("hidden");
+				
+				createSKUTable();
+				wxuploadimg.init({cont:".wxuploaderimg"});
+//				setSkuData(JSON.parse(window.skuvalue));
+				return ;
+			}
+			
+			if($ele.hasClass("js_delete")){
+				$ele.parent().remove();
+				
+				var skuvalue = $ele.parent().text();
+//				console.log(skuvalue);
+				ev.preventDefault();
+				ev.stopPropagation();
+				
+				for(var i=0;i<skumanage.added.length;i++){
+					if(skumanage.added[i] == skuvalue){
+						skumanage.added = skumanage.added.slice(i,i+1);
+						return ;
+					}
+				}
+				
+				skumanage.deleted.push(skuvalue);
+				return ;
+			}
+
+			if($ele.hasClass("js_sku_add")){
+				var $cont = $(".skuvalue_edit_wrp");
+				var skuvalue = $ele.prev().val().trim();
+				
+				if(skuvalue){
+					var len = skuvalue.replace(/[^\x00-\xff]/g, 'xx').length;
+					
+					if(len > 30 ){
+						$.scojs_message("不能超过15字!",$.scojs_message.TYPE_ERROR);
+						return ;
+					}
+					for(var i=0;i<skumanage.added.length;i++){
+						if(skumanage.added[i] == skuvalue){
+							$.scojs_message("已经存在相同规格值!",$.scojs_message.TYPE_ERROR);
+							return ;
+						}
+					}
+					var $panel = $ele.parents(".skuvalue_edit_wrp");
+					$panel = $panel.find(".skuvalue-preview");
+					$panel.append("<label class='bg-muted'>"+skuvalue+"<i class='fa fa-times js_delete'></i></label>");	
+					
+					skumanage.added.push(skuvalue);
+					
+					
+				}else{
+					$.scojs_message("不能添加空值!",$.scojs_message.TYPE_ERROR);
+					return ;
+				}
+
+			}
+			
+		}
+	
+	
 		function createSKUTable(){
 			var cont = $(".sku-table");
 			cont.empty();
@@ -288,7 +409,7 @@
 				var productid = "{$productid}";
 				var id = "{$id}";
 				var query = {productid:productid,id:id,sku_list:getSkuData(),sku_info:getSkuInfo()};
-				console.log(query);
+//				console.log(query);
 				if(query.sku_list.length == 0 || query.sku_info.Length == 0){
 					return false;
 				}
@@ -302,6 +423,10 @@
 				wxuploadimg.init({cont:".wxuploaderimg"});
 				setSkuData(JSON.parse(window.skuvalue));
 			
+			});
+			
+			$(".sku_wrp").click(function(ev){
+				manageSkuClick(ev);
 			});
 		})
 	</script>

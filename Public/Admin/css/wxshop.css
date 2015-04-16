@@ -196,6 +196,24 @@ body {
 	text-align: right;
 }
 
+.skuvalue_edit_wrp label.bg-muted{
+	display: inline-block;
+  	margin: 0 10px 10px 0;
+  	background-color: #e5e7ec;
+  	padding: 0 10px;
+	font-weight: normal;
+}
+.skuvalue_edit_wrp .skuvalue-edit{
+	margin:10px 0px;
+}
+.skuvalue_edit_wrp input{
+	margin: 0px 15px;
+}
+.skuvalue_edit_wrp i.fa-times{
+	cursor: pointer;
+}
+
+
 /**
  * 图片上传样式
  */
