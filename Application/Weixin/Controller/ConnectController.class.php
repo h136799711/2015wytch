@@ -275,7 +275,6 @@ class ConnectController extends WeixinController {
 
 	/**
 	 * 处理用户发送的图片消息
-	 * TODO:多图文查询
 	 */
 	private function imageProcess() {
 		$keyword = $this->data['Content'];

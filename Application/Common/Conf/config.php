@@ -72,5 +72,4 @@ return array(
 		'tmpFolder'=>'./Temp',//临时文件夹可以删除里面的内容
 		'bgImg'=>'./Uploads/QrcodeMerge/qrcode_template.jpg',//背景
 	)
-	
 );

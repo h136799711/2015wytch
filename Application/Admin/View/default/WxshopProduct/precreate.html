@@ -37,14 +37,14 @@
 								</div>
 							</div>
 							<ul class="js_sec_0">
-
+								
 								<volist name="rootcate" id="vo">
 									
-									<li><a href="javascript:;" data-id="{$vo->id}" title="{$vo->name}"  >{$vo->name}</a>
+									<li>
+										<a href="javascript:;" data-id="{$vo['id']}" title="{$vo['name']}"  >{$vo['name']}</a>
 									</li>
 									
 								</volist>
-
 
 							</ul>
 						</div>
@@ -138,7 +138,14 @@
 				getCates();
 				if(index < 4){
 					window.postTimeout = setTimeout(function(){
-							window.ajax_post = $.post("{:U('Admin/Wxshop/cate')}",{cateid:data}).done(function(data){
+						window.ajax_post = $.post("{:U('Admin/Wxshop/cate')}",{cateid:data}).done(function(data){
+//							console.log(data.info == null);
+						if(data.info == null){
+							$("#js_submit").removeClass("disabled");
+							$(".js_catelist"+(index+1)).addClass("hidden");
+							$(".js_catetxt"+(index+2)).addClass("hidden").html("");
+							return ;
+						}
 						if(data.status){
 							if(data.info && data.info.length > 0){
 								appendTo($(".js_sec_"+(index+1)),data.info);
@@ -147,13 +154,8 @@
 							}else{
 								$(".js_catelist"+(index+1)).addClass("hidden");
 							}
-							$("#js_submit").addClass("disabled");
+								$("#js_submit").addClass("disabled");
 							
-						}else if(data.info == null){
-//							alert(data.info);
-							$("#js_submit").removeClass("disabled");
-							$(".js_catelist"+(index+1)).addClass("hidden");
-							$(".js_catetxt"+(index+2)).addClass("hidden").html("");
 						}else{
 							alert(data.info);
 							$("#js_submit").addClass("disabled");
@@ -190,7 +192,7 @@
 			}
 			$("#cates").val(cates);
 			$("#catename").val(catename);
-			console.log($("#cates").val());
+//			console.log($("#cates").val());
 		}
 		
 		function filter(target,ele){

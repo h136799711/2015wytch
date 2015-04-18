@@ -336,11 +336,12 @@
 	
 		function appendProp(list){
 //			console.log(list);
+			
 			$ele = $(".js_prop .prop-list");
 			for(var i=0;i<list.length;i++){
 				//创建一个dropdown
 				$dropdown = $("<button type='button' data-toggle='dropdown' class='btn btn-primary dropdown-toggle'>选择<span class='caret'></span></button>")
-				$propName = $('<span>'+list[i].name+'</span>');
+				$propName = $('<span>'+list[i].propname+'</span>');
 				$prop = $('<div class="dropdown dropdown-toggle"></div>');
 				$prop.append($dropdown);
 				$ele.append($("<div class='prop-item' ></div>").attr("data-id",list[i].id).append($propName).append($prop));
@@ -391,6 +392,11 @@
 			}).done(function(data) {
 				//
 				if (data.status) {
+					if(data.info == null){
+						$ele = $(".js_prop .prop-list");
+						$ele.html("无属性");
+						return ;
+					}
 					appendProp(data.info);
 				} else {
 					$.scojs_message('添加失败!', $.scojs_message.TYPE_ERROR);

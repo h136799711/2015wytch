@@ -267,7 +267,20 @@ abstract class Api {
 			return $this -> apiReturnSuc($result);
 		}
 	}
-
+	
+	/**
+	 * 批量插入
+	 * @param $list 数组
+	 */	
+	public function addAll($list){
+		
+		$result = $this->model->addAll($list);
+		if($result === FALSE){
+			return $this->apiReturnErr($this->model->getError());
+		}else{
+			return $this->apiReturnSuc($result);
+		}
+	}
 	/**
 	 * query 不分页
 	 * @param $map 查询条件

@@ -407,15 +407,18 @@ class WxshopProductController extends AdminController {
 	 * 商品预创建－选择类目
 	 */
 	public function precreate() {
-		$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-
+//		$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+		
 		if (IS_POST) {
 			//保存
 		} else {
-
-			$result = $wxshopapi -> category(1);
+			
+//			$result = $wxshopapi -> category(1);
+			$map = array('parent'=>0);
+			$result = apiCall("Admin/Category/queryNoPaging", array($map));
+			
 			$storeid = I('get.storeid', 0);
-
+			
 			if ($storeid == 0) {
 				$this -> error("缺少商铺ID参数");
 			}
@@ -436,7 +439,7 @@ class WxshopProductController extends AdminController {
 
 		if (IS_POST) {
 
-			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+//			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
 			
 			$base_attr = $this -> getBaseAttr();
 			$storeid = I('storeid', 0);
@@ -452,18 +455,18 @@ class WxshopProductController extends AdminController {
 
 			//			echo (json_encode($product,JSON_UNESCAPED_UNICODE));
 			
-			$result = ($wxshopapi -> productCreate($product));
-			$product_id = "";
-			if ($result['status']) {
-				$info = $result['info'];
-				if ($info -> errcode == 0) {
-					$product_id = $info -> product_id;
-				} else {
-					$this -> error($info -> errmsg);
-				}
-			} else {
-				$this -> error($result['info']);
-			}
+//			$result = ($wxshopapi -> productCreate($product));
+			$product_id = GUID();
+//			if ($result['status']) {
+//				$info = $result['info'];
+//				if ($info -> errcode == 0) {
+//					$product_id = $info -> product_id;
+//				} else {
+//					$this -> error($info -> errmsg);
+//				}
+//			} else {
+//				$this -> error($result['info']);
+//			}
 
 			//TODO:添加到本地
 			//			dump($product);
@@ -472,7 +475,7 @@ class WxshopProductController extends AdminController {
 			if (!empty($product_id)) {
 				$result = $this -> addToProduct($storeid, $product_id, $product);
 			}
-
+			
 			$this -> productToGroup($wxshopapi, $product_id);
 			if ($result['status']) {
 				$this -> success("操作成功!", U('Admin/WxshopProduct/index', array('storeid' => $storeid)));
@@ -569,9 +572,12 @@ class WxshopProductController extends AdminController {
 	public function cateAllProp() {
 
 		if (IS_AJAX) {
-			$cate_id = I('cate_id', 1);
-			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-			$result = $wxshopapi -> cateAllProp($cate_id);
+			$cate_id = I('cate_id', 0);
+//			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+//			$result = $wxshopapi -> cateAllProp($cate_id);
+			$map = array('cate_id'=>$cate_id);
+			$result = apiCall("Admin/CategoryProp/queryNoPaging", array($map));
+			
 			if ($result['status']) {
 				$this -> success($result['info']);
 			} else {
@@ -585,29 +591,30 @@ class WxshopProductController extends AdminController {
 	 * 同步商品信息到微信服务器
 	 */
 	public function sendToWxServer(){
-		if(IS_AJAX){
-			$id = I('get.id',0);
-			$map['id']=$id;
-			$result = apiCall("Admin/Wxproduct/getInfo", array($map));
-			if($result['status']){
-				
-				$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-				$wxproduct = $this->toWeixinproduct($result['info']);
-				$wxproduct['product_id'] = $result['info']['product_id'];
-//				var_dump(json_encode($wxproduct,JSON_UNESCAPED_UNICODE));
-//				return ;
-				$result = $wxshopapi->productMod($wxproduct);
-//				var_dump(json_encode($wxproduct,JSON_UNESCAPED_UNICODE));
-				if($result['status']){
-					$this->success("操作成功！");
-				}else{
-					$this->error($result['info']);
-				}
-								
-			}else{
-				$this->error($result['info']);
-			}
-		}
+		
+		$this->success("操作成功！");
+		
+//		if(IS_AJAX){
+//			$id = I('get.id',0);
+//			$map['id']=$id;
+//			$result = apiCall("Admin/Wxproduct/getInfo", array($map));
+//			if($result['status']){
+//				
+//				$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+//				$wxproduct = $this->toWeixinproduct($result['info']);
+//				$wxproduct['product_id'] = $result['info']['product_id'];
+//				$result = $wxshopapi->productMod($wxproduct);
+//				if($result['status']){
+//					$this->success("操作成功！");
+//				}else{
+//					$this->error($result['info']);
+//				}
+//								
+//			}else{
+//				$this->error($result['info']);
+//			}
+//		}
+
 	}
 
 	
@@ -663,14 +670,13 @@ class WxshopProductController extends AdminController {
 	 * 产品与分组进行关联
 	 */
 	private function productToGroup($wxshopapi, $productid) {
-
+		
 		$groups = I('groups', '');
 		if ($groups) {
-			foreach ($groups as $vo) {
-				$product_list = array('product_id' => $productid, 'mod_action' => 1);
-				$result = $wxshopapi -> groupModProduct($vo, array($product_list));
-
-			}
+//			foreach ($groups as $vo) {
+//				$product_list = array('product_id' => $productid, 'mod_action' => 1);
+//				$result = $wxshopapi -> groupModProduct($vo, array($product_list));
+//			}
 		}
 
 	}

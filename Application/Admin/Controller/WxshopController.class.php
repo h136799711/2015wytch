@@ -199,10 +199,14 @@ class WxshopController extends AdminController{
 		if($cate_id == -1){
 			$this->success(array());
 		}
-		$wxshopapi = new \Common\Api\WxShopApi($this->appid,$this->appsecret);
 		
-			
-		$result = $wxshopapi->category($cate_id);
+//		$wxshopapi = new \Common\Api\WxShopApi($this->appid,$this->appsecret);
+//		$result = $wxshopapi->category($cate_id);		
+		
+		$map = array('parent'=>$cate_id);
+		
+		$result = apiCall("Admin/Category/queryNoPaging", array($map));
+		
 		if($result['status']){
 			$this->success($result['info']);
 		}else{

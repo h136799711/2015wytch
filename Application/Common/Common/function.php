@@ -278,6 +278,7 @@ function addWeixinLog($data, $operator = '') {
 		$weixinlog->add($log);
 }
 
+
 /**
  * 获取订单状态的文字描述
  */
