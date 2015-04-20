@@ -2,12 +2,53 @@
 
 
 <block name="area_header">
-	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/localization/messages_zh.min.js"></script>
-	
-    <script type="text/javascript" charset="utf-8" src="__CDN__/ueditor/1.4.3/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="__CDN__/ueditor/1.4.3/ueditor.all.min.js"> </script>
+    <!--<script type="text/javascript" charset="utf-8" src="__CDN__/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__CDN__/ueditor/1.4.3/ueditor.all.min.js"> </script>-->
 
+	<link type="text/css" rel="stylesheet" href="__CDN__/comp/wxuploader.css?v=__APP_VERSION__" />
+	<link type="text/css" rel="stylesheet" href="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+	<style type="text/css">
+		.banner.wxuploaderimg .img-preview img{
+			width:320px;
+			height:150px;
+		}
+	</style>
+	
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
+	<style type="text/css">
+		.select2-container--default .select2-selection--single .select2-selection__placeholder{
+	color:#E7E7E7;
+}
+.select2-container--default .select2-selection--single {
+  background-color: #2780e3;
+  border: 0px solid #aaa;
+  border-radius: 4px;
+}
+.select2-container{
+  background: #2780e3;
+  color: #fff;
+  padding: 2px;
+  margin: 0px;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #F5F5F5;
+  }
+  .select2-container--default .select2-search--dropdown .select2-search__field{
+  	color:#444;
+  }
+  	.wxnumber-item{
+  		  background: #DFC2C2;
+		  width: auto;
+		  display: inline-block;
+		  padding: 5px;
+		  margin: 5px;
+  	}
+  	.wxnumber-item i.fa{
+  		margin: 0px 5px;
+  		cursor: pointer;
+  	}
+		
+	</style>
 </block>
 
 <block name="area_body">
@@ -30,19 +71,76 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="inputservice_phone" class="col-md-2 col-lg-2 control-label">客服电话</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-short" name="service_phone" id="inputservice_phone" placeholder="请输入客服电话">
+							<div class="help-block">(请输入客服电话)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputweixin_number" class="col-md-2 col-lg-2 control-label">客服微信号</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="hidden" class="required form-control input-short" name="weixin_number" id="inputweixin_number" >
+							<input type="hidden" class="required form-control input-short" name="weixin_number_name" id="inputweixin_number_name" >
+							
+							<div class="js_weixin_number_list well">
+								<select id="user_select2" style="width:240px">
+									
+								</select>
+							</div>
+							
+							<div class="help-block">(请选择客服微信号，必须先关注本公众号,不要超过5个)</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺logo</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="hidden" class="required form-control input-short" name="logo" id="inputlogo" placeholder="请输入店铺logo、头像。">
+							<div class="wxuploaderimg clearfix logo"  data-maxitems="1">
+								<div class="img-preview clearfix" >
+								</div>
+								<div class="add">
+									<i class="fa fa-plus"></i>
+								</div>
+							</div>
+							<div class="help-block">(请上传店铺logo或头像,建议尺寸：60像素 * 60像素,,50KB以下)</div>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺类别</label>
 						<div class="col-md-10 col-lg-10">
-							<select name="store_type" class="form-control">
+							<select name="store_type" class="form-control input-short">
 							{:W('Partials/datatree',array(C('DATATREE.STORE_TYPE'),true))}
 							</select>
 							<div class="help-block">(店铺名称)</div>
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺Banner</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="hidden" class="required form-control input-short" name="banner" id="inputbanner" placeholder="请输入店铺Banner">
+							<div class="wxuploaderimg clearfix banner"  data-maxitems="1">
+								<div class="img-preview clearfix" >
+								</div>
+								<div class="add">
+									<i class="fa fa-plus"></i>
+								</div>
+							</div>
+							<div class="help-block">(请上传店铺Banner,建议尺寸：640像素 * 300像素,150KB以下)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺备注</label>
+						<div class="col-md-10 col-lg-10">
+							<textarea name="notes" class="form-control" rows="5"></textarea>
+							<div class="help-block">(您可以输入店铺备注)</div>
+						</div>
+					</div>
+					
+					<div class="form-group hidden">
 						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺详情</label>
 						<div class="col-md-10 col-lg-10">
-							<!--<input type="text" class="required form-control input-short" name="desc" id="inputtitle" placeholder="请输入店铺详情">-->
-							 <!-- 加载编辑器的容器 -->
 							 <script id="ueditor" name="desc" type="text/plain" style="height: 480px;" ></script>
 							<div class="help-block">(店铺详情)</div>
 						</div>
@@ -50,7 +148,7 @@
 					<div class="form-group">
 						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
 						<div class="col-lg-10 col-md-10">
-							<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Admin/Wxshop/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a target-form="validateForm" class="ajax-post btn btn-primary" onclick="return getData();" href="{:U('Admin/Wxshop/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
 							<a class="btn btn-default" href="{:U('Admin/Wxshop/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
 						</div>
 					</div>
@@ -58,6 +156,10 @@
 			</form>
 			<!-- form -->
 			
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/select2.min.js"></script>
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+			<include file="template/wxpicture" />
 		</div>
 		<!-- END admin-main-content -->
 	</div>
@@ -66,113 +168,123 @@
 
 <block name="area_footer">
 	
+	
 <script type="text/javascript">
-
+           
     //实例化编辑器
     //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    var ue = UE.getEditor('ueditor');
-
-</script>
-	
-	
-	
-<script type="text/javascript">
-
-$(function() {
+//  var ue = UE.getEditor('ueditor',{
+//  	toolbars:[
+//      ['fullscreen', 'source', 'undo', 'redo', 'bold','italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|','lineheight'
+//     , 'fontsize', 'insertimage','emotion','link', 'unlink', 'anchor', '|','map','print', 'preview',  'drafts'
+//      ]
+//  ]});
+    
+	function getData(){
+		var logo = $(".wxuploaderimg.logo img").attr("src");
+		var banner = $(".wxuploaderimg.banner img").attr("src");
+		
+		$("#inputlogo").val(logo);
+		$("#inputbanner").val(banner);
+		
+		$("#inputweixin_number_name").val("");
+		$(".js_weixin_number_list .wxnumber-item").each(function(index,item){
+			var text = "";
+			$("#inputweixin_number_name").val($("#inputweixin_number_name").val()+$(item).text()+",");
 			
-			//是否中文名字
-			$.validator.addMethod("isCnName", function(value, element) {
-				var tel = /[a-z0-9.*?,(!)&amp;%$^……！·￥——（）　#@]/g;
-				return this.optional(element) || !(tel.test(value));
-			}, "请填写正确的姓名");
-			// 联系电话(手机/电话皆可)验证     
-			$.validator.addMethod("isPhone", function(value, element) {
-				var length = value.length;
-				var mobile = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/;
-				var tel = /^\d{3,4}-?\d{7,9}$/;
-				return this.optional(element) || (tel.test(value) || mobile.test(value));
-			}, "请正确填写您的联系电话");
-			// 身份证号码验证         
-			$.validator.addMethod("isIdCardNo", function(value, element) {
-				return this.optional(element) || IdCardValidate(value);
-			}, "请正确输入您的身份证号码");
-			$("#registerForm").validate({
-				errorPlacement: function(error, element) {
-					$(".checked", element.parent()).remove();
-					error.appendTo(element.parent());
-				},
-				success: function(label) {
-					label.removeClass("error").addClass("checked").text("Ok!");
-				},
-				rules: {
-					idnumber: {
-						required: true,
-						isIdCardNo: true,
-					},
-					username: {
-						required: true,
-						minlength: 6,
-						maxlength: 20,
-						remote:{
-							url:"{:U('Public/check_username')}"
+		});
+		
+		return true;
+		
+	}
+	
+	function appendWeixinNumber(weixin,openid){
+		var len = $("#inputweixin_number").val().split(",").length - 1;
+		
+		if(len > 5){
+			$.scojs_message("不能超过5个！",$.scojs_message.TYPE_ERROR);
+			return ;
+		}
+		
+		$("#inputweixin_number").val($("#inputweixin_number").val()+openid+",");
+		
+//		console.log(weixin);
+		$cont = $(".js_weixin_number_list");
+		$item = $("<div class='wxnumber-item'>"+weixin+"<i class='fa fa-times js_removed'></i></div>");
+		$cont.append($item);
+		$item.attr("data-id",openid);	
+	}
+	
+	function removeWeixinNumber(ele){
+//		console.log(ele);
+		var str = $("#inputweixin_number").val();
+		var openid = ele.attr("data-id");
+		$("#inputweixin_number").val(str.replace(openid+",",""));
+		ele.remove();		
+		$cont = $(".js_weixin_number_list");
+		
+	}
+	
+	$(function(){
+		$(".js_weixin_number_list").click(function(ev){
+			$ele = $(ev.target);
+			if($ele.hasClass("js_removed")){
+				removeWeixinNumber($ele.parent());
+			}
+		});
+		
+		wxuploadimg.init({cont:".wxuploaderimg"});
+		$("#user_select2").select2({
+			placeholder: "输入用户id或昵称查询"	,
+			language: "zh-CN",
+			ajax: {
+			    url: "{:U('Wxuser/select')}",
+			    dataType: 'json',
+			    delay: 250,
+			    data: function (params) {
+			    	var queryParameters = {
+				      q: params.term
+				    }
+    				return queryParameters;
+			      
+			    },
+			    processResults: function (data, page) {
+			    	if(!data.info){
+			    		data.info = new Array();
+			    		data.info['nodata']="无相关数据";
+			    	}
+			      	// parse the results into the format expected by Select2.
+			      	// since we are using custom formatting functions we do not need to
+			      	// alter the remote JSON data
+			      	return {
+			        	results: data.info
+			      	};
+			    },
+			    cache: true
+		  	}, 
+			  	minimumInputLength: 0,
+				templateSelection: function (repo) {	
+					var selection = repo.nickname || repo.text;
+					if(repo.nickname){
+						var openid = repo.openid;
+						console.log(repo);
+						if($("#inputweixin_number").val().indexOf(openid) === -1){
+							appendWeixinNumber(selection,openid);
 						}
-					},
-					realname: {
-						required: true,
-						isCnName: true,
-					},
-					email: {
-						required: true,
-						email: true,
-						remote:"{:U('Public/check_email')}"
-					},
-					mobile: {
-						required: true,
-						isPhone: true,
-					},
-					password: {
-						required: true,
-						minlength: 6,
-						maxlength: 30,
-					},
-					repassword: {
-						required: true,
-						minlength: 6,
-						maxlength: 30,
-						equalTo: "#password"
-					},
-					code:{
-						required: true,
-						remote:"{:U('Public/checkVerify')}"
+						
 					}
+	  				return selection;
 				},
-				messages: {
-					username: {
-						remote:"登录名被占用，请换一个账号",
-						required: "请输入登录账号",
-						minlength: $.validator.format("账号不能小于{0}个字 符"),
-						maxlength: $.validator.format("账号不能超过{0}个字 符"),
-					},
-					email: {
-						required: "请输入Email地址",
-						remote:"邮箱被占用，请换一个邮箱",
-						email: "请输入正确的email地址"
-					},
-					password: {
-						required: "请输入密码",
-						minlength: $.validator.format("密码不能小于{0}个字 符")
-					},
-					repassword: {
-						required: "请输入确认密码",
-						minlength: "确认密码不能小于6个字符",
-						equalTo: "两次输入密码不一致"
-					},
-					code:{
-						required: "请输入验证码",
-						remote:"验证码错误"
-					}
-				}
-			}); //end validate
-		}); //end ready
-	</script>
+			  templateResult: function (repo) {
+			   		
+      				if (repo.loading) return repo.text;
+					if(repo.nodata) return repo.nodata;
+//    				var markup = '<div>'+repo.nickname+'</div>';
+      				var markup = '<div><img src="'+repo.avatar+'" style="width:30px;height:30px;"/>[id:'+repo.id+'] '+repo.nickname+'</div>';
+      				return markup;
+    			},
+		});
+		
+	})
+</script>
 </block>

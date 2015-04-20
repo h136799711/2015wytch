@@ -21,6 +21,7 @@
 					<form class="productForm form-horizontal" method="post">
 						<input type="hidden" name="id" value="{$vo.id}" />
 						<input type="hidden" name="main_img" id="main_img" value="{$vo.main_img}" />
+						<input type="hidden" name="img" id="img" value="{$vo.img}" />
 						<input type="hidden" name="storeid" value="{$vo.storeid}" />
 						<h3><i>●</i>基本信息</h3>
 						
@@ -55,6 +56,30 @@
 							</div>
 						</div>
 						
+						<div class="form-group col-lg-12 col-md-12 clearfix">
+							<label for="" class="control-label col-lg-2 col-md-2">&nbsp;</label>
+							<div class="col-lg-10 col-md-10">
+								其他图片<span class="text-muted">(选传，单张图片大小不超过500kb，最多10张)<i class="fa fa-question" data-toggle="tooltip" title="将出现在商品图片库，方便用户更好的了解您的商品。"></i></span>
+								<!-- 图片选择DOM结构 -->
+								<div class="wxuploaderimg clearfix product-imglist "  data-maxitems="10">
+									<div class="img-preview clearfix" <if condition="count($imgs) gt 0">style="display:inline-block;"</if>>										
+										<if condition="count($imgs) gt 0">
+											<volist name="imgs" id="one">
+											<div class="pull-left clearfix img-item">
+												<img src="{$one}" alt="image" />
+												<div class="edit_pic_wrp"><a href="javascript:;" class="fa fa-lg fa-trash js_delete"></a></div>
+											</div>
+											</volist>
+										</if>
+									</div>
+									<div class="add" <if condition="count($imgs) eq 10">style="display:none;"</if> >
+										<i class="fa fa-plus"></i>
+									</div>
+								</div>
+								
+								<!-- 图片选择DOM结构 -->
+							</div>
+						</div>
 						
 						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_buylimit">
 							<label for="" class="control-label col-lg-2 col-md-2">是否限购</label>
@@ -147,6 +172,10 @@
 				$("#main_img").val(main_img);
 			}
 			
+			$("#img").val("");
+			$(".product-imglist .img-preview img").each(function(index,item){
+				$("#img").val($("#img").val()+$(item).attr("src")+",");
+			});
 		}
 		
 		

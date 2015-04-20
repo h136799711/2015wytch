@@ -38,12 +38,7 @@
 			<!-- 操作按钮 -->
 			<div class="btn-controls">
 				<a class="btn btn-primary btn-sm" href="{:U('Admin/WxshopProduct/precreate',array('storeid'=>$storeid))}"><i class="fa fa-plus"></i>添加商品</a>
-				<!--<if condition="$onself == 0" >-->
-				<!--<a href="{:U('Admin/WxshopProduct/self',array('id'=>$vo['id'],'on'=>'1'))}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-up"></i>上架</a>-->
-				<!--<a href="{:U('Admin/WxshopProduct/bulkDelete')}" target-form="selectitem" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>删除</a>-->
-				<!--<else/>-->										
-				<!--<a href="{:U('Admin/WxshopProduct/self',array('id'=>$vo['id'],'on'=>'0'))}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-down"></i>下架</a>-->
-				<!--</if>-->
+				
 			</div>
 
 
@@ -77,7 +72,7 @@
 							<tr>
 								<td>
 									<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" />{$vo.id}</td>
-								<td>{$vo.name}</td>
+								<td class="text-ellipsis">{$vo.name}</td>
 								<td><a href="{$vo.main_img}" target="_blank" title="点击查看原图" data-toggle="tooltip"><img style="max-width: 120px;" class="thumbnail" src="{$vo.main_img}" /></a>
 								</td>
 								<td>

@@ -2,6 +2,7 @@
 
 <block name="area_header">
 	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
+	<link type="text/css" rel="stylesheet" href="__CDN__/comp/wxuploader.css?v=__APP_VERSION__" />
 	<link type="text/css" rel="stylesheet" href="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
 	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
 </block>
@@ -24,6 +25,26 @@
 			</div>
 			
 			<!-- 图片选择DOM结构 -->
+			
+			<!-- 图片选择DOM结构 编辑 -->
+			
+			<div class="wxuploaderimg clearfix <notempty name="wxaccount.qrcode">checked</notempty>" data-maxitems="1">
+				<div class="img-preview clearfix" >
+					<notempty name="wxaccount.qrcode">
+							<div class="pull-left clearfix img-item">
+								<img src="{$wxaccount.qrcode}" />
+								<div class="edit_pic_wrp"><a href="javascript:;" class="fa fa-lg fa-trash js_delete"></a></div>
+							</div>
+					</notempty>
+				</div>
+				<div class="add">
+					<i class="fa fa-plus"></i>
+				</div>
+			</div>
+			
+			<!-- 图片选择DOM结构 -->
+			
+			
 			
 			<!-- 图片选择DOM结构 -->
 			<div class="wxuploaderimg clearfix" data-maxitems="4">

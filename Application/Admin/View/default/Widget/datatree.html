@@ -1,5 +1,5 @@
 
 <volist name="list" id="vo">
-	<option value="{$vo.id}" >{$vo.title_show}</option>
+	<option value="{$vo.id}" <eq name="vo['id']" value="$checkedID">selected="selected"</eq> >{$vo.title_show}</option>
 </volist>
 {__NORUNTIME__}

@@ -465,7 +465,12 @@ class WxshopProductController extends AdminController {
 			
 			$id = I('get.id',0);
 			$result = apiCall("Admin/Wxproduct/getInfo", array(array('id'=>$id)));
+			
 			if($result['status']){
+				$imgs = explode(",",$result['info']['img']);
+				
+				array_pop($imgs);
+				$this->assign("imgs",$imgs);
 				$this->assign("vo",$result['info']);
 			}
 			
@@ -479,13 +484,13 @@ class WxshopProductController extends AdminController {
 			
 			$entity = array(
 				'main_img'=>I('main_img',''),
+				'img'=> I('post.img', ''),
 				'name'=>I('product_name',''),
 				'buy_limit'=>$buylimit,
 				'attrext_ishasreceipt'=>I('ishasreceipt',0),
 				'attrext_isunderguaranty'=>I('isunderguaranty',0),
 				'attrext_issupportreplace'=>I('issupportreplace',0),
 			);
-			
 			$result = apiCall("Admin/Wxproduct/saveByID",array($id,$entity));
 			if(!$result['status']){
 				$this->error($result['info']);

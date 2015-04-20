@@ -48,11 +48,16 @@
 			if (list) {
 				$cont = $("#wxuploadimg .imgs-list").empty();
 				for (var i = 0; i < list.length; i++) {
-					$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + list[i].imgurl + "'/><p class='img-desc'>"+list[i].ori_name+"</p></div>");
+					var imgsrc = list[i].imgurl;
+					if(!imgsrc){
+						imgsrc = '{:C("SITE_URL")}'+list[i].path;
+					}
+					$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + imgsrc  + "'/><p class='img-desc'>"+list[i].ori_name+"</p></div>");
 					$cont.append($item);
+					
 				}
 			}else{
-				$("#wxuploadimg .imgs-list").html("<div style='width:100%'>没有图片！</div>");
+				$("#wxuploadimg .imgs-list").html("");
 			}
 		}
 		
@@ -203,27 +208,24 @@
 		}
 		
 		function open(maxchecked){
-//			checked = 0;
 			checked = $(".img-preview img",wxuploadimg.current).length ;
 			wxuploadimg.setting.MaxChecked = maxchecked || wxuploadimg.setting.MaxChecked;
-//			console.log(checked,wxuploadimg.setting.MaxChecked);
 			$("#wxuploadimg .js_checked").text(0);
 			$("#wxuploadimg .js_total").text(wxuploadimg.setting.MaxChecked - checked);
 			$('#wxuploadimg').modal("show");
 		}
 		function callback(){
 			var data = arguments;
-			console.log(data);
 			for(var i=0;i<data.length;i++){
 				var $ele = $('<div class="pull-left clearfix img-item"><div class="edit_pic_wrp"><a href="javascript:;" class="fa fa-lg fa-trash js_delete"></a></div></div>');
 				$(".img-preview",wxuploadimg.current).append($ele).css("display","inline-block");//.show();
 				$ele.prepend($(data[i]).clone());
+				
 			}
 			
 		}
 		return {
 			setting: {
-				
 				MaxChecked:1,//最多可选图片数
 				size: 10, //每页图片数					
 				callback:null //默认回调函数
@@ -257,8 +259,11 @@
 		var data = $.parseJSON(data);
 		var src = '';
 		if (data.status) {
-			
-			$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + data.imgurl + "'/><p class='img-desc'>"+data.savename+"</p></div>");
+			var imgsrc = data.imgurl;
+			if(!imgsrc){
+				imgsrc = '{:C("SITE_URL")}'+data.path;
+			}
+			$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + imgsrc + "'/><p class='img-desc'>"+data.savename+"</p></div>");
 			$(".imgs-list").prepend($item);
 			
 		} else {

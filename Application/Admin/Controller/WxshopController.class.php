@@ -55,12 +55,39 @@ class WxshopController extends AdminController{
 		}elseif(IS_POST){
 			$name = I('post.name','店铺名称');//
 			$desc = I('post.desc','');
+			$type = I('post.type','');
+			$logo = I('post.logo','');
+			$banner = I('post.banner','');
+			$cate_id = I('post.store_type','');
+			$wxnum = I('post.weixin_number','');
+			$weixin_name = I('post.weixin_number_name','');
+			$weixin = array();
+			$wxnum = explode(",",$wxnum);
+			$weixin_name = explode(",",$weixin_name);
+			
+//			dump($wxnum);
+//			dump($weixin_name);
+			for($i=0;$i<count($wxnum);$i++){
+				if(!empty($weixin_name[$i])){
+					array_push($weixin,array('openid'=>$wxnum[$i],'name'=>$weixin_name[$i]));
+				}
+			}
+			$service_phone = I('post.service_phone','');
+			
 			$entity = array(
 				'uid'=>UID,
 				'name'=>$name,
-				'desc'=>$desc
+				'desc'=>$desc,
+				'logo'=>$logo,
+				'banner'=>$banner,
+				'isopen'=>0,
+				'cate_id'=>$cate_id,
+				'notes'=>I('post.notes',''),
+				'weixin_number'=>json_encode($weixin),
+				'service_phone'=>$service_phone,
 			);
-			
+//			dump($entity);
+//			exit();
 			$result = apiCall("Admin/Wxstore/add",array($entity));
 //			dump($result);
 			if($result['status']){
@@ -79,6 +106,16 @@ class WxshopController extends AdminController{
 			$map = array('id'=>$id);
 			$result = apiCall("Admin/Wxstore/getInfo",array($map));
 			if($result['status']){
+				$weixin = json_decode($result['info']['weixin_number']);
+				$text = "";
+
+				foreach($weixin as $vo){
+					$text = $text.$vo->openid.",";
+				}
+				
+				$this->assign("weixin",$weixin);
+				$this->assign("openids",$text);
+				
 				$this->assign("store",$result['info']);
 				$this->display();
 			}else{
@@ -88,9 +125,33 @@ class WxshopController extends AdminController{
 			$id = I('post.id',0);
 			$name = I('post.name','店铺名称');//
 			$desc = I('post.desc','');
+			$type = I('post.type','');
+			$logo = I('post.logo','');
+			$banner = I('post.banner','');
+			$cate_id = I('post.store_type','');
+			$wxnum = I('post.weixin_number','');
+			$weixin_name = I('post.weixin_number_name','');
+			$weixin = array();
+			$wxnum = explode(",",$wxnum);
+			$weixin_name = explode(",",$weixin_name);
+			
+			for($i=0;$i<count($wxnum);$i++){
+				if(!empty($weixin_name[$i])){
+					array_push($weixin,array('openid'=>$wxnum[$i],'name'=>$weixin_name[$i]));
+				}
+			}
+			
+			$service_phone = I('post.service_phone','');
+			
 			$entity = array(
 				'name'=>$name,
-				'desc'=>$desc
+				'desc'=>$desc,
+				'logo'=>$logo,
+				'banner'=>$banner,
+				'cate_id'=>$cate_id,
+				'notes'=>I('post.notes',''),
+				'weixin_number'=>json_encode($weixin),
+				'service_phone'=>$service_phone,
 			);
 			
 			$result = apiCall("Admin/Wxstore/saveByID",array($id,$entity));
@@ -102,10 +163,41 @@ class WxshopController extends AdminController{
 			}
 		}
 	}
+	
+	public function open(){
+		$isopen = 1-I('get.isopen',0);
+		
+		$id = I('id', -1);
+				
+		$entity = array(
+			'isopen'=>$isopen
+		);
+		$result = apiCall('Admin/Wxstore/saveByID', array($id,$entity));
 
+		if ($result['status'] === false) {
+			LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
+			$this -> error($result['info']);
+		} else {
+			$this -> success(L('RESULT_SUCCESS'), U('Admin/' . CONTROLLER_NAME . '/index'));
+		}
+		
+		
+	}
+	
 	public function delete(){
 		$map = array('id' => I('id', -1));
-
+		
+		$result = apiCall("Admin/Wxproduct/queryNoPaging",array(array('storeid'=>$map['id'])));
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		if(is_array($result['info']) && count($result['info']) > 0){
+			$this->error("该商店尚有相关联数据，无法删除！");			
+		}
+		
+		
+		
 		$result = apiCall('Admin/Wxstore/delete', array($map));
 
 		if ($result['status'] === false) {
@@ -151,15 +243,19 @@ class WxshopController extends AdminController{
 				$this->error("文件对象必须为wxshop");
 			}
 			
-			$wxshopapi = new \Common\Api\WxShopApi($this->appid,$this->appsecret);
-			$tmp_name = $_FILES['wxshop']['tmp_name'];
-			//1.上传到微信
-			$result = $wxshopapi->uploadImg(time().".jpg",$tmp_name);
-						
-			if(!$result['status']){
-				$this->error($result['info']);
-			}
 			
+			
+//			$wxshopapi = new \Common\Api\WxShopApi($this->appid,$this->appsecret);
+			$tmp_name = $_FILES['wxshop']['tmp_name'];
+			
+			//1.上传到微信
+//			$result = $wxshopapi->uploadImg(time().".jpg",$tmp_name);
+//			
+//			if(!$result['status']){
+//				$this->error($result['info']);
+//			}
+
+			$result['info'] = "";
 			//2.再上传到自己的服务器，
 			//TODO:也可以上传到QINIU上
 	        /* 返回标准数据 */
