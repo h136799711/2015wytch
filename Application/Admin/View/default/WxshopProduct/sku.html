@@ -20,36 +20,46 @@
 					<div class="form-group">
 					<label class="control-label">&nbsp;</label>
 					<div class="">
-						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)" ><i class="fa fa-save"></i>同步保存</a>
+						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)" ><i class="fa fa-save"></i>保存</a>
 						<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
 					</div>
 				</div>
 					<label class="control-label">商品规格<span class="help-block">(不要超过4种规格,只有选中的前4种有效)</span></label>
+					<!--<div class="well" >
+						<div class="form-group"><label>规格名称</label><input type="text"  /></div>
+						<div class="form-group"><label>规格值</label><input type="text"  /><a href="javascript:void(0)"  >添加</a></div>
+						<div><a href="javascript:void(0)" class="btn btn-sm btn-primary">确定</a>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-default">取消</a></div>
+					
+					</div>-->
 					<div class="sku-info">
-						<?php for($i=0;$i<count($skulist);$i++) { ?>
-						<div class='sku_wrp' data-skuname='<?php echo $skulist[$i]->name; ?>' data-id='<?php echo $skulist[$i]->id; ?>'>
-							<p>
-								<?php echo $skulist[$i]->name; ?><a href="javascript:void(0);"  class="btn btn-link js_sku_edit">编辑</a></p>
+						
+						<volist name="skulist" id="sku">
+						<div class='sku_wrp' data-skuname="{$sku.name}" data-id="{$sku.id}">
+							<p>{$sku.name}
+								<a href="javascript:void(0);"  class="btn btn-link js_sku_edit">编辑</a>								
+								<!--<a href="javascript:void(0);" data-id="{$sku.id}"  class="btn btn-link js_sku_delete">{:(strpos($sku['sku_id'],'$')  === false ?'':'删除')}</a>-->
+							</p>
 							<div class='skuvalue_wrp'>
-								<?php for($j=0;$j<count($skulist[$i]->value_list);$j++) { ?>
-								<label class="checkbox-inline">
-									<input type="checkbox" {:(strpos($skuinfo,$skulist[$i]->value_list[$j]->id.',')  === false ?'':'checked')} class="js_sku_value {:(strpos($skuinfo,$skulist[$i]->value_list[$j]->id.',')  === false ?'':'checked')}" data-valuename='<?php	echo $skulist[$i]->value_list[$j]->name; ?>' value="<?php	 echo $skulist[$i]->value_list[$j]->id; ?>">
-									<?php echo $skulist[$i]->value_list[$j]->name; ?>
-								</label>
-								<?php } ?>
+								<volist name="sku['value_list']" id="skuvalue">								
+									<label class="checkbox-inline">
+										<input type="checkbox" {:(strpos($skuinfo,$skuvalue['id'].',')  === false ?'':'checked')} class="js_sku_value {:(strpos($skuinfo,$skuvalue['id'].',')  === false ?'':'checked')}" data-valuename="{$skuvalue['name']}" value="{$skuvalue['id']}">
+										{$skuvalue.name}
+									</label>								
+								</volist>
 							</div>
+							
 							<div class='skuvalue_edit_wrp well clearfix hidden'>
 								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'><label>规格值</label><input type='text'  class="input-sm" />
 									<a href="javascript:void(0)" class="btn btn-primary js_sku_add btn-sm" >添加</a></div>
 								<div class='skuvalue-preview'>
-								<?php for($j=0;$j<count($skulist[$i]->value_list);$j++) { ?>
-								<label class="bg-muted">
-									<?php echo $skulist[$i]->value_list[$j]->name; ?>
 									
-									<?php echo (strpos($skulist[$i]->value_list[$j]->id,"$") === 0?"<i class='fa fa-times js_delete'></i>":"") ?>
+								<volist name="sku['value_list']" id="skuvalue2">
+								<label class="bg-muted">
+									{$skuvalue2.name}			
+									{:(strpos($skuvalue2['vid'],"$") === 0?"<i class='fa fa-times js_delete'></i>":"")}
 									
 								</label>
-								<?php } ?>
+								</volist>
 								</div>
 								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'>
 									<a href="javascript:void(0)"  class="btn btn-primary js_sku_sure btn-sm" >确定</a>
@@ -57,8 +67,9 @@
 								</div>
 								
 							</div>
+							
 						</div>
-						<?php } ?>
+						</volist>
 					</div>
 				</div>
 
@@ -72,7 +83,7 @@
 				<div class="form-group">
 					<label class="control-label">&nbsp;</label>
 					<div class="">
-						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)"  ><i class="fa fa-save"></i>同步保存</a>
+						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)"  ><i class="fa fa-save"></i>保存</a>
 						<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
 					</div>
 				</div>
@@ -113,9 +124,7 @@
 				for(var del in window.skumanage.deleted){
 //					console.log(label.length);
 					for(var i=0;i< label.length;i++){
-//						console.log($(label[i]).text().trim(), window.skumanage.deleted[del].trim());
 						if($(label[i]).text().trim() == window.skumanage.deleted[del].trim() ){
-							console.log("remove");
 							$(label[i]).remove();
 							break;
 						}
@@ -217,7 +226,7 @@
 			})
 			//SKU种类 最多4种
 			var col = sku_arr.length;
-					
+			
 			
 			for(var j=0;j<col;j++){
 				header.append("<th>"+$(sku_arr[j]['sku']).attr("data-skuname")+"</th>");
@@ -397,6 +406,8 @@
 			
 			var skuinfo = "{$skuinfo}";
 			window.skuvalue = '{$skuvalue}';
+			console.log(skuinfo);
+			console.log(skuvalue);
 			// 
 			if(skuinfo.length > 0){
 				createSKUTable();
@@ -406,9 +417,8 @@
 			
 			$(".js_sku_submit").click(function(){
 				var url = "{:U('Admin/WxshopProduct/sku')}";
-				var productid = "{$productid}";
 				var id = "{$id}";
-				var query = {productid:productid,id:id,sku_list:getSkuData(),sku_info:getSkuInfo()};
+				var query = {id:id,sku_list:getSkuData(),sku_info:getSkuInfo()};
 //				console.log(query);
 				if(query.sku_list.length == 0 || query.sku_info.Length == 0){
 					return false;
@@ -416,13 +426,16 @@
 //				query = JSON.stringify(query);
 				myUtils.ajaxpost($(".js_sku_submit"),url,query);
 			});
-			$(".js_sku_value").click(function(ev){
-				
-				$(ev.target).toggleClass("checked");	
-				createSKUTable();
-				wxuploadimg.init({cont:".wxuploaderimg"});
-				setSkuData(JSON.parse(window.skuvalue));
 			
+			$(".skuvalue_wrp").click(function(ev){
+				console.log(ev.target);
+				$ele = $(ev.target);
+				if($ele.hasClass("js_sku_value")){					
+					$ele.toggleClass("checked");	
+					createSKUTable();
+					wxuploadimg.init({cont:".wxuploaderimg"});
+					setSkuData(JSON.parse(window.skuvalue));				
+				}
 			});
 			
 			$(".sku_wrp").click(function(ev){

@@ -48,6 +48,10 @@
 										
 									</div>
 									<hr>
+									<div class="btn-controls">										
+										<a href="{:U('Admin/CategoryProp/add',array('cate_id'=>$cate_id))}" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>添加属性</a>
+										<a href="javascript:void(0);"  class="btn btn-sm btn-primary js_prop_refresh"><i class="fa fa-refresh"></i>刷新</a>
+									</div>
 									<!--<div class="btn-controls">
 										<a href="javascript:void(0)" class="js_prop_new">添加属性</a>
 									</div>
@@ -61,7 +65,7 @@
 
 							</div>
 						</div>
-						<div class="js_group form-group col-lg-12 col-md-12 clearfix">
+						<!--<div class="js_group form-group col-lg-12 col-md-12 clearfix">
 							<label for="" class="control-label col-lg-2 col-md-2">商品分组
 								<br/><span class="help-block">(选填)</span>
 							</label>
@@ -71,7 +75,7 @@
 										<img src="__CDN__/common/loading.gif" />
 									</div>
 									<div class="shop-group-list">
-
+											
 									</div>
 									<hr>
 									<div class="btn-controls">
@@ -86,7 +90,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div>-->
 						<div class="form-group col-lg-12 col-md-12 clearfix">
 							<label for="" class="control-label col-lg-2 col-md-2">商品名称</label>
 							<div class="col-lg-10 col-md-10">
@@ -322,11 +326,10 @@
 //			return false;
 			var txt = $(".js_product_name").val();
 			var len = txt.replace(/[^\x00-\xff]/g, 'xx').length ; 
-//			console.log(txt);
-//			if(len == 0){					
-//				$.scojs_message('商品名称必须填写', $.scojs_message.TYPE_ERROR);
-//				return false;
-//			}
+			if(len == 0){					
+				$.scojs_message('商品名称必须填写', $.scojs_message.TYPE_ERROR);
+				return false;
+			}
 			if(len > 30){
 				$.scojs_message('商品名称不能超过30个字', $.scojs_message.TYPE_ERROR);
 				return false;
@@ -338,10 +341,11 @@
 //			console.log(list);
 			
 			$ele = $(".js_prop .prop-list");
+			$ele.empty();
 			for(var i=0;i<list.length;i++){
 				//创建一个dropdown
 				$dropdown = $("<button type='button' data-toggle='dropdown' class='btn btn-primary dropdown-toggle'>选择<span class='caret'></span></button>")
-				$propName = $('<span>'+list[i].propname+'</span>');
+				$propName = $('<span>'+list[i].name+'</span>');
 				$prop = $('<div class="dropdown dropdown-toggle"></div>');
 				$prop.append($dropdown);
 				$ele.append($("<div class='prop-item' ></div>").attr("data-id",list[i].id).append($propName).append($prop));
@@ -353,7 +357,7 @@
 					var propvaluelist = list[i].property_value;
 					for(var j=0;j<propvaluelist.length;j++){
 						$propValueItem = $("<li class='propvalue-item'></li>");
-						$propValueItem.attr("data-id",propvaluelist[j].id).html("<a class='btn link_a' onclick='return false' href='javascript:' >"+propvaluelist[j].name+"</a>");
+						$propValueItem.attr("data-id",propvaluelist[j].id).html("<a class='btn link_a' onclick='return false' href='javascript:' >"+propvaluelist[j].valuename+"</a>");
 						$propValue.append($propValueItem);
 					}
 //					$propValue.append("<li class='propvalue-item'><a class='btn prop-custom js_propnewname' href='javascript:void(0);' >自定义</a></li>");
@@ -370,18 +374,6 @@
 		
 		 //商品属性
 		function queryProp() {
-			
-			$(".js_prop .prop-list").click(function(ev){
-				$ele = $(ev.target);
-				if(!$ele.hasClass('link_a')){
-					return ;
-				}
-				$propitem = $ele.parents(".prop-item");
-//				$propid = $ele.attr("data-id");
-//				$propvalueid = $propitem.attr("data-id");
-				$ele.addClass("selected");
-				$propitem.find("button.dropdown-toggle").html($ele.text()+"<span class='caret'></span>");
-			});
 			
 			
 			$(".js_prop .loading").show();
@@ -405,6 +397,9 @@
 				$(".js_prop .loading").hide();
 			});
 		}
+		
+		
+		
 		//SKU
 		function appendSku(data){
 //			console.log(data);
@@ -444,6 +439,17 @@
 		}
 		
 		function productProp(){
+			
+			$(".js_prop .prop-list").click(function(ev){
+				$ele = $(ev.target);
+				if(!$ele.hasClass('link_a')){
+					return ;
+				}
+				$propitem = $ele.parents(".prop-item");
+				$ele.addClass("selected");
+				$propitem.find("button.dropdown-toggle").html($ele.text()+"<span class='caret'></span>");
+			});
+			
 			setTimeout(queryProp,700);
 		}
 		
@@ -453,7 +459,10 @@
 		}
 		
 		$(function() {
-			productGroups();
+			$(".js_prop_refresh").click(function(){
+				queryProp();
+			});
+//			productGroups();
 			productProp();
 			productSku();
 			//图片上传

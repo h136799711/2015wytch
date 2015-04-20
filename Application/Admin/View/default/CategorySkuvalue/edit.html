@@ -1,0 +1,66 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			
+			
+			
+			<!-- 带验证 form -->
+			<form class="form-horizontal well validateForm">
+				<input type="hidden" name="id" value="{$vo.id}" />
+				<input type="hidden" name="parent" value="{$parent}" />
+				<input type="hidden" name="level" value="{$level}" />
+				<input type="hidden" name="preparent" value="{$preparent}" />
+				<input type="hidden" name="cate_id" value="{$cate_id}" />
+				<input type="hidden" name="sku_id" value="{$sku_id}" />
+				<fieldset>
+					<legend>
+						属性值添加
+					</legend>
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="validateForm" class="ajax-post btn btn-primary btn-sm" href="{:U('Admin/CategorySkuvalue/edit')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a class="btn btn-default btn-sm" href="{:U('Admin/CategorySku/index',array('parent'=>$parent,'level'=>$level,'preparent'=>$preparent,'cate_id'=>$cate_id))}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">SKU值名称</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-normal"  name="name" value="{$vo.name}" id="inputname" placeholder="请输入SKU值名称,请不要超过30个字">
+							<div class="help-block">(请输入SKU值名称,不要超过30个字)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="validateForm" class="ajax-post btn btn-primary btn-sm" href="{:U('Admin/CategorySkuvalue/edit')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a class="btn btn-default btn-sm" href="{:U('Admin/CategorySku/index',array('parent'=>$parent,'level'=>$level,'preparent'=>$preparent,'cate_id'=>$cate_id))}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<!-- form -->
+				
+			
+			
+			
+			
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

@@ -20,12 +20,12 @@ class WxproductSkuApi extends Api{
 	/**
 	 * 保存sku数据
 	 */
-	public function addSkuList($product_id,$sku_info,$list){
+	public function addSkuList($id,$sku_info,$list){
 		$this->model->startTrans();
 		$sql = "";
 		$flag = true;
 		$error = "";
-		$map = array('product_id'=>$product_id);
+		$map = array('id'=>$id);
 		
 		$result = $this->model->where($map)->delete();
 		if($result === false){
@@ -35,7 +35,7 @@ class WxproductSkuApi extends Api{
 		
 		foreach($list as $vo){
 			$entity = array( 
-				'product_id'=>$product_id,
+				'product_id'=>$id,
 				'sku_id'=>$vo['sku_id'],
 				'ori_price'=>$vo['ori_price']*100,
 				'price'=>$vo['price']*100,
@@ -73,13 +73,6 @@ class WxproductSkuApi extends Api{
 			}
 		}
 		
-//		if($flag){
-//			$result = $this->model->execute($sql);
-//			if($result === false){
-//				$flag = false;
-//				$error = $this->model->getError();
-//			}
-//		}
 		
 		if($flag){
 			$this->model->commit();

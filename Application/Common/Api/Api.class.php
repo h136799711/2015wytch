@@ -357,37 +357,7 @@ abstract class Api {
 			$query = $query->field($fields);
 		}
 		$list = $query -> page($page['curpage'] . ',' . $page['size']) -> select();
-		//旧
-//		if ($fields === false) {
-//
-//			if ($order === false) {
-//				if (is_null($map)) {
-//					$list = $this -> model -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				} else {
-//					$list = $this -> model -> where($map) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				}
-//			} else {
-//				if (is_null($map)) {
-//					$list = $this -> model -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				} else {
-//					$list = $this -> model -> where($map) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				}
-//			}
-//		} else {
-//			if ($order === false) {
-//				if (is_null($map)) {
-//					$list = $this -> model -> field($fields) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				} else {
-//					$list = $this -> model -> field($fields) -> where($map) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				}
-//			} else {
-//				if (is_null($map)) {
-//					$list = $this -> model -> field($fields) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				} else {
-//					$list = $this -> model -> field($fields) -> where($map) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-//				}
-//			}
-//		}
+		
 
 		if ($list === false) {
 			$error = $this -> model -> getDbError();

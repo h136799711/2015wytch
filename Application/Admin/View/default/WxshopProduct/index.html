@@ -81,19 +81,19 @@
 								<td><a href="{$vo.main_img}" target="_blank" title="点击查看原图" data-toggle="tooltip"><img style="max-width: 120px;" class="thumbnail" src="{$vo.main_img}" /></a>
 								</td>
 								<td>
+									<a href="{:U('Admin/WxshopProduct/group',array('id'=>$vo['id'],'storeid'=>$storeid))}" class="btn btn-sm btn-link">商品分组</a>
+									
 									<a href="{:U('Admin/WxshopProduct/express',array('id'=>$vo['id'],'storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">运费</a>
 									<a href="{:U('Admin/WxshopProduct/detail',array('id'=>$vo['id'],'storeid'=>$storeid,'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">商品详情</a>
-									<a href="{:U('Admin/WxshopProduct/sku',array('id'=>$vo['id'],'productid'=>$vo['product_id']))}" class="btn btn-sm btn-link">商品规格<i title="规格一般指 颜色、款式等" class="fa fa-question" data-toggle="tooltip"></i></a></td>
+									<a href="{:U('Admin/WxshopProduct/sku',array('id'=>$vo['id']))}" class="btn btn-sm btn-link">商品规格<i title="规格一般指 颜色、款式等" class="fa fa-question" data-toggle="tooltip"></i></a></td>
 								<td>
-									<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$vo['id']))}" class="btn btn-primary btn-sm ajax-get"><i class="fa fa-send-o"></i>商品发送到微信</a>
-									
 									<if condition="$vo['onshelf'] == 0" >
-									<a href="{:U('Admin/WxshopProduct/shelf',array('productid'=>$vo['product_id'],'on'=>1))}" class="ajax-get btn btn-primary btn-sm"><i class="fa fa-arrow-up"></i>同步上架</a>
+									<a href="{:U('Admin/WxshopProduct/shelf',array('id'=>$vo['id'],'on'=>1))}" class="ajax-get btn btn-primary btn-sm"><i class="fa fa-arrow-up"></i>上架</a>
 									<else/>										
-									<a href="{:U('Admin/WxshopProduct/shelf',array('productid'=>$vo['product_id'],'on'=>0))}" class="ajax-get confirm btn btn-primary btn-sm"><i class="fa fa-arrow-down"></i>同步下架</a>
+									<a href="{:U('Admin/WxshopProduct/shelf',array('id'=>$vo['id'],'on'=>0))}" class="ajax-get confirm btn btn-primary btn-sm"><i class="fa fa-arrow-down"></i>下架</a>
 									</if>
-									<!--<a href="{:U('Admin/WxshopProduct/edit',array('productid'=>$vo['product_id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>{:L('BTN_EDIT')}</a>-->
-									<a href="{:U('Admin/WxshopProduct/delete',array('productid'=>$vo['product_id']))}" class="btn btn-danger btn-sm ajax-get confirm"><i class="fa fa-trash-o"></i>同步{:L('BTN_DELETE')}</a>
+									<a href="{:U('Admin/WxshopProduct/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>{:L('BTN_EDIT')}</a>
+									<a href="{:U('Admin/WxshopProduct/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-sm ajax-get confirm"><i class="fa fa-trash-o"></i>{:L('BTN_DELETE')}</a>
 									
 								</td>
 							</tr>

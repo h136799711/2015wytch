@@ -25,4 +25,29 @@ class PartialsWidget extends AdminController{
 			echo L('ERR_SYSTEM_BUSY');
 		}
 	}
+	
+	/**
+	 * 数据字典
+	 */
+	public function datatree($parent,$hasChildren){
+		if($hasChildren){
+			$map['parents'] = array('like','%'.$parent.',%');
+			$result = apiCall('Admin/Datatree/queryNoPaging',array($map));
+			$tree = new \Common\Model\TreeModel();
+			$list = $tree -> toFormatTree($result['info'],'name','id','parentid',$parent);
+		}else{
+			$map = array('parentid'=>$parent);
+			$result = apiCall('Admin/Datatree/queryNoPaging',array($map));
+			$list = $result['info'];
+		}
+		if($result['status']){
+			$this->assign("list",$list);
+			echo $this->fetch("Widget/datatree");
+		}else{
+			LogRecord($result['info'], "[INFO]:".__FILE__." [LINE]".__LINE__);
+			echo L('ERR_SYSTEM_BUSY');
+		}
+		
+	}
+	
 }

@@ -57,46 +57,132 @@ class TaskController extends Controller{
 	}
 	
 	
+	public function insertsku(){
+		ignore_user_abort(true); // 后台运行
+		set_time_limit(0); // 取消脚本运行时间的超时上限
+		$appid = 'wx3fe04f32017f50a5';
+		$appsecret = 'f7dbb6d7882ecaa984a9f3e900db9a3d';
+//		$appid = 'wx58aea38c0796394d';
+//		$appsecret = '3e1404c970566df55d7314ecfe9ff437';
+		
+		$wxapi = new \Common\Api\WxShopApi($appid,$appsecret);
+		
+		$cateApi = new \Tool\Api\CategoryApi();
+		
+		$level = 2;
+		$map = array();
+		$map['id'] = array('gt',3195);
+		$result = $cateApi->queryNoPaging($map);
+		
+		$skuApi = new \Admin\Api\SkuApi();
+		$skuvalueApi = new \Admin\Api\SkuvalueApi();
+		if(is_array($result['info'])){
+			foreach($result['info'] as $vo){
+				$map['parent'] = $vo['id'];
+				$result2 = $cateApi->queryNoPaging($map);
+				if($result2['status']){
+					if(is_null($result2['info']) || count($result2['info']) == 0){
+						//处理
+						dump($vo['cate_id']);
+						dump($result2);
+						$sku_table = $wxapi->getSKU($vo['cate_id']);
+						if(!$sku_table['status']){
+							dump('getSKU'.$sku_table['info']);
+							continue;
+						}
+						$sku_table = $sku_table['info'];
+//						dump($sku_table);
+						for($i=0;$i<count($sku_table);$i++){
+							$entity = array(
+								'cate_id'=>$vo['cate_id'],
+								'name'=>$sku_table[$i]->name,
+								'sku_id'=>$sku_table[$i]->id
+							);
+							dump($entity);
+							$result = $skuApi->add($entity);
+													
+							if($result['status']){
+							
+								$skuvaluelist = array();
+								foreach($sku_table[$i]->value_list as $skuvalue){
+									array_push($skuvaluelist,array('name'=>$skuvalue->name,'vid'=>$skuvalue->id,'sku_id'=>$result['info']));								
+								}
+								
+								$skuvalueApi->addAll($skuvaluelist);
+								
+							}else{
+								dump($result['info']);
+								exit();
+							}
+							
+						}//end for
+//						exit();//第一次
+					}
+					
+				}else{
+					dump($result2['info']);
+					exit();
+				}
+			}
+			
+		}else{
+			dump($result['info']);	
+		}
+
+	}
+	
 	public function props(){
 		ignore_user_abort(true); // 后台运行
 		set_time_limit(0); // 取消脚本运行时间的超时上限
 		$appid = 'wx3fe04f32017f50a5';
 		$appsecret = 'f7dbb6d7882ecaa984a9f3e900db9a3d';
-		$appid = 'wx58aea38c0796394d';
-		$appsecret = '3e1404c970566df55d7314ecfe9ff437';
+//		$appid = 'wx58aea38c0796394d';
+//		$appsecret = '3e1404c970566df55d7314ecfe9ff437';
 		$wxapi = new \Common\Api\WxShopApi($appid,$appsecret);
 		
 		$cateApi = new \Tool\Api\CategoryApi();
 		
 		$list = array();
-		$level = 3;
+		$level = 2;
 		$map = array('level'=>$level);
 		$result = $cateApi->queryNoPaging($map);
-		
+		//49290
 		if(is_array($result['info'])){
-			dump($result['info']);
+//			dump($result['info']);
 			foreach($result['info'] as $vo){
 				$prop = $wxapi->cateAllProp($vo['cate_id']);
-				dump($prop);
-				exit();
+//				$prop = $wxapi->cateAllProp('537091432');
+			
+//				dump($prop);
+//				exit();
 				if($prop['status']){
-											
+					
 					foreach($prop['info'] as $vo2){
 //						array_push($list,array('cate_id'=>$vo['id'],'propname'=>$vo2->name,'parent'=>$vo['id'],'propid'=>$vo2->id));
-						$result2 = apiCall("Admin/CategoryProp/getInfo",array(array('propid'=>$vo2->id,'cate_id'=>$vo['cate_id'])));
+						$result2 = apiCall("Admin/CategoryProp/getInfo",array(array('propid'=>$vo2->id,'cate_id'=>$vo['id'])));
+//						$result2 = apiCall("Admin/CategoryProp/getInfo",array(array('propid'=>$vo2->id,'cate_id'=>'537091432')));
+//						dump($result2);
+//						dump($result2);
 						unset($list); 
 						$list = array();
 						if($result2['status'] && is_array($result2['info'])){
 							foreach($vo2->property_value as $prop2){
 								array_push($list,array('propvalueid'=>$prop2->id,'valuename'=>$prop2->name,'prop_id'=>$result2['info']['id']));
-							}
+							}	
 							apiCall("Admin/CategoryPropvalue/addAll",array($list));
+							
+						}else{
+							
 						}
+//						dump($list);
 					}
-					
+//exit();
 					
 				}else{
-					dump($prop['info']);
+					if(!(strpos($prop['info'],"接口调用") === FALSe )){
+						dump($prop['info']);
+						exit();
+					}
 				}
 			}
 		}else{

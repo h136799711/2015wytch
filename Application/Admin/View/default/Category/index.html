@@ -43,7 +43,7 @@
 								类目名称
 							</th>
 							<th>
-								类目属性
+								类目属性/SKU
 							</th>
 							<th>
 								操作
@@ -65,11 +65,11 @@
 									</td>
 									<td>
 										<a href="{:U('Admin/CategoryProp/index',array('cate_id'=>$vo['id']))}" > 属性管理</a>	
-										<a href="{:U('Admin/CategoryProp/index',array('cate_id'=>$vo['id']))}" > SKU管理</a>	
+										<a href="{:U('Admin/CategorySku/index',array('cate_id'=>$vo['id'],'parent'=>$parent,'preparent'=>$preparent,'level'=>($level)))}" > SKU管理</a>	
 									</td>
 									<td>
 										<a href="{:U('Admin/Category/edit',array('id'=>$vo['id'],'parent'=>$vo['parent'],'preparent'=>$preparent))}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>编辑</a>
-										<a href="{:U('Admin/Category/delete',array('id'=>$vo['id']))}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>删除</a>
+										<a href="{:U('Admin/Category/delete',array('id'=>$vo['id']))}" class="btn btn-sm btn-danger ajax-get confirm"><i class="fa fa-trash"></i>删除</a>
 									</td>
 								</tr>
 

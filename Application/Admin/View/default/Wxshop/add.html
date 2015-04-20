@@ -30,6 +30,15 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺类别</label>
+						<div class="col-md-10 col-lg-10">
+							<select name="store_type" class="form-control">
+							{:W('Partials/datatree',array(C('DATATREE.STORE_TYPE'),true))}
+							</select>
+							<div class="help-block">(店铺名称)</div>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">店铺详情</label>
 						<div class="col-md-10 col-lg-10">
 							<!--<input type="text" class="required form-control input-short" name="desc" id="inputtitle" placeholder="请输入店铺详情">-->

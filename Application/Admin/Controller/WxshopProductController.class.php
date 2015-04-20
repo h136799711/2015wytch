@@ -10,6 +10,45 @@ namespace Admin\Controller;
 
 class WxshopProductController extends AdminController {
 	
+	public function group(){
+		$id = I('id',0);
+		if(IS_GET){
+			$storeid = I('get.storeid',0);
+			$map = array('parentid'=>C('DATATREE.WXPRODUCTGROUP'));
+			$result = apiCall("Admin/Datatree/queryNoPaging",array($map));
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			
+				
+			$this->assign("groups",$result['info']);
+			$this->assign("storeid",$storeid);
+			
+			$result = apiCall("Admin/WxproductGroup/queryNoPaging",array(array('p_id'=>$id)));
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			$this->assign("addedgroups",$this->getGroups($result['info']));
+			$this->assign("id",$id);
+			$this->display();
+		}else{
+			
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private function getGroups($groups){
+		$str = "";
+		foreach($groups as $vo){
+			$str = $str.$vo['g_id'].',';
+		}
+		
+		return $str;
+		
+	}
+	
 	/**
 	 * 商品运费设置
 	 */
@@ -132,10 +171,9 @@ class WxshopProductController extends AdminController {
 	public function sku(){
 		
 		if(IS_GET){
-			$productid = I('get.productid','');
 			$id = I('get.id',0);
 			
-			$result = apiCall("Admin/Wxproduct/getInfo", array(array('product_id'=>$productid) ));
+			$result = apiCall("Admin/Wxproduct/getInfo", array(array('id'=>$id) ));
 			
 			if(!$result['status']){
 				$this->error($result['info']);
@@ -151,26 +189,23 @@ class WxshopProductController extends AdminController {
 				
 				$this->assign("skuinfo",$this->getSkuValue(json_decode($skuinfo,JSON_UNESCAPED_UNICODE)));
 				
-				$skulist = apiCall("Admin/WxproductSku/queryNoPaging", array(array('product_id'=>$productid)));
-				if($skulist['status']){
-					
+				$skulist = apiCall("Admin/WxproductSku/queryNoPaging", array(array('id'=>$id)));
+				if($skulist['status']){					
 					$this->assign("skuvalue",json_encode($skulist['info']));
 				}
 			}
 			
 			$this->assign("storeid",$result['info']['storeid']);
-			
-			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+
 			
 			$cate_id = $result['info']['cate_id'];
+
+			$result = apiCall("Admin/Sku/querySkuTable",array($cate_id));
 			
-			$result = $wxshopapi -> getSKU($cate_id);
-			
-			if($result['status']){				
+			if($result['status']){
 				$this->assign("skulist",$this->color2First($result['info']));
 			}
 			
-			$this->assign("productid",$productid);
 			$this->assign("id",$id);
 			$this->display();
 		}else{
@@ -178,38 +213,18 @@ class WxshopProductController extends AdminController {
 			$sku_list = I('post.sku_list','');
 			$sku_info = I('post.sku_info','');
 			$id = I('post.id',0);
-			$productid = I('post.productid',0);
 			
 			$sku_info = json_decode(htmlspecialchars_decode($sku_info),JSON_UNESCAPED_UNICODE);
-			$sku_list = json_decode(htmlspecialchars_decode($sku_list),JSON_UNESCAPED_UNICODE);
-//			
-//			dump($sku_list);			
-//			dump($sku_info);
+			$sku_list = json_decode(htmlspecialchars_decode($sku_list),JSON_UNESCAPED_UNICODE);	
 			
-//			$sku_info = json_encode($sku_info);
-			$result = apiCall("Admin/WxproductSku/addSkuList", array($productid,$sku_info,$sku_list));
-			if(!$result['status']){
-				
+			$result = apiCall("Admin/WxproductSku/addSkuList", array($id,$sku_info,$sku_list));
+			if(!$result['status']){				
 				$this->error($result['info']);
 				
 			}else{
 				
-				$result = apiCall("Admin/Wxproduct/getInfo", array(array('product_id'=>$productid) ));
-				if($result['status']){
-					$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-					$localproduct = $result['info'];
-					$localproduct = $this->toWeixinproduct($localproduct);	
-					$localproduct['product_id'] = $productid;	
-					$result = $wxshopapi->	productMod($localproduct);		
-					if($result['status']){
-						$this->success("保存成功！");
-					}else{						
-						$this->error($result['info']);
-					}
-				}else{
-					$this->error($result['info']);
-				}
-				
+				$this->success("保存成功！");
+
 			}
 		}
 	}
@@ -327,27 +342,19 @@ class WxshopProductController extends AdminController {
 	 * @param $success_url 删除成功后跳转
 	 */
 	public function shelf() {
-		$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
 		$status = I('get.on',0,'intval');
-		$map = array('product_id' => I('get.productid', -1));
+		$map = array('id' => I('get.id', -1));
 		
-		$result = $wxshopapi -> productStatus($map['product_id'],$status);
+		$entity['onshelf'] = $status;
+		$result = apiCall('Admin/Wxproduct/save', array($map,$entity));
 		
-		if ($result['status']) {
-			$entity['onshelf'] = $status;
-			$result = apiCall('Admin/Wxproduct/save', array($map,$entity));
-
-			if ($result['status'] === false) {
-				LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
-				$this -> error($result['info']);
-			} else {
-				$this -> success(L('RESULT_SUCCESS'));
-			}
-
-		} else {
+		if ($result['status'] === false) {
 			LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 			$this -> error($result['info']);
+		} else {
+			$this -> success(L('RESULT_SUCCESS'));
 		}
+
 	}
 
 	/**
@@ -355,65 +362,36 @@ class WxshopProductController extends AdminController {
 	 * @param $success_url 删除成功后跳转
 	 */
 	public function delete($success_url = false) {
-		$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-
+		
 		if ($success_url === false) {
 			$success_url = U('Admin/WxshopProduct/index',array('storeid'=>$storeid));
 		}
-		$map = array('product_id' => I('productid', -1));
 		
-		$result = $wxshopapi -> productDel($map['product_id']);
+		//TODO: 检测商品的其它数据是否存在
+		$map = array('id' => I('id', -1));
 		
-//		dump($result);
-
-		if ($result['status']) {
-
-			$result = apiCall('Admin/Wxproduct/delete', array($map));
-
-			if ($result['status'] === false) {
-				LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
-				$this -> error($result['info']);
-			} else {
-				$this -> success(L('RESULT_SUCCESS'));
-			}
-
-		} else {
+		$result = apiCall('Admin/Wxproduct/delete', array($map));
+		
+		if ($result['status'] === false) {
 			LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 			$this -> error($result['info']);
+		} else {
+			$this -> success(L('RESULT_SUCCESS'));
 		}
+
 	}
 	
-	/**
-	 * SKU列表
-	 */
-//	public function skulist() {
-//
-//		$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-//
-//		if (IS_POST) {
-//			$cate_id = I('cate_id', 1);
-//
-//			$result = $wxshopapi -> getSKU($cate_id);
-//
-//			if ($result['status']) {
-//				$this -> success($result['info']);
-//			} else {
-//				$this -> error($result['info']);
-//			}
-//		}
-//	}
+	
 
 	/**
 	 * 商品预创建－选择类目
 	 */
 	public function precreate() {
-//		$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
 		
 		if (IS_POST) {
 			//保存
 		} else {
 			
-//			$result = $wxshopapi -> category(1);
 			$map = array('parent'=>0);
 			$result = apiCall("Admin/Category/queryNoPaging", array($map));
 			
@@ -438,9 +416,7 @@ class WxshopProductController extends AdminController {
 	public function create() {
 
 		if (IS_POST) {
-
-//			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-			
+						
 			$base_attr = $this -> getBaseAttr();
 			$storeid = I('storeid', 0);
 
@@ -450,33 +426,14 @@ class WxshopProductController extends AdminController {
 
 			$attrext = array('isPostFree' => 1, 'isHasReceipt' => I('post.ishasreceipt', 0), 'isUnderGuaranty' => I('post.isunderguaranty', 0), 'isSupportReplace' => I('post.issupportreplace', 0), 'location' => array('country' => '中国', 'province' => '四川省', 'city' => '内江市', 'address' => '威远县'));
 			$sku_list = $this -> getSKUList();
-
+			
 			$product = array('product_base' => $base_attr, 'attrext' => $attrext, 'sku_list' => $sku_list);
 
-			//			echo (json_encode($product,JSON_UNESCAPED_UNICODE));
-			
-//			$result = ($wxshopapi -> productCreate($product));
 			$product_id = GUID();
-//			if ($result['status']) {
-//				$info = $result['info'];
-//				if ($info -> errcode == 0) {
-//					$product_id = $info -> product_id;
-//				} else {
-//					$this -> error($info -> errmsg);
-//				}
-//			} else {
-//				$this -> error($result['info']);
-//			}
-
-			//TODO:添加到本地
-			//			dump($product);
-			//			dump($product_id);
-
-			if (!empty($product_id)) {
-				$result = $this -> addToProduct($storeid, $product_id, $product);
-			}
 			
-			$this -> productToGroup($wxshopapi, $product_id);
+
+			$result = $this -> addToProduct($storeid, $product_id, $product);
+			
 			if ($result['status']) {
 				$this -> success("操作成功!", U('Admin/WxshopProduct/index', array('storeid' => $storeid)));
 			} else {
@@ -485,86 +442,59 @@ class WxshopProductController extends AdminController {
 
 		} else {
 			$catename = I('catename', '');
-			$storeid = I('storeid', 0);
+			$storeid = I('storeid', 0);			
+			$cates = I("get.cates", '');
+			$cates = explode("_", $cates);
+			if (count($cates) <= 1) {
+				$this -> error("商品类目错误！");
+			}
+			
+			$this -> assign("cate_id", $cates[count($cates)-1]);
 			$this -> assign("storeid", $storeid);
 			$this -> assign("catename", $catename);
 			$this -> assign("cates", I('cates', ''));
 			$this -> display();
 		}
 	}
-
+	
 	/**
-	 * 修改商品
-	 *	1 product_id表示要更新的商品的ID，其他字段说明请参考增加商品接口。
-		2 从未上架的商品所有信息均可修改，否则商品的名称(name)、商品分类(category)、商品属性(property)这三个字段不可修改。
+	 * 商品信息编辑
 	 */
-	public function edit() {
-
-		if (IS_POST) {
+	public function edit(){
+		if(IS_GET){
 			
-			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-			$productid = I('post.product_id','');
-			if(empty($productid)){
-				$this -> error("缺少商品ID参数");
-			}
-			$base_attr = $this -> getBaseAttr();
-			$storeid = I('storeid', 0);
-
-			if ($storeid == 0) {
-				$this -> error("缺少商铺ID参数");
-			}
-			
-			$attrext = array('isPostFree' => 1, 'isHasReceipt' => I('post.ishasreceipt', 0), 'isUnderGuaranty' => I('post.isunderguaranty', 0), 'isSupportReplace' => I('post.issupportreplace', 0), 'location' => array('country' => '中国', 'province' => '四川省', 'city' => '内江市', 'address' => '威远县'));
-			$sku_list = $this -> getSKUList();
-
-			$product = array('product_base' => $base_attr, 'attrext' => $attrext, 'sku_list' => $sku_list);
-
-			//			echo (json_encode($product,JSON_UNESCAPED_UNICODE));
-
-			$result = ($wxshopapi -> productMod($productid,$product));
-			$product_id = "";
-			if ($result['status']) {
-				$info = $result['info'];
-				if ($info -> errcode == 0) {
-					$product_id = $info -> product_id;
-				} else {
-					$this -> error($info -> errmsg);
-				}
-			} else {
-				$this -> error($result['info']);
-			}
-
-			//TODO:添加到本地
-			//			dump($product);
-			//			dump($product_id);
-
-			
-			$result = $this -> saveToProduct($productid, $product);
-			
-			$this -> productToGroup($wxshopapi, $product_id);
-			if ($result['status']) {
-				$this -> success("操作成功!", U('Admin/WxshopProduct/index', array('storeid' => $storeid)));
-			} else {
-				$this -> error($result['info']);
-			}
-
-		} else {
 			$id = I('get.id',0);
 			$result = apiCall("Admin/Wxproduct/getInfo", array(array('id'=>$id)));
-			if($result['status']){				
-				$product = $result['info'];				
-//				$catename = I('catename', '');
-				$storeid = I('storeid', 0);
-				$this -> assign("storeid", $storeid);
-				$this -> assign("catename", $catename);
-				$this -> assign("cates", I('cates', ''));
-				$this -> display();
-			}else{
+			if($result['status']){
+				$this->assign("vo",$result['info']);
+			}
+			
+			$this->display();
+		}else{
+			$id = I('post.id',0);
+			$buylimit = I('buylimit',0);
+			if(empty($buylimit)){
+				$buylimit = 0;
+			}
+			
+			$entity = array(
+				'main_img'=>I('main_img',''),
+				'name'=>I('product_name',''),
+				'buy_limit'=>$buylimit,
+				'attrext_ishasreceipt'=>I('ishasreceipt',0),
+				'attrext_isunderguaranty'=>I('isunderguaranty',0),
+				'attrext_issupportreplace'=>I('issupportreplace',0),
+			);
+			
+			$result = apiCall("Admin/Wxproduct/saveByID",array($id,$entity));
+			if(!$result['status']){
 				$this->error($result['info']);
 			}
+			
+			$this->success(L('RESULT_SUCCESS'));
+			
 		}
 	}
-	
 
 	/**
 	 * 指定分类的所有属性
@@ -573,10 +503,8 @@ class WxshopProductController extends AdminController {
 
 		if (IS_AJAX) {
 			$cate_id = I('cate_id', 0);
-//			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-//			$result = $wxshopapi -> cateAllProp($cate_id);
 			$map = array('cate_id'=>$cate_id);
-			$result = apiCall("Admin/CategoryProp/queryNoPaging", array($map));
+			$result = apiCall("Admin/CategoryProp/queryPropTable", array($map));
 			
 			if ($result['status']) {
 				$this -> success($result['info']);
@@ -585,39 +513,7 @@ class WxshopProductController extends AdminController {
 			}
 		}
 	}
-
-	
-	/**
-	 * 同步商品信息到微信服务器
-	 */
-	public function sendToWxServer(){
 		
-		$this->success("操作成功！");
-		
-//		if(IS_AJAX){
-//			$id = I('get.id',0);
-//			$map['id']=$id;
-//			$result = apiCall("Admin/Wxproduct/getInfo", array($map));
-//			if($result['status']){
-//				
-//				$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
-//				$wxproduct = $this->toWeixinproduct($result['info']);
-//				$wxproduct['product_id'] = $result['info']['product_id'];
-//				$result = $wxshopapi->productMod($wxproduct);
-//				if($result['status']){
-//					$this->success("操作成功！");
-//				}else{
-//					$this->error($result['info']);
-//				}
-//								
-//			}else{
-//				$this->error($result['info']);
-//			}
-//		}
-
-	}
-
-	
 	//==========================私有方法
 	/**
 	 * 将产品信息保存到数据库

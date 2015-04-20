@@ -22,6 +22,7 @@ class WxshopController extends AdminController{
 	 */
 	public function index(){
 
+		
 		//get.startdatetime
 		//分页时带参数get参数
 		$name = I('name','');
@@ -33,7 +34,7 @@ class WxshopController extends AdminController{
 		
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " createtime desc ";
-		
+		$map['uid'] = UID;
 		//
 		$result = apiCall('Admin/Wxstore/query', array($map, $page, $order, $params));
 		//
@@ -154,8 +155,7 @@ class WxshopController extends AdminController{
 			$tmp_name = $_FILES['wxshop']['tmp_name'];
 			//1.上传到微信
 			$result = $wxshopapi->uploadImg(time().".jpg",$tmp_name);
-			
-			
+						
 			if(!$result['status']){
 				$this->error($result['info']);
 			}

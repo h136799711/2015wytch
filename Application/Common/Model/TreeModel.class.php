@@ -20,6 +20,7 @@ class TreeModel {
 	 * @param integer $level 进行递归时传递用的参数
 	 */
 	private $formatTree; //用于树型数组完成递归格式的全局变量
+	
 	private function _toFormatTree($list,$level=0,$title = 'title') {
 		foreach($list as $key=>$val){
 			$tmp_str=str_repeat("&nbsp;",$level*2);
@@ -38,12 +39,12 @@ class TreeModel {
 				}
 			}
 			return;
-		}
+	}
 
-		public function toFormatTree($list,$title = 'title',$pk='id',$pid = 'pid',$root = 0){
+	public function toFormatTree($list,$title = 'title',$pk='id',$pid = 'pid',$root = 0){
 			$list = list_to_tree($list,$pk,$pid,'_child',$root);
 			$this->formatTree = array();
 			$this->_toFormatTree($list,0,$title);
 			return $this->formatTree;
-		}
 	}
+}

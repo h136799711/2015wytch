@@ -16,8 +16,8 @@
 				</div>
 				<!-- 操作按钮 -->
 				<div class="btn-controls">
-					<a href="{:U('Admin/Category/index')}" class="btn btn-default btn-sm "><i class="fa fa-reply"></i>返回</a>
-					<a class="btn btn-primary btn-sm" href="{:U('Admin/CategoryProp/add',array('cate_id'=>$cate_id))}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+					<a href="{:U('Admin/Category/index',array('level'=>$level,'parent'=>$parent,'preparent'=>$preparent))}" class="btn btn-default btn-sm "><i class="fa fa-reply"></i>返回</a>
+					<a class="btn btn-primary btn-sm" href="{:U('Admin/CategorySku/add',array('cate_id'=>$cate_id,'level'=>$level,'parent'=>$parent,'preparent'=>$preparent))}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
 					<!--<a target-form="selectitem" class="btn btn-danger btn-sm ajax-post confirm" href="{:U('Admin/CategoryProp/bulkDelete')}"><i class="fa fa-trash"></i>{:L('BTN_DELETE')}</a>-->
 					
 				</div>
@@ -29,7 +29,7 @@
 								<input type="checkbox" class="selectall" onclick="myUtils.selectall(this,'.selectitem');" />
 							</th>
 							<th>
-								属性名称
+								SKU名称
 							</th>
 							<th>
 								操作
@@ -47,14 +47,14 @@
 									<td>
 										<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" /></td>
 									<td>
-										<a href="{:U('Admin/CategoryPropvalue/index',array('cate_id'=>$cate_id,'prop_id'=>$vo['id']))}">{$vo.propname}</a>
+										<a href="{:U('Admin/CategorySkuvalue/index',array('cate_id'=>$cate_id,'sku_id'=>$vo['id'],'level'=>$level,'parent'=>$parent,'preparent'=>$preparent))}">{$vo.name}</a>
 									</td>
 									
 									<td>
 										
-										<a href="{:U('Admin/CategoryProp/edit',array('id'=>$vo['id']))}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>编辑</a>
+										<a href="{:U('Admin/CategorySku/edit',array('id'=>$vo['id'],'cate_id'=>$cate_id,'level'=>$level,'parent'=>$parent,'preparent'=>$preparent))}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>编辑</a>
 										
-										<a href="{:U('Admin/CategoryProp/delete',array('id'=>$vo['id']))}" class="btn btn-sm btn-danger ajax-get confirm"><i class="fa fa-trash"></i>删除</a>
+										<a href="{:U('Admin/CategorySku/delete',array('id'=>$vo['id']))}" class="btn btn-sm btn-danger ajax-get confirm"><i class="fa fa-trash"></i>删除</a>
 									
 									</td>
 								</tr>
