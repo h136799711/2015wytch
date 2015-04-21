@@ -71,6 +71,7 @@ class CategorySkuvalueController extends AdminController{
 		}else{
 			
 			$name = I('name','');
+			$dnredirect = I('dnredirect',false);
 			
 			if(empty($name)){
 				$this->error("属性不能为空！");
@@ -86,7 +87,11 @@ class CategorySkuvalueController extends AdminController{
 			
 			
 			if($result['status']){
-				$this->success("添加成功！",U('Admin/CategorySkuvalue/index',array('sku_id'=>$sku_id,'cate_id'=>$cate_id,'preparent'=>$this->preparent,'parent'=>$this->parent,'level'=>$this->level)));
+				if($dnredirect){
+					$this->success("添加成功！");					
+				}else{
+					$this->success("添加成功！",U('Admin/CategorySkuvalue/index',array('sku_id'=>$sku_id,'cate_id'=>$cate_id,'preparent'=>$this->preparent,'parent'=>$this->parent,'level'=>$this->level)));
+				}
 			}
 			else{
 				$this->error($result['info']);

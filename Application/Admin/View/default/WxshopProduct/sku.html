@@ -25,12 +25,12 @@
 					</div>
 				</div>
 					<label class="control-label">商品规格<span class="help-block">(不要超过4种规格,只有选中的前4种有效)</span></label>
-					<!--<div class="well" >
-						<div class="form-group"><label>规格名称</label><input type="text"  /></div>
-						<div class="form-group"><label>规格值</label><input type="text"  /><a href="javascript:void(0)"  >添加</a></div>
-						<div><a href="javascript:void(0)" class="btn btn-sm btn-primary">确定</a>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-default">取消</a></div>
-					
-					</div>-->
+					<div class="well" >
+						<div>
+							<a target="_blank" href="{:U('Admin/CategorySku/add',array('cate_id'=>$cate_id,'level'=>$level,'parent'=>$parent,'preparent'=>$preparent))}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>新增规格</a>
+							<a href="__SELF__" class="btn btn-sm btn-default"><i class="fa fa-refresh"></i>刷新</a>
+						</div>
+					</div>
 					<div class="sku-info">
 						
 						<volist name="skulist" id="sku">
@@ -50,7 +50,7 @@
 							
 							<div class='skuvalue_edit_wrp well clearfix hidden'>
 								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'><label>规格值</label><input type='text'  class="input-sm" />
-									<a href="javascript:void(0)" class="btn btn-primary js_sku_add btn-sm" >添加</a></div>
+									<a href="javascript:void(0)" data-skuid="{$sku.id}" class="btn btn-primary js_sku_add btn-sm" >添加</a></div>
 								<div class='skuvalue-preview'>
 									
 								<volist name="sku['value_list']" id="skuvalue2">
@@ -79,7 +79,6 @@
 						<span class="help-block">请选择规格</span>
 					</div>
 				</div>
-				
 				<div class="form-group">
 					<label class="control-label">&nbsp;</label>
 					<div class="">
@@ -183,11 +182,18 @@
 							return ;
 						}
 					}
-					var $panel = $ele.parents(".skuvalue_edit_wrp");
-					$panel = $panel.find(".skuvalue-preview");
-					$panel.append("<label class='bg-muted'>"+skuvalue+"<i class='fa fa-times js_delete'></i></label>");	
+					var cate_id = "{$cate_id}";
+					var sku_id = $ele.attr("data-skuid");
+					var query = {dnredirect:true,cate_id:cate_id,sku_id:sku_id,name:skuvalue};
 					
-					skumanage.added.push(skuvalue);
+					window.myUtils.ajaxpost($ele,"{:U('Admin/CategorySkuvalue/add')}",query);
+					
+//					var $panel = $ele.parents(".skuvalue_edit_wrp");
+//					$panel = $panel.find(".skuvalue-preview");
+					
+//					$panel.append("<label class='bg-muted'>"+skuvalue+"<i class='fa fa-times js_delete'></i></label>");	
+					
+//					skumanage.added.push(skuvalue);
 					
 					
 				}else{
@@ -224,6 +230,7 @@
 					row = row * sku_items.length;
 				}
 			})
+			
 			//SKU种类 最多4种
 			var col = sku_arr.length;
 			
@@ -238,6 +245,7 @@
 				var tbody_tr = $("<tr></tr>");
 				tbody.append(tbody_tr);
 			}
+			
 			//是否为颜色
 			var flag = 0;
 			//创建行内部的列
@@ -297,7 +305,7 @@
 			}
 			//添加输入框
 			var td = "<td><input type='text' class='price' /></td><td><input type='text' class='ori_price' /></td><td><input type='text' class='quantity' /></td><td><input type='text' class='barcode' /></td>";
-			for(var j=1;j<=row;j++){	
+			for(var j=1;j<=row && col > 0;j++){	
 				$($("tr",tbody).get(j)).append(td);		
 			}
 			//创建结束
@@ -405,7 +413,9 @@
 		$(function(){
 			
 			var skuinfo = "{$skuinfo}";
-			window.skuvalue = '{$skuvalue}';
+			
+			window.skuvalue = '{$skuvaluelist}';
+			
 			console.log(skuinfo);
 			console.log(skuvalue);
 			// 

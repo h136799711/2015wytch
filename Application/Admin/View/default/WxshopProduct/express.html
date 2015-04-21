@@ -60,14 +60,12 @@
 
 			<form class="form form-horizontal">
 				<fieldset>
-					<legend>运费设置<div class="help-block">1. 先点击[保存]。<br/> 2. 再[同步到微信]</div></legend>
+					<legend>运费设置</legend>
 					<div class="form-group">
 						<div class="col-lg-2 col-md-2 control-label">&nbsp;</div>
 						<div class="col-lg-10 col-md-10">
 							<a href="javascript:void(0)" class="btn btn-primary js_submit btn-sm"><i class="fa fa-save" ></i>保存</a>							
 							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
-							
-							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-danger pull-right  ajax-get"><i class="fa fa-send-o"></i>同步到微信</a>
 							
 						</div>
 					</div>
@@ -113,8 +111,8 @@
 								<label class="radio-inline">
 									<input type="radio" value="0" name="express_tmpl" class="js_express_tmpl" <eq name="delivery_type" value="0">checked="checked"</eq> checked="checked" />统一运费
 								</label>
-								<label class="radio-inline">
-									<input type="radio" value="1" name="express_tmpl" class="js_express_tmpl" <eq name="delivery_type" value="1">checked="checked"</eq> />使用运费模板
+								<label class="radio-inline hidden">
+									<input type="radio" value="1" name="express_tmpl" class="js_express_tmpl " <eq name="delivery_type" value="1">checked="checked"</eq> />使用运费模板
 								</label>
 								<div class="express-union"  <eq name="delivery_type" value="1">style="display: none;"</eq>>
 									<div class="">
@@ -136,7 +134,7 @@
 										<input type="text" name="ems" value="<if condition="isset($express['10000029'])">{$express['10000029']}</if>" style="width: 60px;" /><span>元</span>
 									</div>
 								</div>
-								<div class="express-tmpl" <eq name="delivery_type" value="0">style="display: none;"</eq> >
+								<div class="express-tmpl hidden" <eq name="delivery_type" value="0">style="display: none;"</eq> >
 									<select class="form-control" >
 										<volist name="expresslist" id="vo">
 											<option value="{$vo.Id}" <eq name="vo['Id']" value="$template_id">selected="selected"</eq> >{$vo.Name}</option>
@@ -153,7 +151,6 @@
 							<a href="javascript:void(0)" class="btn btn-primary js_submit btn-sm"><i class="fa fa-save" ></i>保存</a>
 							
 							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
-							<a href="{:U('Admin/WxshopProduct/sendToWxServer',array('id'=>$id))}" class="btn btn-danger pull-right  ajax-get"><i class="fa fa-send-o"></i>同步到微信</a>
 							
 						</div>
 					</div>

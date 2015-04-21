@@ -89,15 +89,15 @@ class WxshopProductController extends AdminController {
 			}else{
 				$this->error("警告：省份信息获取失败！");
 			}
-			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
+//			$wxshopapi = new \Common\Api\WxShopApi($this -> appid, $this -> appsecret);
 			
-			$result = $wxshopapi->expressGetAll();
-//			dump($result);
-			if($result['status']){	
-				$this->assign("expresslist",$result['info']);				
-			}else{
-				$this->error("警告：运费信息获取失败！");
-			}
+//			$result = $wxshopapi->expressGetAll();
+////			dump($result);
+//			if($result['status']){	
+//				$this->assign("expresslist",$result['info']);				
+//			}else{
+//				$this->error("警告：运费信息获取失败！");
+//			}
 			
 			$this->assign("countrylist",C('COUNTRY_LIST'));
 			$this->assign("productid",$productid);
@@ -189,9 +189,9 @@ class WxshopProductController extends AdminController {
 				
 				$this->assign("skuinfo",$this->getSkuValue(json_decode($skuinfo,JSON_UNESCAPED_UNICODE)));
 				
-				$skulist = apiCall("Admin/WxproductSku/queryNoPaging", array(array('id'=>$id)));
-				if($skulist['status']){					
-					$this->assign("skuvalue",json_encode($skulist['info']));
+				$skulist = apiCall("Admin/WxproductSku/queryNoPaging", array(array('product_id'=>$id)));
+				if($skulist['status']){
+					$this->assign("skuvaluelist",json_encode($skulist['info'],JSON_UNESCAPED_UNICODE));
 				}
 			}
 			
@@ -206,6 +206,29 @@ class WxshopProductController extends AdminController {
 				$this->assign("skulist",$this->color2First($result['info']));
 			}
 			
+			//SKU
+			$result = apiCall("Admin/Category/getInfo",array(array('id'=>$cate_id)));
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			$level = 0;
+			$parent = 0;
+			$preparent = -1;
+			
+			if(is_array($result['info'])){
+				$level = $result['info']['level'];
+				$parent = $result['info']['parent'];
+				$result = apiCall("Admin/Category/getInfo",array(array('id'=>$parent)));
+				if(!$result['status']){
+					$this->error($result['info']);
+				}
+				$preparent = $result['info']['parent'];		
+			}
+			
+			$this->assign("cate_id",$level);
+			$this->assign("parent",$parent);
+			$this->assign("preparent",$preparent);
+			$this->assign("cate_id",$cate_id);
 			$this->assign("id",$id);
 			$this->display();
 		}else{
@@ -218,6 +241,7 @@ class WxshopProductController extends AdminController {
 			$sku_list = json_decode(htmlspecialchars_decode($sku_list),JSON_UNESCAPED_UNICODE);	
 			
 			$result = apiCall("Admin/WxproductSku/addSkuList", array($id,$sku_info,$sku_list));
+			
 			if(!$result['status']){				
 				$this->error($result['info']);
 				
