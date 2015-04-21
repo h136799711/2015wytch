@@ -38,6 +38,10 @@ function loadingMsg(txt){
 	
 }
 
+/**
+ * 
+ * @param {Object} data {content:"文字",action:"回调函数"}
+ */
 function confirmMsg(data){
 	var ele = $("#confirm-mb");
 	if(ele.length == 0){		
@@ -67,9 +71,11 @@ function confirmMsg(data){
 	},2500);
 }
 
+
 $(window).load(function() {
 	$.AMUI.progress.done();
 });
+
 $(function() {
 		$.AMUI.progress.start();//.start();
 		//nprogress
@@ -134,23 +140,6 @@ $(function() {
 						ajaxpost(that, target, query);
 					}
 				});
-//				var confirm = $(this).data('am.modal');
-//		        var onConfirm = function() {		            
-//					ajaxpost(that, target, query);
-//		        };
-//		        var onCancel = function() { };
-//		        
-//		        if (confirm) {
-//		          confirm.options.onConfirm =  onConfirm;
-//		          confirm.options.onCancel =  onCancel;
-//		          confirm.toggle(this);
-//		        } else {
-//		          $confirm.modal({
-//		            relatedElement: this,
-//		            onConfirm: onConfirm,
-//		            onCancel: onCancel
-//		          });
-//		        }
 				
 			} else {
 				ajaxpost(that, target, query);
@@ -159,22 +148,16 @@ $(function() {
 		}); //END ajax-post
 
 		function ajaxpost(that, target, query) {
-			//					return true;
 			$(that).button("loading");
-			//				console.log("query=",query);
-			//				return ;
 //			var ele = loadingMsg("请求中...")；
 			$.post(target, query).always(function() {
 				setTimeout(function() {
 					$(that).button("reset");
 				}, 1400);
-//				ele.modal('close');
-				//					$(that).button("reset");
 			}).done(function(data) {
 				if (data.status == 1) {
 					if (data.url) {
 						alertMsg(data.info + ' 页面即将自动跳转~');
-//						$.scojs_message(data.info + ' 页面即将自动跳转~', $.scojs_message.TYPE_OK);
 					} else {
 						alertMsg(data.info);
 					}
@@ -199,7 +182,5 @@ $(function() {
 				}
 			});
 		}
-
-//		$(window).resize();
-		//		  $('[data-toggle="tooltip"]').tooltip()
-	}) //end $.ready
+		
+}) //end $.ready

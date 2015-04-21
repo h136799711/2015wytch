@@ -16,6 +16,8 @@ class WxuserController extends AdminController {
 
 	public function index() {
 		//get.startdatetime
+		$nickname = I('nickname','');
+		
 		
 		$startdatetime = I('startdatetime', date('Y-m-d', time() - 24 * 3600), 'urldecode');
 		$enddatetime = I('enddatetime', date('Y-m-d', time()), 'urldecode');
@@ -37,11 +39,17 @@ class WxuserController extends AdminController {
 
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " subscribe_time desc ";
+		if(!empty($nickname)){
+			$map['nickname'] = array('like','%'.$nickname.'%');
+			$params['nickname'] = $nickname;
+		}
+		
 		//
 		$result = apiCall('Admin/Wxuser/query', array($map, $page, $order, $params));
 
 		//
 		if ($result['status']) {
+			$this -> assign('nickname', $nickname);
 			$this -> assign('startdatetime', $startdatetime);
 			$this -> assign('enddatetime', $enddatetime);
 			$this -> assign('show', $result['info']['show']);
@@ -159,7 +167,7 @@ class WxuserController extends AdminController {
 	 */
 	public function syncUser(){
 		
-		
+		set_time_limit(0);
 		$uid = session("uid");
 		
 		$wxaccount = getWxAccountID();// "eotprkjn1426473619";		
@@ -200,6 +208,8 @@ class WxuserController extends AdminController {
 			}
 //			dump($count - $success);
 //			dump($result);
+		}else{
+			$this->error("当前无公众号！");
 		}
 	}
 

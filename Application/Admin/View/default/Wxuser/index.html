@@ -24,6 +24,16 @@
 					<form action="{:U('Admin/Wxuser/index')}" method="post" class="form-inline">
 						<div class="form-group">
 							<div class="input-group">
+								
+								<div class="input-group-addon">
+									用户昵称
+									<i class="fa fa-user"></i>
+								</div>
+								<input type="text" name="nickname" class="form-control" value="{$nickname}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="input-group">
 								<div class="input-group-addon">
 									关注时间
 									<i class="fa fa-calendar"></i>

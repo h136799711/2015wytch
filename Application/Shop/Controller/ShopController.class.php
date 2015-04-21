@@ -6,7 +6,7 @@
 // | Copyright (c) 2013-2016 杭州博也网络科技, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Weixin\Controller;
+namespace Shop\Controller;
 use Think\Controller;
 
 class ShopController extends  Controller {
@@ -30,11 +30,36 @@ class ShopController extends  Controller {
 			}
 		}
 		C('SHOW_PAGE_TRACE', false);//设置不显示trace
-		$this -> refreshWxaccount();
-		$url = $this->getCurrentURL();
-		$this->getWxuser($url);
-
+		$this->getDebugUser();
+//		$this -> refreshWxaccount();
+//		$url = $this->getCurrentURL();
+//		$this->getWxuser($url);
+		if(empty($this->userinfo)){
+			echo "无法获取到用户信息！";
+			exit();
+		}
 	}
+	
+	//获取测试用户信息，用于PC端测试使用
+	private function getDebugUser(){
+		$this->userinfo = array(
+			'openid'=>'oxGH0sgeUkH4g8aowy0452xJnX1o',
+			'nickname'=>'老胖子何必都',
+			'avatar'=>'http://wx.qlogo.cn/mmopen/An6TFzHNImPecEhl1R3UWd26LlC1mvVgyhdh2KGCOb0yjQ4JNQnOicG2ysaKojzusSO9R3RE55Exq0lYKpVr3RRArU0u7kgjR/0',
+			'score'=>0,
+			'wxaccount_id'=>1,
+		);
+		$this->wxaccount = array(
+			'wxname'=>'同诚汇',
+			'appid'=>'wx5f9ed360f5da5370',
+			'appsecret'=>'4a0e3e50c8e9137c4873689b8ee99124',
+			'uid'=>'32',
+			'token'=>'eotprkjn1426473619',
+		);
+		$this->wxapi = new \Common\Api\WeixinApi('wx5f9ed360f5da5370','4a0e3e50c8e9137c4873689b8ee99124');
+		$this->openid = "oxGH0sgeUkH4g8aowy0452xJnX1o";
+	}
+	
 	
 	protected function getCurrentURL(){
 		$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];

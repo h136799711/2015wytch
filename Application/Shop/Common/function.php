@@ -14,7 +14,7 @@ function getAllExpress(){
 	$EXPRESS = C('express');
 	$exp = array();
 	foreach($EXPRESS as $key=>$vo){
-		array_push($exp,array('code'=>$key,'name'=>$vo))
+		array_push($exp,array('code'=>$key,'name'=>$vo));
 	}
 	
 	return $exp;
