@@ -5,51 +5,46 @@
 
 <block name="area_body">
 	
-	<header data-am-widget="header" class="am-header am-header-default">
-	  <div class="am-header-left am-header-nav">
-	    <a href="#" class="">
-	      威
+	<header class="am-header am-header-default grid">
+	  <div class="logo col-2">
+	    <a href="#" >
+	      <img src="__IMG__/logo.png?v=1.1" alt="logo"  />
 	    </a>
 	  </div>
-	  <h1 class="am-header-title">
-	  	<input type="text" class="am-form-control" name="search" />
-	  </h1>
+	  <div class="top-search-wrp col-10">
+	  	<span class="i-search"><i class="am-icon-search"></i>搜索商品、店铺</span>
+	  	<input type="text" class="am-form-control top-search js_top_search" value="" name="q" />
+	  </div>
 	</header>
-	<div data-am-widget="slider" class="am-slider am-slider-default" data-am-slider='{}'>
+	<div></div>
+	<div data-am-widget="slider" class="am-slider am-slider-a5" data-am-slider='{&quot;directionNav&quot;:false}'>
 	  <ul class="am-slides">
-	    <li>
-	      <img src="http://s.cn.bing.net/az/hprichbg/rb/TheLuxorHotel_ZH-CN12121725266_1920x1080.jpg">
-	    </li>
-	    <li>
-	      <img src="http://s.cn.bing.net/az/hprichbg/rb/MovingWalkway_ZH-CN9842297711_1920x1080.jpg">
-	    </li>
-	    <li>
-	      <img src="http://global.bing.com/az/hprichbg/rb/UchisarCastle_EN-US10838608428_1920x1080.jpg">
-	    </li>
-	    <li>
-	      <img src="http://global.bing.com/az/hprichbg/rb/DumbartonOaksGardens_EN-US12360736195_1920x1080.jpg">
-	    </li>
+	  	<volist name="banners" id="vo">
+	  		<li>
+	  			<img src="{$vo.url}" alt="{$vo.title}" />
+	  		</li>
+	  	</volist>
 	  </ul>
 	</div>
-	<div data-am-widget="slider" class="am-slider am-slider-a5" data-am-slider='{&quot;directionNav&quot;:false}'>
-  <ul class="am-slides">
-    <li>
-      <img src="http://s.cn.bing.net/az/hprichbg/rb/TheLuxorHotel_ZH-CN12121725266_1920x1080.jpg">
-    </li>
-    <li>
-      <img src="http://s.cn.bing.net/az/hprichbg/rb/MovingWalkway_ZH-CN9842297711_1920x1080.jpg">
-    </li>
-    <li>
-      <img src="http://global.bing.com/az/hprichbg/rb/UchisarCastle_EN-US10838608428_1920x1080.jpg">
-    </li>
-    <li>
-      <img src="http://global.bing.com/az/hprichbg/rb/DumbartonOaksGardens_EN-US12360736195_1920x1080.jpg">
-    </li>
-  </ul>
-</div>
+	
+	
+	
 </block>
 
 <block name="area_footer">
 	<include  file="partial/footermenu" />
+	
+	<script type="text/javascript">
+		$(function(){
+						
+			$(".js_top_search").on("tap",function(){
+				alertMsg("jquery tap");
+			});
+//			$(".js_top_search").on("click",function(){
+//				alertMsg("jquery click");
+//			});
+		})
+		
+	</script>
 </block>
 

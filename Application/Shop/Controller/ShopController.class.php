@@ -17,7 +17,7 @@ class ShopController extends  Controller {
 	protected $openid;
 	
 	protected function _initialize() {
-
+		
 		// 获取配置
 		$this -> getConfig();
 
@@ -30,8 +30,8 @@ class ShopController extends  Controller {
 			}
 		}
 		C('SHOW_PAGE_TRACE', false);//设置不显示trace
+		$this -> refreshWxaccount();
 		$this->getDebugUser();
-//		$this -> refreshWxaccount();
 //		$url = $this->getCurrentURL();
 //		$this->getWxuser($url);
 		if(empty($this->userinfo)){
@@ -49,14 +49,8 @@ class ShopController extends  Controller {
 			'score'=>0,
 			'wxaccount_id'=>1,
 		);
-		$this->wxaccount = array(
-			'wxname'=>'同诚汇',
-			'appid'=>'wx5f9ed360f5da5370',
-			'appsecret'=>'4a0e3e50c8e9137c4873689b8ee99124',
-			'uid'=>'32',
-			'token'=>'eotprkjn1426473619',
-		);
-		$this->wxapi = new \Common\Api\WeixinApi('wx5f9ed360f5da5370','4a0e3e50c8e9137c4873689b8ee99124');
+		
+//		$this->wxapi = new \Common\Api\WeixinApi('wx5f9ed360f5da5370','4a0e3e50c8e9137c4873689b8ee99124');
 		$this->openid = "oxGH0sgeUkH4g8aowy0452xJnX1o";
 	}
 	

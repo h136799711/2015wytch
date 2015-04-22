@@ -1,0 +1,92 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" href="__CDN__/comp/wxuploader.css" />
+	<link type="text/css" rel="stylesheet" href="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+		<style type="text/css">
+		.banner.wxuploaderimg {
+			width: 320px;
+			height: 100px;
+		}
+		.banner.wxuploaderimg .img-preview img{
+			width: 320px;			
+		}
+	</style>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			
+			<!-- 带验证 form -->
+			<form class="form-horizontal well validateForm">
+				<fieldset>
+					<legend>
+						Banners添加
+					</legend>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">图片标题</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-short" name="title" id="title" placeholder="请给图片起个标题或默认">
+							<div class="help-block">(给图片起个标题或默认)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">图片地址</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="hidden" class="" name="url" id="url" placeholder="请给图片起个标题或默认">
+							<!-- 图片选择DOM结构 -->
+							<div class="wxuploaderimg clearfix banner" data-maxitems="1">
+								<div class="img-preview clearfix" >
+									
+								</div>
+								<div class="add">
+									<i class="fa fa-plus"></i>
+								</div>
+							</div>							
+							<!-- 图片选择DOM结构 -->
+							
+							<div class="help-block">(上传图片,尺寸：640像素*200像素)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">图片描述</label>
+						<div class="col-md-10 col-lg-10">
+							<textarea name="notes" class="form-control" rows="5"></textarea>							
+							<div class="help-block">(图片描述)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="validateForm" onclick="getData();" class="ajax-post btn btn-primary" href="{:U('Admin/Banners/add')}" autofocus="autofocus"><i class="fa fa-save"></i>保存</a>
+							<a class="btn btn-default" href="{:U('Admin/Banners/index')}">
+								<i class="fa fa-reply"></i>								返回</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<!-- form -->
+			<include file="template/wxpicture" />
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+	function getData(){
+		var img = $(".wxuploaderimg img").attr("src");
+		$("#url").val(img);
+	}
+	
+	$(function(){
+			wxuploadimg.init({cont:".wxuploaderimg"});
+	});
+	</script>
+</block>

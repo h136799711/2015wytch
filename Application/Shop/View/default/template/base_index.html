@@ -3,20 +3,30 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>{$seo.title|default=L('TITLE')}-{:C('WEBSITE_TITLE')}</title>
-		<meta name="viewport" content="target-densitydpi=device-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>{:C('WEBSITE_TITLE')}</title>
 		<meta name="keywords" content="{$seo.keywords|default=" "}" />
 		<meta name="description" content="{$seo.description|default=" "}" />
 		<meta name="author" content="{$cfg.owner|default=" Gooraye "}" />
+	    <meta content="yes" name="apple-mobile-web-app-capable" />
+	    <meta content="yes" name="apple-touch-fullscreen" />
+	    <meta content="telephone=no,email=no" name="format-detection" />
+	    <meta content="maximum-dpr=2" name="flexible" />
+	    <meta content="modeName=640-12" name="grid" />
 		<!-- 系统基本样式 -->
-		<link type="text/css" rel="stylesheet" href="__CDN__/amazeui/2.3.0/css/amazeui.min.css" />
+		<link type="text/css" rel="stylesheet" href="__CDN__/amazeui/2.3.0/css/amazeui.css" />
 		
 		<!-- 商城全局样式 -->
 		<link type="text/css" rel="stylesheet" href="__CSS__/shop.css?v=__APP_VERSION__" />
+		<link type="text/css" rel="stylesheet" href="__CSS__/shop-dpr2.css?v=__APP_VERSION__" />
+		<!-- 商城全局样式 -->
+		<link type="text/css" rel="stylesheet" href="__CDN__/flexible/flexible.css?v=__APP_VERSION__" />
+		<script type="text/javascript" src="__CDN__/flexible/flexible.js?v=__APP_VERSION__"></script>
+		<script type="text/javascript" src="__CDN__/flexible/makegrid.js?v=__APP_VERSION__"></script>
 
 		<!-- 脚本 -->
 		<script type="text/javascript" src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
 		<script type="text/javascript" src="__CDN__/amazeui/2.3.0/js/amazeui.min.js"></script>
+		<script type="text/javascript" src="__JS__/shop.js?v=__APP_VERSION__"></script>
 		
 
 		<block name="area_header">
@@ -24,7 +34,7 @@
 		</block>
 
 	</head>
-
+	
 	<body class="theme-default theme-shop">
 
 		<block name="area_body">

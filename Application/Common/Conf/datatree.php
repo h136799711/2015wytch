@@ -11,5 +11,7 @@ return array(
 	'DATATREE'=>array(
 		'STORE_TYPE'=>2,//店铺类别
 		'WXPRODUCTGROUP'=>13, //商品分组
+		
+		'SHOP_INDEX_BANNERS'=>17, //商品分组
 	)
 );

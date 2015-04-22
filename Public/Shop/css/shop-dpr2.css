@@ -1,0 +1,27 @@
+
+[data-dpr="2"] .theme-shop .i-search{
+	font-size:40px;
+}
+[data-dpr="2"] .am-navbar-nav a .am-navbar-label{
+	font-size:24px;
+}
+[data-dpr="2"] .am-navbar-nav a [class*="am-icon"]:before{
+	font-size: 44px;
+}
+
+[data-dpr="2"] .am-navbar-nav a [class*="am-icon"] {  
+	width: 48px;
+	height: 48px;
+	line-height: 48px;
+}
+[data-dpr="2"] .am-navbar-nav a{
+	  height: 98px;
+  line-height: 40px;
+}
+[data-dpr="2"] .am-navbar{
+  height: 98px;
+  line-height: 98px;
+}
+[data-dpr="2"] .am-footer-default .am-footer-miscs{
+	font-size:26px;
+}
