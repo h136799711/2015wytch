@@ -80,6 +80,31 @@
 								<!-- 图片选择DOM结构 -->
 							</div>
 						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2">微信价</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="price" class="price form-control input-short input-sm" value="{:($vo['price']/100.0)}" />元
+								<span class="help-block">销售价,需低于原价</span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2">原价
+								<br/><span class="help-block">(选填)</span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="ori_price" maxlength="60"  value="{:($vo['ori_price']/100.0)}"  class="oriprice form-control input-short input-sm" />元
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_sku">
+							<label for="" class="control-label col-lg-2 col-md-2 ">商品库存
+								<br/><span class="help-block"></span>
+							</label>
+							<div class="col-lg-10 col-md-10">
+								<input name="quantity" maxlength="60"  value="{$vo.quantity}"  class="oriprice form-control input-short input-sm" />
+								<span class="help-block"></span>
+							</div>
+						</div>
 						
 						<div class="form-group col-lg-12 col-md-12 clearfix js_frm_gp_buylimit">
 							<label for="" class="control-label col-lg-2 col-md-2">是否限购</label>

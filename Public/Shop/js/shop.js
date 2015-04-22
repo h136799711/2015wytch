@@ -73,6 +73,8 @@ function confirmMsg(data){
 
 
 $(window).load(function() {
+	$("body").addClass("domloaded")
+//	setTimeout(function(){},1300);
 	$.AMUI.progress.done();
 });
 

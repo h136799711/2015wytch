@@ -26,6 +26,46 @@
 							</volist>
 						</select>
 					</case>
+					<!-- 图片地址 -->
+					<case value="5">
+						<link type="text/css" rel="stylesheet" href="__CDN__/comp/wxuploader.css?v=__APP_VERSION__" />
+						<link type="text/css" rel="stylesheet" href="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+						<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+						<input type="hidden"  name="config[{$config.name}]" id="img_{$config.name}" value="{$config.value}" />
+						
+						<!-- 图片选择DOM结构 -->
+						<div data-id="img_{$config.name}" class="wxuploaderimg clearfix <notempty name="config.value">checked</notempty> " data-maxitems="1">
+							<div class="img-preview clearfix" >
+								<notempty name="config.value">
+										<div class="pull-left clearfix img-item">
+											<img src="{$config.value}"  />
+											<div class="edit_pic_wrp"><a href="javascript:;" class="fa fa-lg fa-trash js_delete"></a></div>
+										</div>
+								</notempty>
+							</div>
+							<div class="add">
+								<i class="fa fa-plus"></i>
+							</div>
+						</div>
+						
+						<include file="template/wxpicture" autoinit="true" />
+						<script type="text/javascript">
+							function config_set_get_data(){
+								$(".wxuploaderimg").each(function(index,item){
+//									console.log(item);
+									var data_id = $(item).attr("data-id");
+//									console.log(data_id);
+									$("#"+data_id).val($("img",item).attr("src"));
+								});
+								
+								return false;
+							}
+							$(function(){
+								
+							})
+						</script>
+								<!-- 图片选择DOM结构 -->
+					</case>
 				</switch>
 
 			</div>
@@ -36,7 +76,7 @@
 		<div class="controls">
 			<empty name="list">
 			<else/>
-				<button type="submit" class="btn btn-primary submit-btn ajax-post" target-form="configSetForm">{:L('BTN_SAVE')}</button>
+				<button type="submit" onclick="return config_set_get_data();" class="btn btn-primary submit-btn ajax-post" target-form="configSetForm">{:L('BTN_SAVE')}</button>
 			</empty>
 		</div>
 	</div>

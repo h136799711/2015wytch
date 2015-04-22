@@ -505,11 +505,17 @@ class WxshopProductController extends AdminController {
 			if(empty($buylimit)){
 				$buylimit = 0;
 			}
-			
+			$price = I('price',0,'intval');
+			$price = $price * 100.0;
+			$ori_price = I('ori_price',0,'intval');
+			$ori_price = $ori_price * 100.0;
 			$entity = array(
 				'main_img'=>I('main_img',''),
 				'img'=> I('post.img', ''),
 				'name'=>I('product_name',''),
+				'price'=>$price,
+				'ori_price'=>$ori_price,
+				'quantity'=>I('quantity',0),
 				'buy_limit'=>$buylimit,
 				'attrext_ishasreceipt'=>I('ishasreceipt',0),
 				'attrext_isunderguaranty'=>I('isunderguaranty',0),
@@ -752,7 +758,7 @@ class WxshopProductController extends AdminController {
 		if($localproduct['has_sku'] == 0){
 			array_push($sku_list,array(			
 			'sku_id'=>''	,	
-			'ori_price'=>floatval($localproduct['ori_price'])+10,
+			'ori_price'=>floatval($localproduct['ori_price']),
 			'price' => floatval($localproduct['price']),
 			'quantity' => intval($localproduct['quantity']),
 			'product_code' => $localproduct['product_code'],

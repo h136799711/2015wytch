@@ -8,20 +8,24 @@
 
 namespace Admin\Controller;
 
-class BannersController extends  AdminController{
+class AdvertController extends  AdminController{
 	
+	protected $position;
+	
+	protected function _initialize(){
+		parent::_initialize();
+		$this->position = C('DATATREE.SHOP_INDEX_ADVERT');
+	}
+
 	public function index(){
 		
-		
-		
 		$map = array();
-		$map = array('uid'=>UID);
-		$map['position'] = array("in","18,20");
+		$map = array('uid'=>UID,'position'=>$this->position);
 		
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " createtime desc ";
 		//
-		$result = apiCall('Admin/Banners/queryWithPosition', array($map, $page, $order, $params));
+		$result = apiCall('Admin/Banners/query', array($map, $page, $order, $params));
 		//
 		if ($result['status']) {
 			$this -> assign('show', $result['info']['show']);
@@ -41,10 +45,27 @@ class BannersController extends  AdminController{
 			$title = I('post.title','');
 //			$url = 
 			$notes = I('post.notes','');
-			$position = I('post.position',18);
+			$position = $this->position;
+			$starttime = I('post.startdatetime',FALSE);
+			$endtime = I('post.enddatetime',FALSE);
+			$noticetime = I('post.noticedatetime',FALSE);
+			
+			$starttime = strtotime($starttime);
+			$endtime = strtotime($endtime);
+			$noticetime = strtotime($noticetime);
+			if($starttime > $endtime){
+				$tmp = $endtime;
+				$endtime = $starttime;
+				$starttime = $tmp;
+			}
+			
+			if($starttime === FALSE || $endtime === FALSE){
+				$this->error("时间格式错误！");
+			}
 			if(empty($position)){
 				$this->error("配置错误！");
 			}
+			
 			$entity = array(
 				'uid'=>UID,
 				'position'=>$position,
@@ -53,9 +74,9 @@ class BannersController extends  AdminController{
 				'notes'=>$notes,
 				'img'=>I('img',''),
 				'url'=>I('url',''),
-				'starttime'=>0,
-				'endtime'=>0,
-				'noticetime'=>0,
+				'starttime'=>$starttime,
+				'endtime'=>$endtime,
+				'noticetime'=>$noticetime,
 			);
 		
 			
@@ -65,7 +86,7 @@ class BannersController extends  AdminController{
 				$this->error($result['info']);
 			}
 			
-			$this->success("保存成功！",U('Admin/Banners/index'));
+			$this->success("保存成功！",U('Admin/Advert/index'));
 			
 		}
 	}
@@ -84,18 +105,31 @@ class BannersController extends  AdminController{
 			$title = I('post.title','');
 //			$url = 
 			$notes = I('post.notes','');
-			$position = I('post.position',18);
-			if(empty($position)){
-				$this->error("配置错误！");
+			$starttime = I('post.startdatetime',FALSE);
+			$endtime = I('post.enddatetime',FALSE);
+			$noticetime = I('post.noticedatetime',FALSE);
+			$starttime = strtotime($starttime);
+			$endtime = strtotime($endtime);
+			$noticetime = strtotime($noticetime);
+			if($starttime === FALSE || $endtime === FALSE){
+				$this->error("时间格式错误！");
+			}
+						
+			if($starttime > $endtime){
+				$tmp = $endtime;
+				$endtime = $starttime;
+				$starttime = $tmp;
 			}
 			$entity = array(
-				'position'=>$position,
 				'title'=>$title,
 				'notes'=>$notes,
 				'img'=>I('img',''),
 				'url'=>I('url',''),
+				'starttime'=>$starttime,
+				'endtime'=>$endtime,
+				'noticetime'=>$noticetime,
 			);
-		
+			
 			
 			$result = apiCall("Admin/Banners/saveByID", array($id,$entity));
 			
@@ -103,12 +137,26 @@ class BannersController extends  AdminController{
 				$this->error($result['info']);
 			}
 			
-			$this->success("保存成功！",U('Admin/Banners/index'));
+			$this->success("保存成功！",U('Admin/Advert/index'));
 			
 		}
 	}
 		
+	public function delete($redirectURL=false){
+		
+		$id = I('id',0);
+		$map = array("id"=>$id);
+		$result = apiCall("Admin/Banners/delete", array($map));
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		$this->success("删除成功！");
+		
+	}
 	
 	
+
 	
 }

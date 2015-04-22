@@ -5,28 +5,46 @@
 // | Author: 贝贝 <hebiduhebi@163.com>
 // | Copyright (c) 2013-2016, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
+namespace Shop\Api;
 
-namespace Admin\Api;
-use \Common\Model\BannersModel;
+use Common\Api\Api;
+use Common\Model\WxproductModel;
 
-class BannersApi extends \Common\Api\Api{
+class WxproductApi extends Api{
 	
 	protected function _init(){
-		$this->model = new BannersModel();
-	}	
+		$this->model = new WxproductModel();
+	}
 	
-	public function queryWithPosition($map = null, $page = array('curpage'=>0,'size'=>10), $order = false, $params = false){
+	public function queryByGroup($group_id,$map,$page){
 		
-		$field = 'dt.name as position_name,banner.url,banner.noticetime,banner.endtime,banner.starttime,banner.title,banner.createtime,banner.storeid,banner.id,banner.img,banner.position,banner.notes,banner.uid';
+		$result = $this->model->query("select * from __WXPRODUCT_GROUP__ where g_id = ".$group_id);
+		if($result === FALSE){
+			return $this->apiReturnErr($this->model->getDbError());
+		}
+		$product_ids = array();
 		
-		$query = $this->model->alias(" as banner ")->field($field)->join('LEFT JOIN common_datatree as dt ON dt.id = banner.position');
+		foreach($result as $vo){
+			array_push($product_ids,$vo['p_id']);
+		}
+		
+		if(is_null($map)){
+			$map = array();
+		}
+		
+		$map['id'] = array('in',$product_ids);
+		
+		
+		$query = $this->model;
 		if(!is_null($map)){
 			$query = $query->where($map);
 		}
 		if(!($order === false)){
 			$query = $query->order($order);
 		}
-		
+		if(!($fields === false)){
+			$query = $query->field($fields);
+		}
 		$list = $query -> page($page['curpage'] . ',' . $page['size']) -> select();
 		
 
@@ -38,8 +56,8 @@ class BannersApi extends \Common\Api\Api{
 		$count = $this -> model -> where($map) -> count();
 		// 查询满足要求的总记录数
 		$Page = new \Think\Page($count, $page['size']);
-
-		//分页跳转的时候保证查询条件
+		
+		// 分页跳转的时候保证查询条件
 		if ($params !== false) {
 			foreach ($params as $key => $val) {
 				$Page -> parameter[$key] = urlencode($val);
@@ -48,8 +66,9 @@ class BannersApi extends \Common\Api\Api{
 
 		// 实例化分页类 传入总记录数和每页显示的记录数
 		$show = $Page -> show();
-
+		
 		return $this -> apiReturnSuc(array("show" => $show, "list" => $list));
+		
 	}
-	
 }
+

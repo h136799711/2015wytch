@@ -319,3 +319,11 @@ function getPayStatus($status){
 			return "未知";
 	}
 }
+
+/**
+ * 获取数据字典的ID
+ * TODO: 考虑从数据库中获取
+ */
+function getDatatree($code){
+	return C("DATATREE.".$code);
+}

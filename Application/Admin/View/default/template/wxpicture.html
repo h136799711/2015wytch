@@ -270,4 +270,10 @@
 			$.scojs_message(data.info, $.scojs_message.TYPE_OK);
 		}
 	}
+	$(function(){			
+		var init = '[autoinit]';
+		if(init == 'true'){
+			wxuploadimg.init({cont:".wxuploaderimg"});
+		}
+	})
 </script>

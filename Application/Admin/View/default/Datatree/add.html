@@ -5,6 +5,10 @@
 <script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/localization/messages_zh.min.js"></script>
 	
+	<link rel="stylesheet" type="text/css" href="__CDN__/comp/wxuploader.css" />
+	<link type="text/css" rel="stylesheet" href="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
+	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+	
 
 </block>
 
@@ -38,6 +42,24 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">图标<br/>（选填）</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="hidden" class="required form-control input-short" id="iconurl" name="iconurl"  >
+							<!-- 图片选择DOM结构 -->
+							<div class="wxuploaderimg clearfix banner" data-maxitems="1">
+								<div class="img-preview clearfix" >
+									
+								</div>
+								<div class="add">
+									<i class="fa fa-plus"></i>
+								</div>
+							</div>							
+							<!-- 图片选择DOM结构 -->
+							
+							<div class="help-block">(图标,可不填)</div>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">排序</label>
 						<div class="col-md-10 col-lg-10">
 							<input type="text" class="required form-control input-short" value="0" name="sort"  placeholder="">
@@ -54,13 +76,14 @@
 					<div class="form-group">
 						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
 						<div class="col-lg-10 col-md-10">
-							<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Admin/Datatree/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a target-form="validateForm" onclick="return getData();" class="ajax-post btn btn-primary" href="{:U('Admin/Datatree/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
 							<a class="btn btn-default" href="{:U('Admin/Datatree/index',array('parent'=>$parent))}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>
 						</div>
 					</div>
 				</fieldset>
 			</form>
 			<!-- form -->
+			<include file="template/wxpicture" />
 
 		</div>
 		<!-- END admin-main-content -->
@@ -71,6 +94,15 @@
 <block name="area_footer">
 
 	<script type="text/javascript">
+	function getData(){
+		var img = $(".wxuploaderimg img").attr("src");
+		$("#iconurl").val(img);
 		
+		return true;
+	}
+	
+	$(function(){
+			wxuploadimg.init({cont:".wxuploaderimg"});
+	});
 	</script>
 </block>

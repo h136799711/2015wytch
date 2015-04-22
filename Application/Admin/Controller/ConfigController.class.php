@@ -55,7 +55,7 @@ class ConfigController extends AdminController {
         		$this->success(L('RESULT_SUCCESS'),U('Admin/Config/set'));
 			}else{
 				LogRecord($result['info'], '[INFO]'.__FILE.__LINE__);
-				$this -> error(L('ERR_SYSTEM_BUSY'));
+				$this -> error($result['info']);
 			}
 		}
 	}

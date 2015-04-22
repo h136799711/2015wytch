@@ -114,6 +114,7 @@ class DatatreeController extends AdminController{
 				'parents'=>$parents,
 				'parentid'=>$this->parent,
 				'code'=>I('code',''),
+				'iconurl'=>I('iconurl',''),
 			);
 			
 			$result = apiCall("Admin/Datatree/add", array($entity));
@@ -149,7 +150,7 @@ class DatatreeController extends AdminController{
 	}
 	
 	public function edit(){
-		$id = I('get.id',0);
+		$id = I('id',0);
 		if(IS_GET){
 			$result = apiCall("Admin/Datatree/getInfo",array(array('id'=>$id)));
 			if($result['status']){
@@ -164,8 +165,8 @@ class DatatreeController extends AdminController{
 				'notes'=>I('notes',''),
 				'sort'=>I('sort',''),
 				'code'=>I('code',''),
+				'iconurl'=>I('iconurl',''),
 			);
-			
 			$result = apiCall("Admin/Datatree/saveByID", array($id,$entity));
 			
 			if(!$result['status']){

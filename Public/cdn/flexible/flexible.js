@@ -7,7 +7,7 @@
     var scale = 0;
     var tid;
     var flexible = lib.flexible || (lib.flexible = {});
-    
+    var maximumFontSize = 200;//html标签最大字体大小值
     if (metaEl) {
         console.warn('将根据已有的meta标签来设置缩放比例');
         var match = metaEl.getAttribute('content').match(/initial\-scale=([\d\.]+)/);
@@ -20,6 +20,7 @@
         if (content) {
             var initialDpr = content.match(/initial\-dpr=([\d\.]+)/);
             var maximumDpr = content.match(/maximum\-dpr=([\d\.]+)/);
+            maximumFontSize = content.match(/maximum\-fontsize=([\d\.]+)/);
             if (initialDpr) {
                 dpr = parseFloat(initialDpr[1]);
                 scale = parseFloat((1 / dpr).toFixed(2));    
@@ -71,6 +72,7 @@
             width = 540 * dpr;
         }
         var rem = width / 10;
+//      if(rem > maximumFontSize) return ;
         docEl.style.fontSize = rem + 'px';
         flexible.rem = win.rem = rem;
     }

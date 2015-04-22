@@ -10,6 +10,18 @@ namespace Common\Model;
 use Think\Model;
 
 class WxproductModel extends Model{
+	
+	/**
+	 * 上架
+	 */
+	const STATUS_ONSHELF = 1;
+	
+	/**
+	 * 下架
+	 */
+	const STATUS_OFFSHELF = 0; 
+	
+	
 	protected $_auto = array(
 		array('updatetime', 'time', self::MODEL_BOTH,'function'), 
 		array('createtime', NOW_TIME, self::MODEL_INSERT), 
