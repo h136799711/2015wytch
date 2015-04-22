@@ -110,7 +110,7 @@
 	  <ul class="am-slides">
 	  	<volist name="banners" id="vo">
 	  		<li>
-	  			<a href="<empty name='vo.url'>#<else/>$vo['url']</empty>">
+	  			<a href="<empty name='vo.url'>#<else/>{$vo['url']}</empty>">
 	  				<img src="{$vo.img}" alt="{$vo.title}" />
 	  			</a>
 	  		</li>
@@ -165,7 +165,7 @@
   			<ul class="am-slides">
   				<volist name="rec_stores" id="vo">
 			  		<li>
-			  			<a href="<empty name='vo.url'>#<else/>$vo['url']</empty>">
+			  			<a href="<empty name='vo.url'>#<else/>{$vo['url']}</empty>">
 			  				<img src="{$vo.img}" alt="{$vo.title}" />
 	     					<div class="am-slider-desc">
 	         				{$vo.title}

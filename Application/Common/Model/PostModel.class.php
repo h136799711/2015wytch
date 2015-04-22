@@ -6,17 +6,16 @@
 // | Copyright (c) 2013-2016, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
+namespace Common\Model;
+use Think\Model;
 
-return array(
-	'DATATREE'=>array(
-		'STORE_TYPE'=>2,//店铺类别
-		'WXPRODUCTGROUP'=>13, //商品分组
-		'WXPRODUCTGROUP_RECOMMEND'=>16, //首页推荐商品
-		
-		'SHOP_INDEX_BANNERS'=>18, //首页轮播图片
-		'SHOP_INDEX_ADVERT'=>19, //首页广告
-		'SHOP_INDEX_RECOMMEND_STORE'=>20, //首页推荐店铺
-		
-		'POST_CATEGORY'=>21, //文章分类
-	)
-);
+/**
+ * 文章发布
+ */
+class PostModel extends Model{
+	
+	protected $_auto = array(
+		array("post_date",NOW_TIME,self::MODEL_INSERT),
+		array("post_modified","time",self::MODEL_BOTH,"function"),
+	);
+}

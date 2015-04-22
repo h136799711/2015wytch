@@ -36,7 +36,7 @@ class WxshopController extends AdminController{
 		$order = " createtime desc ";
 		$map['uid'] = UID;
 		//
-		$result = apiCall('Admin/Wxstore/query', array($map, $page, $order, $params));
+		$result = apiCall('Admin/Wxstore/query', array($map, $page, $order));
 		//
 		if ($result['status']) {
 			$this -> assign('name', $name);

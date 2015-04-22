@@ -1,0 +1,107 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/localization/messages_zh.min.js"></script>
+	
+    <script type="text/javascript" charset="utf-8" src="__CDN__/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__CDN__/ueditor/1.4.3/ueditor.all.min.js"> </script>
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+		
+			<!-- 带验证 form -->
+			<form class="form-horizontal well validateForm">
+				<fieldset>
+					<legend>
+						</legend>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">文章标题</label>
+						<div class="col-md-10 col-lg-10">
+							<input type="text" class="required form-control input-short" name="post_title" id="inputtitle" placeholder="{:L('PLACEHOLDER_TITLE')}">
+							<div class="help-block">(请输入文章标题)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">文章状态</label>
+						<div class="col-md-10 col-lg-10">
+							<label class="radio-inline">
+								<input type="radio" name="post_status" value="publish" checked="checked" />立即发布
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="post_status" value="draft" />草稿
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">可否评论</label>
+						<div class="col-md-10 col-lg-10">
+							<label class="radio-inline">
+								<input type="radio" name="comment_status"  checked="checked" value="closed" />禁止评论
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="comment_status" value="open" />任何人都可评论
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="comment_status" value="registered_only" />仅会员可评论
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputpost_excerpt" class="col-md-2 col-lg-2 control-label">文章摘要</label>
+						<div class="col-md-10 col-lg-10">
+							<textarea name="post_excerpt" rows="5"  class="required form-control input-normal"></textarea>
+							<div class="help-block">(请输入文章摘要)</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="inputpost_excerpt" class="col-md-2 col-lg-2 control-label">文章分类</label>
+						<div class="col-md-10 col-lg-10">
+							<select name="post_category" >
+								{:W("Partials/datatree",array(getDatatree('POST_CATEGORY'),true))}
+							</select>
+							<div class="help-block">(请选择文章分类)</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">文章内容</label>
+						<div class="col-md-10 col-lg-10">							
+							 <script id="ueditor" name="post_content" type="text/plain" style="height: 480px;" ></script>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
+						<div class="col-lg-10 col-md-10">
+							<a target-form="validateForm" class="ajax-post btn btn-primary" href="{:U('Admin/Post/add')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a class="btn btn-default" href="{:U('Admin/Post/index')}"><i class="fa fa-reply"></i>返回</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<!-- form -->
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+<script>
+    var ue = UE.getEditor('ueditor',{
+    	toolbars:[
+        ['fullscreen', 'source', 'undo', 'redo', 'bold','italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|','lineheight'
+       , 'fontsize', 'insertimage','emotion','link', 'unlink', 'anchor', '|','map','print', 'preview',  'drafts'
+        ]
+    ]});
+	</script>
+</block>
