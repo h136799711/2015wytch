@@ -38,10 +38,10 @@
 								店铺名称
 							</th>
 							<th>
-								创建时间
+								店铺主微信号
 							</th>
 							<th>
-								店铺状态
+								创建时间
 							</th>
 							<th>
 								操作
@@ -60,14 +60,18 @@
 										{$vo.id}
 									</td>
 									<td>{$vo.name}<img src="{$vo.logo}" alt='logo' style="max-width:40px;" />
-									</td>									
+									</td>						
+									<td>
+										{$vo.wxno}
+									</td>							
 									<td>
 										{$vo.createtime|date='Y-m-d h:i:s',###}
-									</td>
-									<td>
+									</td>			
+									<!--<td>
 										{:($vo['isopen'] == "1"?"营业中":"休息中")}
 										<a href="{:U('Admin/Wxshop/open',array('id'=>$vo['id'],'isopen'=>$vo['isopen']))}" class="btn btn-primary btn-sm ajax-get" ><i class="fa fa-chain"></i>{:($vo['isopen'] == "1"?"改为休息":"改为营业")}</a>
-									</td>
+									</td>-->
+									
 									<td>
 										<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$vo['id']))}" class="btn btn-sm btn-primary"><i class="fa fa-building"></i>店铺商品管理</a>
 										<a href="{:U('Admin/Wxshop/edit',array('id'=>$vo['id']))}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>编辑</a>

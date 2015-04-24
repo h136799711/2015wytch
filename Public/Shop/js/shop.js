@@ -186,3 +186,47 @@ $(function() {
 		}
 		
 }) //end $.ready
+
+
+window.wxshop = (function(){
+	
+	/**
+	 * 将商品添加到购物车中
+	 * @param {Object} p_id 商品ID
+	 */
+	function addToShoppingCart(that,p_id,target){
+		var sku_id = "";
+		//存在SKU标识
+		if($("#hebidu_skuchecked").length == 1){
+			sku_id  = $("#hebidu_skuchecked").val();
+		}
+		
+		var query = {p_id:p_id,sku_id :sku_id}; 
+		
+		$.post(target, query).always(function() {
+			
+		}).done(function(data) {
+			if (data.status == 1) {
+				alertMsg("成功添加到购物车!");
+			} else {
+				alertMsg(data.info);				
+			}
+		});
+		
+	}
+	
+	
+	
+	return {
+		addToShoppingCart:addToShoppingCart,
+	}
+	
+	
+})(window);
+
+
+
+
+
+
+

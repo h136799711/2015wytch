@@ -70,10 +70,31 @@ class IndexController extends ShopController{
 		$result = $this->getRecommendStore();
 		
 		$this->assign("rec_stores",$result['info']['list']);
-			
-	
+		
+		//获取首页4格活动
+		$result = $this->getFourGrid();
+//		
+		$this->assign("fourgrid",$result['info']['list']);
+//		
 		$this->display();
 	}
+
+	/**
+	 * 获取首页4格活动
+	 * 
+	 */
+	 private function getFourGrid(){
+		$page = array('curpage'=>0,'size'=>4);
+	 	$map = array('parentid'=>getDatatree("INDEX_4_ACTIVTIY"));
+		$order = " sort desc";
+		$result = apiCall("Admin/Datatree/query", array($map,$page,$order));
+	
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		return $result;
+	 }
 	
 	/**
 	 * 广告
@@ -82,7 +103,7 @@ class IndexController extends ShopController{
 		
 		$page = array('curpage'=>0,'size'=>2);
 		$map = array('position'=>getDatatree("SHOP_INDEX_ADVERT"));
-		$result = apiCall("Admin/Banners/query", array($map));
+		$result = apiCall("Admin/Banners/query", array($map,$page));
 		if(!$result['status']){
 			$this->error($result['info']);
 		}
@@ -90,7 +111,7 @@ class IndexController extends ShopController{
 		return $result;
 	}
 	/**
-	 * 广告
+	 * 推荐店铺
 	 */
 	private function getRecommendStore(){
 		

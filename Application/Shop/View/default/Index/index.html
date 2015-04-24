@@ -86,6 +86,26 @@
 			height: 1.5rem;
 			width: 100%;
 		}
+		.activity {
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			padding: 0;
+			margin: 0.25rem 0;
+			background: #FFFFFF;
+		}
+		.activity img{
+			height: 100%;
+		}
+		.layer.grid{
+			padding: 0px;
+  			margin: 0px;
+		}
+		.layer .layer-title{
+			background: #FFFFFF;
+			padding: 0.1rem 0px;
+			border-left: 5px solid #D3B640;
+			padding-left: 8px;
+		}
 	</style>
 </block>
 
@@ -128,27 +148,32 @@
 	</div>
 	
 	<div class="top-line">
-		TODO: 头条新闻
+		<!--TODO: 头条新闻-->
 	</div>
-	<div class="demo">
-		广告4格 不规则
-		<div class="col-6">
-			
+	<div class="grid activity">
+		<if condition="count($fourgrid) gt 3"> 
+		<div class="col-6 text-center" style="border: 1px solid #F0F0EE;height: 4rem;  border-left: 0px;background: #FFFFFF;">
+			<img src="{$fourgrid[0]['iconurl']}" alt="{$fourgrid[0]['name']}" class="am-responsive-width"/>
 		</div>
-		<div class="col-6">			
-			<div class="col-3">
+		<div class=" text-center" >			
+			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
+				<img  src="{$fourgrid[1]['iconurl']}" alt="{$fourgrid[1]['name']}"class="am-responsive-width" />
 			</div>
-			<div class="col-3">
-				<div class="col-3">
-				</div>
+			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
+				<img src="{$fourgrid[2]['iconurl']}" alt="{$fourgrid[2]['name']}" class="am-responsive-width" />
 			</div>
 		</div>
+		<div class=" text-center" >			
+			<div class="col-6 text-center"  style="border: 0px solid #F0F0EE;border-top:1px;height: 2rem;background: #FFFFFF;">
+				<img  src="{$fourgrid[3]['iconurl']}" alt="{$fourgrid[3]['name']}" class="am-responsive-width" />
+			</div>
+		</div>
+		<else/>
+		
+		</if>
 	</div>
-	<!--
-    	作者：hebiduhebi@126.com
-    	时间：2015-04-22
-    	描述：首页嵌入广告01
-    -->
+	
+	
 	<div class="ad ad0">
 		<if condition="count($ads) gt 0">
 		<a href="{$ads[0].url}" ><img src="{$ads[0].img|default='__IMG__/ad_default.jpg?v=1.0'}" alt="{$ads[0].title}" /></a>
@@ -156,7 +181,12 @@
 		<img src="__IMG__/ad_default.jpg?v=1.0" alt="广告位招租" />
 		</if>
 	</div>
-	<div class="demo">活动</div>
+	<div class="demo">
+                      <!--
+                      	作者：hebiduhebi@126.com
+                      	时间：2015-04-23
+                      	描述：TODO 活动
+                      --></div>
 	
 	<div class="layer grid">
 		<div class="layer-title">优质商家</div>
@@ -192,15 +222,17 @@
 		<img src="__IMG__/ad_default.jpg?v=1.0" alt="广告位招租" />
 		</if>
 	</div>
-	<div class="am-text-center">推荐商品</div>
+	<div class="am-text-center" style="margin: 0.2rem 0;border-bottom: 1px solid #E2CCCC;">推荐商品</div>
 	<div class="product-list grid">
 		<volist name="recommend_products" id="vo">
 				<div class="product-wrp col-6">
 					<div class="product-item">
+						<a href="{:U('Shop/Product/detail',array('id'=>$vo['id']))}">
 						<div class="p-main-img" ><img src="{$vo.main_img}" alt="{$vo.name}"/></div>
 						<div class="p-name" >{$vo.name}</div>
 						<div class="p-price" >¥{:number_format($vo['price']/100,1)}<del>¥{:number_format($vo['ori_price']/100,1)}</del></div>
 						<i class="zk">{:number_format(10.0*($vo['price']/$vo['ori_price']),1)}折</i>
+						</a>
 					</div>
 				</div>
 		</volist>

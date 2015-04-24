@@ -1,0 +1,416 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" href="__CSS__/detail.css?v=__APP_VERSION__" />
+	<script type="text/javascript" src="__CDN__/amazeui-lazyload/1.9.3/amazeui.lazyload.min.js"  ></script>
+</block>
+
+<block name="area_body">
+	<div class="detail-page">
+		<div class="btn-controls">
+			<a href="javascript:history.back(-1);" class="back"><i class="am-icon-chevron-left"></i></a>
+		</div>
+		<!--
+        	作者：hebiduhebi@126.com
+        	时间：2015-04-23
+        	描述：图片滚动
+        -->
+		<div data-am-widget="slider" style="height: 270px;" class="am-slider am-slider-a5" data-am-slider='{&quot;directionNav&quot;:false}'>
+		  <ul class="am-slides">
+		  	<volist name="banners" id="vo">
+		  		<li>
+		  			<a href="#view">
+		  				<img src="{$vo}" alt="{$vo}" style="  height: 270px;" />
+		  			</a>
+		  		</li>
+		  	</volist>
+		  </ul>
+		</div>
+		<div class="p-info">
+			<p class="p-name">{$product.name}</p>
+			<div class="p-price" >
+				<p class="">¥{:number_format($product['price']/100,1)}</p>
+				<p class="lgray p-ori-price">价格:<del>¥{:number_format($product['ori_price']/100,1)}</del></p>
+			</div>
+			<ul class="am-avg-sm-3 am-list p-extra lgray">
+				<li class="am-text-left" ><if condition="$product['attrext_ispostfree'] eq 1" >包邮<else/>{$express_str}</if></li>
+				<!-- TODO: 销量统计 -->
+				<li class="am-text-center">月销：{:(mt_rand(0,1000))}</li>
+				<li class="am-text-right">{$product.loc_city}</li>
+			</ul>
+		</div>
+		
+		<eq name="product['has_sku']" value="1">
+		
+		<!--
+        	作者：hebiduhebi@126.com
+        	时间：2015-04-23
+        	描述：弹出SKU选择
+        -->
+		<div class="p-pro">
+			<div class="d-sku js_sku">
+				请选择商品规格<i class="am-icon-chevron-right am-fr"></i>
+			</div>
+		</div>
+		
+		</eq>
+		
+		<!--
+        	作者：hebiduhebi@126.com
+        	时间：2015-04-23
+        	描述：店铺信息
+        -->
+		<div class="p-shop am-cf" data-spm="shop">
+			<div class="p-logo">
+				<img class="am-circle" src="{$wxstore['logo']}">
+			</div>
+			<div class="p-desc am-cf">
+				{$wxstore['name']}<br/>
+				<i class="am-icon-weixin color-weixin"></i>微信号：<small>{$wxstore['wxno']}</small>
+			</div>
+			
+			<div class="p-quick am-cf">
+				<!--
+                	作者：hebiduhebi@126.com
+                	时间：2015-04-23
+                	描述：单店铺－所有宝贝查看
+                -->
+				<a class="c-btn" href="{:U('Shop/Product/all',array('store_id'=>$product['storeid']))}" style="border-right: 1px solid #FAE4E4;">
+					<span><i class="am-icon-th-list"></i>查看宝贝分类
+					</span>
+				</a>
+				<!--
+                	作者：hebiduhebi@126.com
+                	时间：2015-04-23
+                	描述：单店铺查看
+                -->
+				<a href="{:U('Shop/Wxstore/view',array('store_id'=>$product['storeid']))}" class="">
+					<span><i class="am-icon-university"></i>
+						进入店铺
+					</span>
+				</a>
+			</div>
+		</div>
+		<!-- 1. 商品详情
+			 2. 产品参数
+			-->
+		<div class="p-content">
+			<div data-am-widget="tabs" class="am-tabs am-tabs-d2">
+				<ul class="am-tabs-nav am-cf">
+					<li class="am-active">
+						<a href="[data-tab-panel-0]">图文详情</a>
+					</li>
+					<li class="">
+						<a href="[data-tab-panel-1]">产品参数</a>
+					</li>
+					<li class="">
+						<a href="[data-tab-panel-2]">累计评价</a>
+					</li>
+				</ul>
+				<div class="am-tabs-bd">
+					<div data-tab-panel-0 class="am-tab-panel am-active">
+						<!--
+                        	作者：hebiduhebi@126.com
+                        	时间：2015-04-23
+                        	描述：图文详情
+                        -->
+						<volist name="details" id="vo">
+							<?php
+							 if($vo->type == 'text'){
+								
+								echo $vo->ct;
+							}else{
+								echo "<img class='am-responsive-width lazy' data-original='".$vo->ct."' />";
+							} ?>
+						</volist>
+					</div>
+					<div data-tab-panel-1 class="am-tab-panel ">
+					
+						<ul class="am-list am-cf p-propvalue-list">
+						<volist name="properties" id="vo">
+							  <li class="am-cf" ><div class="lgray am-fl" style="width: 100px;margin-right: 10px;">{$vo.name}</div><div class=" am-fl omit">{$vo.value}</div></li>				
+						</volist>
+						</ul>	
+					</div>	
+					<div data-tab-panel-2 class="am-tab-panel ">
+						评论功能正在加班加点开发中...
+					</div>
+				</div>
+	
+			</div>
+		</div>
+		
+		
+		<eq name="product['has_sku']" value="1">
+		
+		<div class="sku-panel-mask" style="opacity:0;left:100%">
+			
+		<div class="sku-panel">
+			<i class="close am-icon-times-circle"></i>
+			<div class="sku-info am-cf">
+				<img class="js_sku_icon_url am-thumbnail am-fl  am-responsive-width " src="{$product.main_img}" alt=""   />
+				<div class="sku-ext am-fl">
+					<span>¥<span  class="js_sku_price">{:($product['price']/100.0)}</span></span>
+					<span>库存<span class="js_sku_quantity">{$product.quantity}</span>件</span>
+					<span class="js_checked_info lgray"></span>
+				</div>
+			</div>
+			<div class="sku-list">
+				<volist name="sku_arr" key="k" id="vo">
+					<div class="sku-name">{$vo['sku_name']}</div>
+					<div class="sku-value-list am-cf">
+						<volist name="vo.sku_value_list" id="sku_value">
+							<div class="value-item am-fl" data-sku="{$vo['id']}:{$sku_value['id']};">
+								{$sku_value['name']}
+							</div>
+						</volist>
+					</div>
+				</volist>
+			</div>
+			<div class="btn-controls">
+			      <a href="javascript:wxshop.addToShoppingCart({$product.id})" class="am-btn am-btn-primary">
+			        <span class="add-cart">加入购物车</span>
+			      </a>
+			      <a href="{:U('Shop/Product/buy',array('id'=>$product['id']))}" class="am-btn am-btn-danger">
+			        <span class="buy">立即购买</span>
+			      </a>
+			</div>
+		</div>
+
+		</div>
+		
+		<div>
+			<!-- 存在此input 即表示需要选择规格 -->
+			<input  type="hidden" id="hebidu_skuchecked" />
+		</div>
+		</eq>
+</block>
+
+<block name="area_footer">
+	<include  file="partial/product_footer" />
+	
+	<script type="text/javascript">
+		
+		
+		<eq name="product['has_sku']" value="1">
+		
+	
+		/**
+		 * 设置选中SKU的信息
+		 * @param {Object} sku
+		 */
+		function setCheckedSku(sku){
+			//需要选择的SKU数目
+			var len = $(".sku-list .sku-name").length;
+			//已选择SKU数目
+			var checked = $(".sku-list .value-item.checked");
+			var allSkuName = $(".sku-list .sku-name");
+			var checked_info ="";
+			var not_checked_info ="";
+			var checked_ids = "";
+			for(var i=0;i < allSkuName.length;i++){
+				var checked_sku = $(allSkuName[i]).next(".sku-value-list").find(".value-item.checked");
+				if(checked_sku.length == 1){
+					if(checked_info.length > 0){
+						checked_ids += checked_sku.attr("data-sku");
+						checked_info = checked_info + ",\""+$(checked_sku).text()+"\"";
+					}else{
+						checked_ids = checked_sku.attr("data-sku");
+						checked_info = "\""+$(checked_sku).text()+"\"";
+					}
+				}else{
+					if(not_checked_info.length > 0){
+						not_checked_info = not_checked_info + ","+$(allSkuName[i]).text()+"";
+					}else{
+						not_checked_info = $(allSkuName[i]).text();
+					}
+				}
+			}
+//			console.log(not_checked_info);
+			
+			//指示 是否已经选择过商品规格，表示是否可以直接购买以及加入购物车。
+			window.hasChoosed = false;
+			if(checked_info.length > 0){
+				$(".sku-info .js_checked_info").text("已选:"+checked_info);
+				if(not_checked_info.length > 0){
+					$(".sku-info .js_checked_info").html($(".sku-info .js_checked_info").text()+";还未选: <span style='color:#333;'>"+not_checked_info+"</span>");				
+				}else{
+					window.hasChoosed = true;
+				}
+			}else{
+				$(".sku-info .js_checked_info").text("");
+			}
+			
+			$("#hebidu_skuchecked").val(checked_ids);
+			changeSku();
+//			console.log(len - checked.length > 1);
+			if(len - checked.length == 0){
+				disabledSku(checked_ids,true);
+			}else if(len - checked.length == 1){
+				disabledSku(checked_ids);
+			}else if(len - checked.length > 1){
+				$(".sku-list .value-item.disabled").removeClass("disabled");
+			}
+		}
+		
+		/**
+		 * 禁用库存为0 的
+		 * @param {Object} checked_ids
+		 */
+		function disabledSku(checked_ids,loop){
+			$(".sku-list .value-item.disabled").removeClass("disabled");
+			var ids = checked_ids.split(";");
+			ids.pop();
+			var list = $(".sku-list .value-item");
+			//遍历规格值
+			for(sku_key in window.sku_list ){
+//				console.log(sku_key);
+				var current_sku = window.sku_list[sku_key];
+				if(current_sku.quantity > 0){
+					continue;
+				}
+				
+				var last_sku_id = sku_key;
+				
+				if(loop){
+					for(var i=0;i<ids.length;i++){
+						
+						for(var j=0;j<ids.length;j++){
+							
+							if(i != j ){
+								last_sku_id = last_sku_id.replace(ids[j]+";","");
+							}
+							
+						}
+						
+						list.each(function(index,item){
+							if($(item).attr("data-sku") == last_sku_id){
+								$(item).addClass("disabled");
+								return false;
+							}
+						});
+					}
+				}else{
+					for(tmp in ids){
+						
+						if(last_sku_id.indexOf(ids[tmp]) >= 0){
+							last_sku_id = last_sku_id.replace(ids[tmp]+";","");
+						}					
+					}
+					
+					//last_sku_id 表示当前规格中剩下的规格值，替换掉选中的规格值
+					//遍历所有规格值
+					list.each(function(index,item){
+						if($(item).attr("data-sku") == last_sku_id){
+							$(item).addClass("disabled");
+							return false;
+						}
+					});
+				}
+				
+				
+			}
+		}
+		
+		//设置当前规格下的价格，库存量，图标
+		function changeSku(){
+			//默认图标
+			var default_icon = "{$product.main_img}";
+			//当前SKU_ID
+			var sku_id = $("#skuchecked").val();
+			if(window.hasChoosed){
+				//必须在所有规格都有选择下才遍历处理
+				//TODO: 对库存为0 的设置disabled
+				var current_sku = window.sku_list[sku_id];
+//				console.log(current_sku);
+				if(current_sku){	
+					if(current_sku.icon_url){
+						$(".sku-info .js_sku_icon_url").attr("src",current_sku.icon_url);
+					}else{
+						$(".sku-info .js_sku_icon_url").attr("src",default_icon);
+					}
+					$(".sku-info .js_sku_price").text(current_sku.price/100.0);
+					$(".sku-info .js_sku_quantity").text(current_sku.quantity);
+				}
+			}
+			
+			
+		}
+		
+		function showSku(){
+			var top2 = $(window).height();
+			var top3 = top2 - $(".sku-panel").height();
+			console.log(top3,top2);
+			$(".sku-panel-mask").css({opacity:1.0,left:0});
+			$(".sku-panel").css({top:top2}).animate({top:top3.toString()+'px'},1000);
+			
+//			$(".sku-panel-mask").show().slideUp(800);
+		}
+		
+		function hideSku(){
+			var top2 = $(window).height()+$("body").scrollTop();
+			$(".sku-panel-mask").css({opacity:0,left:'100%'});
+		}
+		</eq>
+		$(function(){
+			
+			<eq name="product['has_sku']" value="1">
+		
+			$(".js_sku").on("tap",function(){
+				showSku();
+			});
+			$(".js_sku").click(function(){
+				showSku();
+			});
+			$(".sku-panel .close").on("tap",function(){
+				hideSku();
+			});
+			$(".sku-panel .close").click(function(){
+				hideSku();
+			});
+			window.sku_list = JSON.parse('{$sku_list}');
+			
+			
+			
+			$(".sku-value-list").on("tap",function(ev){
+//				console.log("tap");
+				var $ele = $(ev.target);
+				if($ele.hasClass("value-item") && !$ele.hasClass("disabled")){
+					$ele.siblings().removeClass("checked");
+					$ele.toggleClass("checked");			
+					setCheckedSku();
+				}
+				console.log(window.hasChoosed);
+				if(window.hasChoosed){
+					$("#hebidu_skuchecked").attr("data-checked","true");
+				}else{
+					$("#hebidu_skuchecked").attr("data-checked","false");
+				}
+				console.log($("#hebidu_skuchecked"));
+			});
+			
+			$(".sku-value-list").on("click",function(ev){
+//				console.log("click");
+				var $ele = $(ev.target);
+				if($ele.hasClass("value-item") && !$ele.hasClass("disabled")){
+					$ele.siblings().removeClass("checked");
+					$ele.toggleClass("checked");				
+					setCheckedSku();		
+				}
+				console.log(window.hasChoosed);
+				if(window.hasChoosed){
+					$("#hebidu_skuchecked").attr("data-checked","true");
+				}else{
+					$("#hebidu_skuchecked").attr("data-checked","false");
+				}
+				console.log($("#hebidu_skuchecked"));
+				console.log($("#hebidu_skuchecked").attr("data-checked"));
+			});
+			</eq>
+			
+			$("img.lazy").lazyload({effect : 'fadeIn'});
+		})
+		
+	</script>
+</block>
+

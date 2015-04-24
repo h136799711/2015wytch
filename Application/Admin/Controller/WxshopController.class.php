@@ -58,6 +58,7 @@ class WxshopController extends AdminController{
 			$type = I('post.type','');
 			$logo = I('post.logo','');
 			$banner = I('post.banner','');
+			$wxno = I('post.wxno','');
 			$cate_id = I('post.store_type','');
 			$wxnum = I('post.weixin_number','');
 			$weixin_name = I('post.weixin_number_name','');
@@ -75,6 +76,7 @@ class WxshopController extends AdminController{
 			$service_phone = I('post.service_phone','');
 			
 			$entity = array(
+				'wxno'=>$wxno,
 				'uid'=>UID,
 				'name'=>$name,
 				'desc'=>$desc,
@@ -125,6 +127,7 @@ class WxshopController extends AdminController{
 			$id = I('post.id',0);
 			$name = I('post.name','店铺名称');//
 			$desc = I('post.desc','');
+			$wxno = I('post.wxno','');
 			$type = I('post.type','');
 			$logo = I('post.logo','');
 			$banner = I('post.banner','');
@@ -144,6 +147,7 @@ class WxshopController extends AdminController{
 			$service_phone = I('post.service_phone','');
 			
 			$entity = array(
+				'wxno'=>$wxno,
 				'name'=>$name,
 				'desc'=>$desc,
 				'logo'=>$logo,

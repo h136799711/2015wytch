@@ -195,6 +195,7 @@ class WxshopProductController extends AdminController {
 				}
 			}
 			
+			$this->assign("has_sku",$result['info']['has_sku']);
 			$this->assign("storeid",$result['info']['storeid']);
 
 			
@@ -233,9 +234,27 @@ class WxshopProductController extends AdminController {
 			$this->display();
 		}else{
 			
+			$id = I('post.id',0);
+			$has_sku = I('post.has_sku',1);
+			
+			if($has_sku == 0){
+				$entity = array(
+					'sku_info'=>'',
+					'has_sku'=>0,
+				);
+				
+				$result = apiCall("Admin/Wxproduct/saveByID", array($id,$entity));
+				
+				if(!$result['status']){
+					$this->error($result['info']);
+				}
+				
+				$this->success("保存成功！");
+				
+			}
+			
 			$sku_list = I('post.sku_list','');
 			$sku_info = I('post.sku_info','');
-			$id = I('post.id',0);
 			
 			$sku_info = json_decode(htmlspecialchars_decode($sku_info),JSON_UNESCAPED_UNICODE);
 			$sku_list = json_decode(htmlspecialchars_decode($sku_list),JSON_UNESCAPED_UNICODE);	

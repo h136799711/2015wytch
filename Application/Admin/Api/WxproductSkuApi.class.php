@@ -25,7 +25,7 @@ class WxproductSkuApi extends Api{
 		$sql = "";
 		$flag = true;
 		$error = "";
-		$map = array('id'=>$id);
+		$map = array('product_id'=>$id);
 		
 		$result = $this->model->where($map)->delete();
 		if($result === false){
@@ -64,7 +64,7 @@ class WxproductSkuApi extends Api{
 				'has_sku'=>1,
 				'sku_info'=>json_encode($sku_info,JSON_UNESCAPED_UNICODE),
 			);
-			
+			$map = array('id'=>$id);
 			$model = new \Common\Model\WxproductModel();
 			$result = $model->where($map)->save($entity);
 			if($result === false){

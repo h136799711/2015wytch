@@ -8,6 +8,7 @@ html{
 	vertical-align: top;
 	line-height: 100%;
 	display: inline-block;
+	float:left;
 }
 .theme-shop .logo img{
 	 width: 80%;

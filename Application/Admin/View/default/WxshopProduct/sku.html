@@ -17,74 +17,88 @@
 					<legend>规格添加</legend>
 				</fieldset>
 				<div class="form-group">
-					<div class="form-group">
 					<label class="control-label">&nbsp;</label>
 					<div class="">
 						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)" ><i class="fa fa-save"></i>保存</a>
 						<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
 					</div>
 				</div>
-					<label class="control-label">商品规格<span class="help-block">(不要超过4种规格,只有选中的前4种有效)</span></label>
-					<div class="well" >
-						<div>
+				<label class="control-label">商品规格<span class="help-block">(不要超过4种规格,只有选中的前4种有效)</span></label>
+				<div class="well" >
+						<div class="form-group">
+							
 							<a target="_blank" href="{:U('Admin/CategorySku/add',array('cate_id'=>$cate_id,'level'=>$level,'parent'=>$parent,'preparent'=>$preparent))}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>新增规格</a>
 							<a href="__SELF__" class="btn btn-sm btn-default"><i class="fa fa-refresh"></i>刷新</a>
 						</div>
+						<div class="form-group js_sku_change">
+							<label class="am-radio-inline">
+								<input type="radio" value="0" <eq name="has_sku" value="0">checked="checked"</eq> name="has_sku" />
+								统一规格
+							</label>
+							<label class="am-radio-inline">
+								<input type="radio" value="1" <eq name="has_sku" value="1">checked="checked"</eq> name="has_sku" />
+								多规格
+							</label>
+							<div class="help-block">尽量都设置为统一规格</div>
+						</div>
 					</div>
-					<div class="sku-info">
-						
+				<div class="sku-panel-wrp" <eq name="has_sku" value="0">style="display:none;"</eq>>
+					<div class="sku-info">						
 						<volist name="skulist" id="sku">
 						<div class='sku_wrp' data-skuname="{$sku.name}" data-id="{$sku.id}">
-							<p>{$sku.name}
-								<a href="javascript:void(0);"  class="btn btn-link js_sku_edit">编辑</a>								
-								<!--<a href="javascript:void(0);" data-id="{$sku.id}"  class="btn btn-link js_sku_delete">{:(strpos($sku['sku_id'],'$')  === false ?'':'删除')}</a>-->
-							</p>
-							<div class='skuvalue_wrp'>
-								<volist name="sku['value_list']" id="skuvalue">								
-									<label class="checkbox-inline">
-										<input type="checkbox" {:(strpos($skuinfo,$skuvalue['id'].',')  === false ?'':'checked')} class="js_sku_value {:(strpos($skuinfo,$skuvalue['id'].',')  === false ?'':'checked')}" data-valuename="{$skuvalue['name']}" value="{$skuvalue['id']}">
-										{$skuvalue.name}
-									</label>								
-								</volist>
-							</div>
-							
-							<div class='skuvalue_edit_wrp well clearfix hidden'>
-								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'><label>规格值</label><input type='text'  class="input-sm" />
-									<a href="javascript:void(0)" data-skuid="{$sku.id}" class="btn btn-primary js_sku_add btn-sm" >添加</a></div>
-								<div class='skuvalue-preview'>
-									
-								<volist name="sku['value_list']" id="skuvalue2">
-								<label class="bg-muted">
-									{$skuvalue2.name}			
-									{:(strpos($skuvalue2['vid'],"$") === 0?"<i class='fa fa-times js_delete'></i>":"")}
-									
-								</label>
-								</volist>
+								<p>{$sku.name}
+									<a href="javascript:void(0);"  class="btn btn-link js_sku_edit">编辑</a>								
+									<!--<a href="javascript:void(0);" data-id="{$sku.id}"  class="btn btn-link js_sku_delete">{:(strpos($sku['sku_id'],'$')  === false ?'':'删除')}</a>-->
+								</p>
+								<div class='skuvalue_wrp'>
+									<volist name="sku['value_list']" id="skuvalue">								
+										<label class="checkbox-inline">
+											<input type="checkbox" {:(strpos($skuinfo,$skuvalue['id'].',')  === false ?'':'checked')} class="js_sku_value {:(strpos($skuinfo,$skuvalue['id'].',')  === false ?'':'checked')}" data-valuename="{$skuvalue['name']}" value="{$skuvalue['id']}">
+											{$skuvalue.name}
+										</label>								
+									</volist>
 								</div>
-								<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'>
-									<a href="javascript:void(0)"  class="btn btn-primary js_sku_sure btn-sm" >确定</a>
-									<a href="javascript:void(0)" class="btn btn-default js_sku_cancel btn-sm" >取消</a>
+								
+								<div class='skuvalue_edit_wrp well clearfix hidden'>
+									<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'><label>规格值</label><input type='text'  class="input-sm" />
+										<a href="javascript:void(0)" data-skuid="{$sku.id}" class="btn btn-primary js_sku_add btn-sm" >添加</a>
+									</div>
+									<div class='skuvalue-preview'>
+										
+									<volist name="sku['value_list']" id="skuvalue2">
+									<label class="bg-muted">
+										{$skuvalue2.name}			
+										{:(strpos($skuvalue2['vid'],"$") === 0?"<i class='fa fa-times js_delete'></i>":"")}
+										
+									</label>
+									</volist>
+									</div>
+									<div class='col-lg-12 col-md-12 clearfix skuvalue-edit'>
+										<a href="javascript:void(0)"  class="btn btn-primary js_sku_sure btn-sm" >确定</a>
+										<a href="javascript:void(0)" class="btn btn-default js_sku_cancel btn-sm" >取消</a>
+									</div>
+									
 								</div>
 								
 							</div>
-							
-						</div>
 						</volist>
 					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label">价格&库存</label>
-					<div class="sku-table">
-						<span class="help-block">请选择规格</span>
+					
+	
+					<div class="form-group">
+						<label class="control-label">价格&库存</label>
+						<div class="sku-table">
+							<span class="help-block">请选择规格</span>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">&nbsp;</label>
-					<div class="">
-						<a class="btn btn-primary js_sku_submit" href="javascript:void(0)"  ><i class="fa fa-save"></i>保存</a>
-						<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
+					<div class="form-group">
+						<label class="control-label">&nbsp;</label>
+						<div class="">
+							<a class="btn btn-primary js_sku_submit" href="javascript:void(0)"  ><i class="fa fa-save"></i>保存</a>
+							<a href="{:U('Admin/WxshopProduct/index',array('storeid'=>$storeid))}" class="btn btn-default" ><i class="fa fa-reply"></i>返回</a>
+						</div>
 					</div>
+			
 				</div>
 			</form>
 
@@ -109,6 +123,7 @@
 			$ele = $(ev.target);
 			if($ele.hasClass("js_sku_cancel")){
 				$ele.parents(".skuvalue_edit_wrp").addClass("hidden");
+				$ele.parents(".skuvalue_wrp").removeClass("hidden");
 			}
 			
 			if($ele.hasClass("js_sku_edit")){
@@ -188,12 +203,6 @@
 					
 					window.myUtils.ajaxpost($ele,"{:U('Admin/CategorySkuvalue/add')}",query);
 					
-//					var $panel = $ele.parents(".skuvalue_edit_wrp");
-//					$panel = $panel.find(".skuvalue-preview");
-					
-//					$panel.append("<label class='bg-muted'>"+skuvalue+"<i class='fa fa-times js_delete'></i></label>");	
-					
-//					skumanage.added.push(skuvalue);
 					
 					
 				}else{
@@ -238,7 +247,7 @@
 			for(var j=0;j<col;j++){
 				header.append("<th>"+$(sku_arr[j]['sku']).attr("data-skuname")+"</th>");
 			}
-			header.append("<th>微信价</th><th>原价<span class='text-muted'>(选填)</span></th><th>库存</th><th>商品条码<span class='text-muted'>(选填)</span></th>");
+			header.append("<th>微信价</th><th>原价<span class='text-muted'>(必须大于微信价)</span></th><th>库存</th><th>商品条码<span class='text-muted'>(选填)</span></th>");
 			
 			//创建好所有的行
 			for(var i=0;i<row;i++){
@@ -273,9 +282,15 @@
 					
 					//
 					
+					console.log("======================");
 					
 					for(var k=0;k<repeater;k++){
-						var index = k2*repeater*rowspan+k*rowspan+1;
+//						var index = k2*repeater*rowspan+k*rowspan+1;
+						var index = k*skuitems.length*rowspan+k2*rowspan+1;
+						
+//						var index = (rowspan)*k2+k+1;
+						console.log("repeater "+repeater,"rowspan "+rowspan);
+						console.log(index,sku);
 						var tr = $("tr",tbody).get(index);
 						var td = '';
 						if(flag == 1){
@@ -287,6 +302,7 @@
 						td.attr("rowspan",rowspan);
 						
 						for(var k3 = 0; k3 < rowspan && k < repeater ; k3++){
+//							console.log(index+k3,"k3");
 							if(index+k3 < row+1){
 								tr = $("tr",tbody).get(index+k3);
 								if($(tr).attr("data-id")){
@@ -294,7 +310,9 @@
 								}else{
 									$(tr).attr("data-id",sku);
 								}
-							}	
+							}else{
+								break;
+							}
 						}
 					}
 					
@@ -309,6 +327,9 @@
 				$($("tr",tbody).get(j)).append(td);		
 			}
 			//创建结束
+			
+			//设置价格
+			$(".sku-table input").bind("blur",inputBlur);
 			
 		}
 		
@@ -410,6 +431,56 @@
 			});
 		}
 		
+		function inputBlur(ev){
+//			console.log(ev);
+			var input = $(ev.target);
+//			console.log(input);
+//			setTimeout(function(ev){
+				var $flag = true,$price=0,$quantity=0;
+				if(input.hasClass("price")){
+					$price = input.val();
+					//微信价
+					$(".sku-table input.price").each(function(index,item){
+						if(ev.target != item && $(item).val()){
+							$flag = false;
+						}
+					});
+					
+					if($flag){
+						$(".sku-table input.price").val($price);
+					}
+				}else
+				if(input.hasClass("ori_price")){
+					//原价
+					$price = input.val();
+					$(".sku-table input.ori_price").each(function(index,item){
+						if(ev.target != item && $(item).val()){
+							$flag = false;
+						}
+					});
+					
+					if($flag){
+						$(".sku-table input.ori_price").val($price);
+					}
+				}else
+				if(input.hasClass("quantity")){
+					//库存
+					$quantity = input.val();
+					$(".sku-table input.quantity").each(function(index,item){
+						if(ev.target != item && $(item).val()){
+							$flag = false;
+						}
+					});
+					
+					if($flag){
+						$(".sku-table input.quantity").val($price);
+					}
+				}
+//				console.log($flag);
+//			},300);
+				
+		}
+		
 		$(function(){
 			
 			var skuinfo = "{$skuinfo}";
@@ -428,7 +499,7 @@
 			$(".js_sku_submit").click(function(){
 				var url = "{:U('Admin/WxshopProduct/sku')}";
 				var id = "{$id}";
-				var query = {id:id,sku_list:getSkuData(),sku_info:getSkuInfo()};
+				var query = {id:id,sku_list:getSkuData(),sku_info:getSkuInfo(),has_sku:$(".form input[name='has_sku']:checked").val()};
 //				console.log(query);
 				if(query.sku_list.length == 0 || query.sku_info.Length == 0){
 					return false;
@@ -451,6 +522,16 @@
 			$(".sku_wrp").click(function(ev){
 				manageSkuClick(ev);
 			});
+			
+			
+			$(".js_sku_change input[type='radio']").click(function(ev){
+				if($(ev.target).val() == 0){
+					$(".sku-panel-wrp").hide();
+				}else{
+					$(".sku-panel-wrp").show();
+				}
+			});
+			
 		})
 	</script>
 
