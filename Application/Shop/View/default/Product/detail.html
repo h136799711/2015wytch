@@ -14,7 +14,9 @@
 <block name="area_body">
 	<form class="js_product_form" method="post" action="{:U('Shop/Orders/confirm')}">
 		<input type="hidden" name="p_id" value="{$product.id}" />
-	<div class="detail-page">
+		<input type="hidden" name="price" id="price" value="{$product.price}" />
+		<input type="hidden" name="count" id="count" value="1" />
+		<div class="detail-page">
 			<div class="btn-controls">
 			<a href="javascript:history.back(-1);" class="back"><i class="am-icon-chevron-left"></i></a>
 			<a href="{:U('Shop/ShoppingCart/index')}" class="shopping-cart"><i class="am-icon-shopping-cart"></i></a>
@@ -429,6 +431,7 @@
 						$(".sku-info .js_sku_icon_url").attr("src",default_icon);
 					}
 					$(".sku-info .js_sku_price").text(current_sku.price/100.0);
+					$("#price").val(current_sku.price/100.0);
 					$(".sku-info .js_sku_quantity").text(current_sku.quantity);
 				}
 			}
@@ -442,7 +445,7 @@
 //			console.log(top3,top2);
 			$(".sku-panel-mask").css({opacity:1.0,left:0}).removeClass("js_hide");			
 			$(".sku-panel").css({top:top2}).animate({top:top3.toString()+'px'},1000);
-			console.log(which,"点击什么触发，显示SKU");
+//			console.log(which,"点击什么触发，显示SKU");
 			if(which == 1){
 				$(".sku-panel-mask .js_add_to_cart").removeClass("onlyone").hide();
 				$(".sku-panel-mask .buy").text("确定").parent().addClass("onlyone");

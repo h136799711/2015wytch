@@ -100,7 +100,7 @@ class OrdersModel extends Model{
 	 */
 	const ORDER_COMPLETED = 7;
 	/**
-	 * 取消
+	 * 取消或交易关闭
 	 */
 	const ORDER_CANCEL = 8;
 	
@@ -110,6 +110,10 @@ class OrdersModel extends Model{
 	 * 待支付
 	 */
 	const ORDER_TOBE_PAID = 0;
+	/**
+	 * 货到付款
+	 */
+	const ORDER_CASH_ON_DELIVERY = 3;
 	/**
 	 * 已支付
 	 */

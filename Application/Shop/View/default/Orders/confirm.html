@@ -91,7 +91,10 @@
 	<div class="order-confirm">
 		
 		<form class="js_order_form" method="post" action="{:U('Shop/Orders/save')}">
-			<input type="hidden" name="address_id" id="address_id" value="{$default_address['id']}" />
+			<input type="hidden" name="address_id" value="{$default_address['id']}" />
+			<input type="hidden" name="province_name" value="{$default_address['province_name']}" />
+			<input type="hidden" name="city_name" value="{$default_address['city_name']}" />
+			<input type="hidden" name="area_name"  value="{$default_address['area_name']}" />
 			<!--
             	作者：hebiduhebi@126.com
             	时间：2015-04-27
@@ -103,7 +106,7 @@
             		<else/>
             			<a href="{:U('Shop/Address/add')}">
 	            		<i class="am-icon-map-marker am-icon-lg am-text-primary am-fl"></i>
-	            	
+	            		
             			<div class="receiver-info am-fl">收货人：{$default_address['contactname']}   {$default_address['mobile']} <br/><span class="am-text-sm">收货地址：{$default_address['province_name']}{$default_address['city_name']}{$default_address['area_name']}{$default_address['detail']}</span></div>
 	            		<!--<i class="am-icon-chevron-right am-icon-lg am-text-primary am-fr"></i>-->
 	            		</a>
@@ -117,7 +120,6 @@
             	描述：按店铺分商品
             -->
             <div class="shop-wrp">
-           	 	<!--{:dump($list)}-->
            	 	<volist name="list['list']" id="vo">
             		<div class="shop">
             			<img src="{$vo['store']['logo']}" style="width: 3rem;height: 3rem;" />&nbsp;&nbsp;{$vo['store']['name']} 
@@ -132,7 +134,7 @@
 							<div class="item-desc am-cf">
 									<div class="am-text-truncate am-fl item-name">{$item.name}
 									</div>
-									<div class="am-text-truncate am-fl am-link-muted am-text-left">{$item.sku_desc}
+									<div class="am-text-truncate am-fl am-link-muted am-text-left">{$item['sku_desc']['sku_desc']}
 									</div>
 								<div class="am-fl"><span class="am-fl am-text-danger ">¥<span class="js_item_total_price">{:($item['price']*$item['count']/100.0)}</span></span><span class="am-fr js_item_cnt">x{$item.count}</span></div>
 							</div>
@@ -155,7 +157,7 @@
 	                    	描述：订单备注
 	                   -->
 					<div class="order-notes  am-padding-sm">
-						<textarea name="notes" rows="2" placeholder="给卖家留言"></textarea>
+						<textarea name="notes[]" rows="2" placeholder="给卖家留言"></textarea>
 					</div>
 					
 					<div class="order-info am-link-muted am-text-right  am-padding-sm">
@@ -174,7 +176,7 @@
 		
 		
 		<div class="footer-menu am-text-right  am-padding-sm">合计<span class="am-text-danger">¥<span class="js_total_price " >{:number_format($list['all_price']+$list['all_express'],2)}元&nbsp;<if condition="$list['all_express'] gt 0">含运费：{:number_format($list['all_express'],2)}元</if></span></span>
-			<a href="{:U('Shop/Orders/save')}" onclick="return check();" class="am-btn am-btn-sm am-btn-danger">确认</a>
+			<a href="{:U('Shop/Orders/save')}" onclick="return check();" target-form="js_order_form" class="ajax-post am-btn am-btn-sm am-btn-danger">确认</a>
 		</div>
 	</div>
 	

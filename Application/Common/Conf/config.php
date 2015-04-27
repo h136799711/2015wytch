@@ -59,8 +59,8 @@ return array(
 		'mchid'=>'10027619',
 		'key'=>'755c9713b729cd82467ac592ded397ee',//在微信发送的邮件中查看,patenerkey
 		
-		'notifyurl'=>'http://2.test.8raw.com/index.php/Shop/WxpayNotify/index',
-		'jsapicallurl'=>'http://2.test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
+		'notifyurl'=>'http://2test.8raw.com/index.php/Shop/WxpayNotify/index',
+		'jsapicallurl'=>'http://2test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
 		'sslcertpath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 		'sslkeypath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 	),

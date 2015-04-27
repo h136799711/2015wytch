@@ -280,6 +280,8 @@
 					
 					var sku = $(sku_arr[i]['sku']).attr("data-id")+":"+$(skuitems[k2]).val()+";";
 					
+					var sku_name = $(sku_arr[i]['sku']).attr("data-skuname")+":"+$(skuitems[k2]).attr("data-valuename")+";";
+//					console.log(sku_name);
 					//
 					
 					console.log("======================");
@@ -307,8 +309,10 @@
 								tr = $("tr",tbody).get(index+k3);
 								if($(tr).attr("data-id")){
 									$(tr).attr("data-id",$(tr).attr("data-id")+sku);
+									$(tr).attr("data-desc",$(tr).attr("data-desc")+sku_name);
 								}else{
 									$(tr).attr("data-id",sku);
+									$(tr).attr("data-desc",sku_name);
 								}
 							}else{
 								break;
@@ -366,7 +370,8 @@
 					'icon_url':icon_url,
 					'quantity':quantity,
 					'product_code':product_code,
-					'ori_price':ori_price
+					'ori_price':ori_price,
+					'sku_desc':$(item).attr("data-desc")
 				}
 				
 				skulist.push(sku);

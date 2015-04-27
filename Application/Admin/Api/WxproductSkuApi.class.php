@@ -42,6 +42,7 @@ class WxproductSkuApi extends Api{
 				'quantity'=>$vo['quantity'],
 				'product_code'=>$vo['product_code'],
 				'icon_url'=>$vo['icon_url'],
+				'sku_desc'=>$vo['sku_desc'],
 			);
 			
 			if($this->model->create($entity,1)){

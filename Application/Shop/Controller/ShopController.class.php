@@ -141,7 +141,9 @@ class ShopController extends  Controller {
 		} elseif (session("?shop_token")) {
 			$token = session("shop_token");
 		}
-		
+		if(empty($token)){
+			$token = C('SHOP_TOKEN');
+		}
 		$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $token)));
 		if ($result['status'] && is_array($result['info'])) {
 			$this -> wxaccount = $result['info'];

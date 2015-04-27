@@ -15,6 +15,9 @@ return array(
     'DB_PORT'                   =>  '3306',
     'DB_PREFIX'                 =>  'wytch_',
     
+     //token，TODO: 一套系统对应一个公众号的商城
+    'SHOP_TOKEN'=>'eotprkjn1426473619',
+    
 	'SHOW_PAGE_TRACE'=>false,
 	
 );
