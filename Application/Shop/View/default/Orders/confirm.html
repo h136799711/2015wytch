@@ -1,0 +1,99 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	<style type="text/css">
+		html{
+			font-size: 10px;
+		}
+		.header{
+			background: #FFFFFF;
+			margin-bottom: 15px;
+		}
+		.header{
+			font-size: 16px;
+		}
+		.header .am-topbar{
+			font-size: 18px;
+  			padding: 5px 16px;
+  			min-height: 20px;
+  			margin-bottom: 0px;
+		}
+		
+  		.theme-shop .am-gotop-fixed{
+		  width: 32px;
+		  height: 32px;
+		  bottom: 64px;
+  		}
+  		.theme-shop .am-gotop-fixed .am-gotop-icon {
+		  width: 32px;
+		  height: 32px;
+		  line-height: 28px;
+  		}
+  		
+	</style>
+</block>
+
+<block name="area_body">
+	<div class="header">
+		<div class="am-topbar am-topbar-default am-topbar-fixed-top"><a href="javascript:history.back(-1);"><i class="am-icon-chevron-left"></i>&nbsp;&nbsp;订单确认</a></div>
+	</div>
+	
+	<div class="order-list">
+		
+		<form class="js_order_form" method="post" action="{:U('Shop/Orders/save')}">
+			<!--
+            	作者：hebiduhebi@126.com
+            	时间：2015-04-27
+            	描述：收货地址
+            -->
+            <div class="address">
+            	
+            </div>
+            <!--
+            	作者：hebiduhebi@126.com
+            	时间：2015-04-27
+            	描述：按店铺分商品
+            -->
+            <div class="shop-wrp">
+            		<div class="shop">
+            			
+            		</div>
+            		<div class="product-list">
+            			
+            		</div>
+            		<!--
+                    	作者：hebiduhebi@126.com
+                    	时间：2015-04-27
+                    	描述：运费
+                    -->
+            		<div class="express">
+					
+				</div>
+            </div>
+            
+            
+			<div>
+				
+			</div>
+
+		</form>
+		
+		
+		
+	</div>
+	
+	
+</block>
+
+<block name="area_footer">
+	<include file="partial/footermenu" />
+	<script>
+	//变更商品数目，选择商品时 计算商品总价
+	
+	
+	$(function(){
+	})
+		
+	</script>
+</block>
+

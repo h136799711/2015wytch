@@ -57,12 +57,25 @@ return array(
 		'appid'=>'wx58aea38c0796394d',
 		'appsecret'=>'3e1404c970566df55d7314ecfe9ff437',
 		'mchid'=>'10027619',
-		'notifyurl'=>'http://2.test.8raw.com/index.php/Shop/WxpayNotify/index',
 		'key'=>'755c9713b729cd82467ac592ded397ee',//在微信发送的邮件中查看,patenerkey
+		
+		'notifyurl'=>'http://2.test.8raw.com/index.php/Shop/WxpayNotify/index',
 		'jsapicallurl'=>'http://2.test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
 		'sslcertpath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 		'sslkeypath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 	),
+	//正式
+//  'WXPAY_CONFIG'=>array(
+//		'appid'=>'wx5f9ed360f5da5370',
+//		'appsecret'=>'4a0e3e50c8e9137c4873689b8ee99124',
+//		'mchid'=>'1238878502',
+//		'key'=>'8bc2aaab0d35d70564a8194629c988ff',//在微信发送的邮件中查看,patenerkey
+//		
+//		'notifyurl'=>'http://2test.8raw.com/index.php/Shop/WxpayNotify/index',
+//		'jsapicallurl'=>'http://2test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
+//		'sslcertpath'=>'',
+//		'sslkeypath'=>'',
+//	),
 	'PROMOTIONCODE'=>array(
 		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode_default.jpg',
 		'mergeFolder'=>'./Uploads/QrcodeMerge', //合并后的二维码存储位置

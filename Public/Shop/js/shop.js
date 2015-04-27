@@ -2,12 +2,15 @@ function alertMsg(txt){
 	var ele = $("#alertMsg-mobile");
 	if(ele.length == 0){
 		
-		$alert = $('<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="alertMsg-mobile"><div class="am-modal-dialog"><div class="am-modal-hd">系统提示</div><div class="am-modal-bd"></div></div></div>');
+		$alert = $('<div style="z-index:100000000;" class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="alertMsg-mobile"><div class="am-modal-dialog"><div class="am-modal-bd"></div></div></div>');
 		$("body").append($alert);
 		ele = $("#alertMsg-mobile");
 	}
 	if(txt){
 		$(".am-modal-bd",ele).text(txt);
+	}else{
+		return ;
+//		$(".am-modal-bd",ele).text(txt);
 	}
 	
 	ele.modal("open");
@@ -22,14 +25,17 @@ function loadingMsg(txt){
 	var ele = $("#loading-mobile");
 	if(ele.length == 0){
 		
-		$alert = $('<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="loading-mobile"><div class="am-modal-dialog"><div class="am-modal-hd">正在请求...</div><div class="am-modal-bd"><span class="am-icon-spinner am-icon-spin"></span>    </div>  </div></div>');
+		$alert = $('<div style="z-index:100000000;" class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="loading-mobile"><div class="am-modal-dialog"><div class="am-modal-bd"><span class="am-icon-spinner am-icon-spin"></span></div></div></div>');
 		$("body").append($alert);
 		ele = $("#loading-mobile");
 	}
 	
-	if(txt){
-		$(".am-modal-hd",ele).text(txt);
-	}
+//	if(txt){
+//		$(".am-modal-hd",ele).text(txt);
+//	}else{
+//		return ;
+//		$(".am-modal-bd",ele).text(txt);
+//	}
 	
 	ele.modal("open");
 	return ele;
@@ -45,30 +51,32 @@ function loadingMsg(txt){
 function confirmMsg(data){
 	var ele = $("#confirm-mb");
 	if(ele.length == 0){		
-		$confirm = $('<div class="am-modal am-modal-confirm" tabindex="-1" id="confirm-mb"><div class="am-modal-dialog"><div class="am-modal-hd">系统消息</div><div class="am-modal-bd">你，确定要进行此操作吗？</div><div class="am-modal-footer"><span class="am-modal-btn" data-am-modal-cancel>取消</span><span class="am-modal-btn" data-am-modal-confirm>确定</span></div></div></div>');
+		$confirm = $('<div style="z-index:100000000;" class="am-modal am-modal-confirm" tabindex="-1" id="confirm-mb"><div class="am-modal-dialog"><div class="am-modal-bd">你，确定要进行此操作吗？</div><div class="am-modal-footer"><span class="am-modal-btn" data-am-modal-cancel>取消</span><span class="am-modal-btn" data-am-modal-confirm>确定</span></div></div></div>');
 		$("body").append($confirm);
 		ele = $("#confirm-mb");
+		ele.on('closed.modal.amui', function() {
+			$(this).removeData('amui.modal');
+		});
+		
 	}
 	
+	var $confirmBtn = ele.find('[data-am-modal-confirm]');
+	var $cancelBtn = ele.find('[data-am-modal-cancel]');
+	$confirmBtn.off('click.confirm.modal.amui').unbind('click');
+	$confirmBtn.off('click.confirm.modal.amui').bind('click', function() {
+			// do something
+    		data.action && data.action.apply(this,[data.relatedTarget]);
+	});
 	if(data.content){
 		$(".am-modal-bd",ele).text(data.content);
-	}else{
-		ele.modal({
-	        relatedTarget: window,
-	        onConfirm: function(options) {
-	         	data.action && data.action.call();
-	        },
-	        onCancel: function() {
-	        		
-	        }
-      });
 	}
+//	console.log(data);
 	
     ele.modal("open");
 	
-	setTimeout(function(){
+//	setTimeout(function(){
 		//$(".am-modal-hd",ele).modal("close");
-	},2500);
+//	},2500);
 }
 
 
@@ -90,6 +98,34 @@ $(function() {
 		});
 		
 		
+		$('.ajax-get').click(function() {
+//			console.log("ajax-get");
+			var target, query, form;
+			var that = this;
+			var need_confirm = false;
+			query = {};
+			if ($(that).attr("href") !== undefined || $(that).attr('data-href') !== undefined) {
+				target = $(that).attr('href') || $(that).attr("data-href");
+			}
+			
+//			target = $(that).attr("href");
+//			console.log(target,that);
+			if ($(that).hasClass('confirm')) {
+				confirmMsg({
+					relatedTarget:that,
+					content: '确认要执行该操作吗',
+					action: function() {
+						console.log(arguments);
+						var target = $(that).attr('href') || $(that).attr("data-href");
+						ajaxpost(this, target, {});
+					}
+				});
+				
+			} else {
+				ajaxpost(that, target, query);
+			}
+			return false;
+		}); //END ajax-get
 		
 		//依赖jquery，scojs,
 		//ajax post submit请求
@@ -150,11 +186,13 @@ $(function() {
 		}); //END ajax-post
 
 		function ajaxpost(that, target, query) {
-			$(that).button("loading");
-//			var ele = loadingMsg("请求中...")；
+//			$(that).button("loading");
+
+			var ele = loadingMsg("请求中...");
 			$.post(target, query).always(function() {
+				ele.modal("close");
 				setTimeout(function() {
-					$(that).button("reset");
+//					$(that).button("reset");					
 				}, 1400);
 			}).done(function(data) {
 				if (data.status == 1) {
@@ -186,47 +224,5 @@ $(function() {
 		}
 		
 }) //end $.ready
-
-
-window.wxshop = (function(){
-	
-	/**
-	 * 将商品添加到购物车中
-	 * @param {Object} p_id 商品ID
-	 */
-	function addToShoppingCart(that,p_id,target){
-		var sku_id = "";
-		//存在SKU标识
-		if($("#hebidu_skuchecked").length == 1){
-			sku_id  = $("#hebidu_skuchecked").val();
-		}
-		
-		var query = {p_id:p_id,sku_id :sku_id}; 
-		
-		$.post(target, query).always(function() {
-			
-		}).done(function(data) {
-			if (data.status == 1) {
-				alertMsg("成功添加到购物车!");
-			} else {
-				alertMsg(data.info);				
-			}
-		});
-		
-	}
-	
-	
-	
-	return {
-		addToShoppingCart:addToShoppingCart,
-	}
-	
-	
-})(window);
-
-
-
-
-
 
 

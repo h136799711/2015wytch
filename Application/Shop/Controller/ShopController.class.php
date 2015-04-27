@@ -38,6 +38,7 @@ class ShopController extends  Controller {
 			echo "无法获取到用户信息！";
 			exit();
 		}
+		$this->assign("userinfo",$this->userinfo);
 	}
 	
 	//获取测试用户信息，用于PC端测试使用

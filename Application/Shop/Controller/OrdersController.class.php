@@ -27,37 +27,7 @@ class OrdersController extends ShopController {
 		}
 		return $list;
 	}
-	
-	/**
-	 * 订单列表，瀑布
-	 */
-	public function orderList(){
-//		if(IS_POST){
-			$p = I('p',0);
-			$userinfo = $this->getUserinfo();
-			$map= array('wxuser_id'=>$userinfo['id']);
-			$page = array('curpage'=>$p,'size'=>10);
-			$order = "pay_status asc";
-			$params = false;
-			$fields = "id,orderid,price,createtime,pay_status,order_status,expressname,expressno";
-			$result = apiCall("Shop/OrdersWithExpress/query",array($map,$page,$order,$params,$fields));
-			if($result['status']){
-				
-//				$json = json_encode($result['info']);
-//				dump($result);
-//				if(count($result['info']['list']) == 0){
-//					$this->success("0");
-//				}else{
-					$format = $this->formatOrderData($result['info']['list']);
-//					dump($format);
-					$this->success($format);
-//				}
-			}else{
-				$this->error($result['info']);
-			}
-//		}
-	}
-	
+		
 	/**
 	 * 支付成功后js跳转到此链接
 	 */
@@ -66,6 +36,7 @@ class OrdersController extends ShopController {
 		$this->redirect(('Shop/Index/orders'));
 //		$this->display();
 	}
+	
 	/**
 	 * 微信支付页面
 	 */
@@ -105,9 +76,16 @@ class OrdersController extends ShopController {
 
 	}
 
+	/**
+	 * 订单确认
+	 */
+	public function confirm(){
+		$this->display();
+	}
+	
 	public function save() {
 		addWeixinLog(I('post.'),'[order]save');
-		$userinfo = session("userinfo");
+		$userinfo = $this->userinfo;
 //		$userinfo = array('id'=>1);
 		if (IS_POST && is_array($userinfo)) {
 			addWeixinLog($userinfo,'[session]saveispost');
