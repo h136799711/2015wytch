@@ -73,6 +73,7 @@
 			border: 1px solid #FFFFFF;
   			float: left;
   		}
+  		
   		.shopping-cart .product-edit i.js_plus{
   			margin-right: 48px;
   		}
@@ -105,7 +106,7 @@
 			<div class="empty am-padding-lg"><i class="am-icon-shopping-cart"></i>&nbsp;&nbsp;&nbsp;购物车为空！</div>
 		<else/>
 		
-		<form class="js_order_form" method="post" action="{:U('Shop/Orders/confirm')}">
+		<form class="js_order_form" enctype="multipart/form-data" method="post" action="{:U('Shop/Orders/confirm')}">
 		<volist name="cart"  id="vo">
 			<div class="store-info am-cf">
 				<a class="am-fl" href="{:U('Shop/Wxstore/view',array('id'=>$stores[$key]['id']))}">
@@ -119,13 +120,14 @@
 			<volist name="vo" id="item">
 				<div class="product-item am-cf">
 					<!-- 商品ID -->
-					<input type="hidden" class="js_p_id" name="p_id" value="{$item['p_id']}" />
+					<input type="hidden" class="js_p_id" name="p_id[]" value="{$item['p_id']}" />
 					<!-- 商品SKU -->
-					<input type="hidden" class="js_sku_id"  name="sku_id" value="{$item['sku_id']}" />
+					<input type="hidden" class="js_sku_id"  name="sku_id[]" value="{$item['sku_id']}" />
 					<!-- 商品单价 -->
-					<input type="hidden" class="js_price"  name="price" value="{:($item['price']/100.0)}" />
+					<input type="hidden" class="js_price"  name="price[]" value="{:($item['price']/100.0)}" />
 					<!-- 商品总价 -->
-					<input type="hidden" class="js_total_price"  value="{$item['price']*$item['count']}" />
+					<input type="hidden" class="js_count" name="count[]"  value="{$item['count']}" />
+					
 					<div class="am-fl item-img">
 						<a href="{:U('Shop/Product/detail',array('id'=>$item['p_id']))}">
 							<img src="{$item.icon_url}" class="am-fl" style="width: 48px;height: 48px;" />
@@ -133,8 +135,8 @@
 					</div>
 					<div class="item-desc">
 							<div class="am-text-truncate am-fl item-name">
-							<a href="{:U('Shop/Product/detail',array('id'=>$item['p_id']))}">{$item.name}
-							</a></div>
+								<a href="{:U('Shop/Product/detail',array('id'=>$item['p_id']))}">{$item.name}</a>
+							</div>
 							<div class="am-text-truncate am-fl am-link-muted am-text-left">{$item.sku_desc}
 							</div>
 						<div class="am-fl"><span class="am-fl am-text-danger ">¥<span class="js_item_total_price">{:($item['price']*$item['count']/100.0)}</span></span><span class="am-fr js_item_cnt">x{$item.count}</span></div>
@@ -156,15 +158,18 @@
 			</div>
 			
 		</volist>
-		</form>
 				
 		<div class=" am-padding-sm am-cf">
 			<div style="line-height: 35px;" class="am-fl">合计:<span class="am-text-danger">¥<span class="js_val_total_price"></span></span>
 			不含运费</div>
-			<div class="am-fr"><a target-form="js_order_form" href="{:U('Shop/Orders/confirm')}" class="am-btn am-btn-sm am-btn-danger ajax-post confirm">结算</a></div>			
+			<div class="am-fr">
+				<!--<input type="submit" value="结算" class="am-btn am-btn-sm am-btn-danger"  />-->
+				<button type="submit" class="am-btn am-btn-sm am-btn-danger" >结算</button>
+			</div>			
 		</div>
 		
 		
+		</form>
 		</empty>
 		
 	</div>
@@ -214,23 +219,28 @@
 		var cur = parseInt(js_val_cnt.val());
 		if(cur - 1 > 0){
 			js_val_cnt.val(cur - 1);
+			$(pitem).find(".js_count").val(cur-1);
+			
+			
+			var price = parseFloat($(pitem).find(".js_price").val());
+			var cnt = parseInt($(pitem).find(".js_val_cnt").val());		
+			//变更商品数目,价格
+			$(pitem).find(".js_item_cnt").text(cnt);
+			$(pitem).find(".js_item_total_price").text(price*cnt);
+			
+			countPrice();
+			
 		}
 		
-		var price = parseFloat($(pitem).find(".js_price").val());
-		var cnt = parseInt($(pitem).find(".js_val_cnt").val());		
-		//变更商品数目,价格
-		$(pitem).find(".js_item_cnt").text(cnt);
-		$(pitem).find(".js_item_total_price").text(price*cnt);
-		
-		countPrice();
 	}
 	
 	function onPlus(ev){
 		var pitem = $(ev.target).parents(".product-item");
 		var js_val_cnt = $(pitem).find(".js_val_cnt");
 		var cur = parseInt(js_val_cnt.val());
-		js_val_cnt.val(cur + 1);
-		
+		js_val_cnt.val(cur + 1);		
+		$(pitem).find(".js_count").val(cur + 1);
+			
 		var pitem = $(ev.target).parents(".product-item");
 		var price = parseFloat($(pitem).find(".js_price").val());
 		var cnt = parseInt($(pitem).find(".js_val_cnt").val());		

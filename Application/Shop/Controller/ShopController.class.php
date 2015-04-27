@@ -44,6 +44,7 @@ class ShopController extends  Controller {
 	//获取测试用户信息，用于PC端测试使用
 	private function getDebugUser(){
 		$this->userinfo = array(
+			'id'=>8,
 			'openid'=>'oxGH0sgeUkH4g8aowy0452xJnX1o',
 			'nickname'=>'老胖子何必都',
 			'avatar'=>'http://wx.qlogo.cn/mmopen/An6TFzHNImPecEhl1R3UWd26LlC1mvVgyhdh2KGCOb0yjQ4JNQnOicG2ysaKojzusSO9R3RE55Exq0lYKpVr3RRArU0u7kgjR/0',

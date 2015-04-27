@@ -12,7 +12,7 @@
 </block>
 
 <block name="area_body">
-	<form class="js_product_form" method="post" action="{:U('Shop/Product/buy')}">
+	<form class="js_product_form" method="post" action="{:U('Shop/Orders/confirm')}">
 		<input type="hidden" name="p_id" value="{$product.id}" />
 	<div class="detail-page">
 			<div class="btn-controls">
@@ -200,7 +200,7 @@
 			    <a data-am-loading="{spinner: 'circle-o-notch', loadingText: '加入购物车...'}" href='#' onclick='addToCart();' class="js_add_to_cart am-btn am-btn-primary">
 			       <span class="add-cart">加入购物车</span>
 			    </a>
-			    <a  href="{:U('Shop/Orders/confirm')}" onclick="return checkHasSku();" class="js_buy am-btn am-btn-danger">
+			    <a href="#" onclick="return buyProduct();" class="js_buy am-btn am-btn-danger">
 			      <span class="buy">立即购买</span>
 			    </a>
 			</div>

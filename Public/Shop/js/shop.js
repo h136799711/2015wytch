@@ -140,7 +140,6 @@ $(function() {
 				
 				if ($.validator && (form.hasClass("validate-form") || form.hasClass("validateForm"))) {
 					if (!form.valid()) {
-						console.log(1);
 						alertMsg('表单验证不通过！');
 						return false;
 					}

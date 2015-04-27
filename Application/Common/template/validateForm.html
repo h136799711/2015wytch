@@ -2,9 +2,8 @@
 	<script type="text/javascript" src="__CDN__/jquery-validation/1.13.1/localization/messages_zh.min.js"></script>
 	
 
-
+<script>
 $(function() {
-			refresh('.verify');
 			//是否中文名字
 			$.validator.addMethod("isCnName", function(value, element) {
 				var tel = /[a-z0-9.*?,(!)&amp;%$^……！·￥——（）　#@]/g;

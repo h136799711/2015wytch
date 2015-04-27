@@ -20,15 +20,12 @@ class ShoppingCartController extends ShopController{
 		$this->cart = session("shoppingcart");
 	}
 	
-	public function test(){
-		dump(session("shoppingcart"));
-		dump($this->cart);
-	}
 	
 	/**
 	 * 购物车查看页面
 	 */
 	public function index(){
+		session("confirm_order_info",null);
 		$store = $this->getStoreInfo();
 		
 		$this->assign("stores",$store);
