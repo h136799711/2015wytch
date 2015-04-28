@@ -45,16 +45,8 @@ class OrdersController extends ShopController {
 			}
 			
 			//获取商品信息
-			$map = array();
-			$map['id'] = array('in',$p_id_arr);
-			$order = " id desc ";
-			$result = apiCall("Shop/Wxproduct/queryNoPaging", array($map,$order));
 			
-			if(!$result['status']){
-				LogRecord($result['info'], __FILE__.__LINE__);
-				$this->error($result['info']);
-			}
-			$product_list = $result['info'];
+			$product_list = $this->getProductList($p_id_arr);
 			//获取商品SKU信息
 			unset($map['id']);
 			array_push($sku_id_arr,-1);
@@ -82,13 +74,12 @@ class OrdersController extends ShopController {
 			$all_price = 0.0;
 			$all_express = 0.0;
 			$tmp_store = array();
+			//遍历商品列表
 			foreach($product_list as &$vo){
-	//			if(isset($tmp_arr[$vo['id']])){
-	//				$vo['_sku_obj'] = $tmp_arr[$vo['id']];	
-	//			}else{
-	//				$vo['_sku_obj'] = array();
-	//			}
+				
+				//
 				$entity = array(
+					'p_id'=>$vo['id'],
 					'has_sku'=>$vo['has_sku'],//标志是否使用SKU信息
 					'img'=>$vo['main_img'],
 					'price'=>$vo['price'],
@@ -157,26 +148,8 @@ class OrdersController extends ShopController {
 		}
 
 		//获取默认收货地址		
-		$result = apiCall("Shop/Address/getInfo", array(array('wxuserid'=>$this->userinfo['id'],'default'=>1)));
-		if(!$result['status']){
-			LogRecord($result['info'], __FILE__ . __LINE__);
-		}
 		
-		$default_address = $result['info'];//默认收货地址
-		$province_one = apiCall("Tool/Province/getInfo",array(array("provinceID"=>$default_address['province'])));
-		$city_one = apiCall("Tool/City/getInfo",array(array("cityID"=>$default_address['city'])));
-		$area_one = apiCall("Tool/Area/getInfo",array(array("areaID"=>$default_address['area'])));
-		
-		if(is_array($province_one['info'])){
-			$default_address['province_name'] = $province_one['info']['province'];
-		}
-		if(is_array($city_one['info'])){
-			$default_address['city_name'] = $city_one['info']['city'];
-		}
-		if(is_array($area_one['info'])){
-			$default_address['area_name'] = $area_one['info']['area'];
-		}
-		
+		$default_address = $this->getDefaultAddress();
 		
 		$this->assign("default_address",$default_address);
 		$this->assign("list",$list);
@@ -184,6 +157,9 @@ class OrdersController extends ShopController {
 		
 	}
 	
+	/**
+	 * 订单保存
+	 */
 	public function save() {
 		//收货地址ID
 		$address_id = I('post.address_id',0);
@@ -199,7 +175,9 @@ class OrdersController extends ShopController {
 			addWeixinLog($buyProductList,'购买商品的列表');
 			
 			$map = array('id'=>$address_id);
+			
 			$result = apiCall("Shop/Address/getInfo", array($map));
+			
 			if(!$result['status']){
 				$this->error($result['info']);
 			}
@@ -209,6 +187,8 @@ class OrdersController extends ShopController {
 				//如果是空的
 				$this->error("收货地址信息获取失败！");
 			}
+			
+				
 			$address_info = $result['info'];
 			//总价，不含运费
 			$all_price = $buyProductList['all_price'];
@@ -236,12 +216,13 @@ class OrdersController extends ShopController {
 			$i = 0;
 			$ids = '';
 			$orderid = $this -> getOrderID();
+//			addWeixinLog($buyProductList['list'],'订单');
 			//分店铺保存订单，每个店铺一张订单
 			foreach($buyProductList['list'] as $key=>$vo){
 				//店铺ID
 				$entity['storeid'] = $key;
 				$entity['orderid'] = $orderid.'_'.$key;
-				$entity['items'] = json_encode($vo,JSON_UNESCAPED_UNICODE);
+				$entity['items'] = $vo;
 				//
 				$price  = 0.0;
 				foreach($vo['products'] as $item){
@@ -255,16 +236,25 @@ class OrdersController extends ShopController {
 				}
 				
 				$i++;
+//				dump($entity['items']['products']);
+//				exit();
 				$result = apiCall("Shop/Orders/addOrder", array($entity));
+//				addWeixinLog($result,'订单3333');
 				if(!$result['status']){
 					LogRecord($result['info'], __FILE__.__LINE__);
 					$this->error($result['info']);
 				}
 				$ids .= $result['info'].'-';
 			}
+			$ids = trim($ids,"-");
+			//TODO: 从购物车中移除相对应的商品，根据店铺ID，商品ID，商品SKU
+			//目前 就直接删除购物车
+			session("shoppingcart",null);
+			session("confirm_order_info",null);
+//			addWeixinLog($ids,'订单IDs');
+			$this->success("订单保存成功，前往支付！",C('SITE_URL')."/index.php/Shop/OnlinePay/pay/id/$ids");
 			
-			$this->success("订单保存成功，前往支付！",U("Shop/OnlinePay/wxpay",array('id'=>$ids)));
-			
+//			$this->success("订单保存成功，前往支付！",C('SITE_URL')."/index.php?m=Shop&c=OnlinePay&a=pay&id=$ids&showwxpaytitle=1");
 		} else {
 			LogRecord("禁止访问！", __FILE__.__LINE__);
 			$this -> error("禁止访问！");
@@ -272,6 +262,51 @@ class OrdersController extends ShopController {
 
 	}
 	
+	
+	
+	//===================private
+	
+	/**
+	 * 获取商品集合
+	 * @param $p_id_arr 商品id数组
+	 */
+	private function getProductList($p_id_arr){
+		$map = array();
+		$map['id'] = array('in',$p_id_arr);
+		$order = " id desc ";
+		$result = apiCall("Shop/Wxproduct/queryNoPaging", array($map,$order));
+		
+		if(!$result['status']){
+			LogRecord($result['info'], __FILE__.__LINE__);
+			$this->error($result['info']);
+		}
+		
+		return $result['info'];
+	}
+	
+	private function getDefaultAddress(){
+		$result = apiCall("Shop/Address/getInfo", array(array('wxuserid'=>$this->userinfo['id'],'default'=>1)));
+		if(!$result['status']){
+			LogRecord($result['info'], __FILE__ . __LINE__);
+		}
+		
+		$default_address = $result['info'];//默认收货地址
+		$province_one = apiCall("Tool/Province/getInfo",array(array("provinceID"=>$default_address['province'])));
+		$city_one = apiCall("Tool/City/getInfo",array(array("cityID"=>$default_address['city'])));
+		$area_one = apiCall("Tool/Area/getInfo",array(array("areaID"=>$default_address['area'])));
+		
+		if(is_array($province_one['info'])){
+			$default_address['province_name'] = $province_one['info']['province'];
+		}
+		if(is_array($city_one['info'])){
+			$default_address['city_name'] = $city_one['info']['city'];
+		}
+		if(is_array($area_one['info'])){
+			$default_address['area_name'] = $area_one['info']['area'];
+		}
+		
+		return $default_address;
+	}
 	
 	
 	private function getOrderID() {

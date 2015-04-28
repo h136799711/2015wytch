@@ -219,6 +219,8 @@ $(function() {
 						} else {}
 					}, 1500);
 				}
+			}).fail(function(){
+				alertMsg("操作失败！");
 			});
 		}
 		

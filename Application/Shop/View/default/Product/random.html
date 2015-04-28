@@ -1,0 +1,132 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	<script type="text/javascript" src="__CDN__/amazeui-masonry/3.2.2/masonry.pkgd.min.js"></script>
+	<style type="text/css">
+		html{
+			font-size: 12px;
+		}
+		.item-wrp .item{
+			width:40%;
+			margin: 0 5%;
+		}
+		.header{
+			font-size: 12px;
+		}
+		.header select{
+			  width: 64px;
+  font-size: 12px;
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  height: 30px;
+  padding: 4px;
+  border-right: 0px;
+		}
+		
+		.header .search-wrp{
+  padding: 8px 56px 8px 74px;
+		}
+		.header .search-wrp input{
+			padding: 5px;
+			font-size: 14px;
+			height: 30px;
+		}
+		.header i.am-icon-home{
+			position: absolute;
+		  width: 48px;
+		  color: #666666;
+		  right: 10px;
+		  font-size: 28px;
+		  top: 0px;
+		  color: #fff;
+		  text-align: center;
+		  line-height: 1.6;
+			
+		}
+		.am-topbar{
+			background: #73142A;
+			margin-bottom: 0px;
+		}
+		.filter{
+			text-align: center;
+		}
+		.filter a{
+			padding:10px;
+			color: #000000;
+			font-size: 14px;
+			width:25%;
+			box-sizing: border-box;
+			display: inline-block;
+			float: left;
+		}
+		.filter i.am-icon-caret-down{
+			font-size: 12px;
+			font-size: 10px;
+		}
+	</style>
+</block>
+
+<block name="area_body">
+	
+	<div class="header">
+		<div class="am-topbar am-topbar-default">
+				<form class="am-form">
+				<select name="type">
+					<option value="1">商品</option>
+					<option value="2">店铺</option>
+				</select>
+				<div class="search-wrp">
+					<input type="text" class="am-form-control" name="q" placeholder="搜索关键词" />
+				</div>
+				<a href="{:U('Shop/Index/index')}"><i class="am-icon-home"></i></a>
+			</form>
+		</div>
+	</div>
+	<div class="filter am-cf">
+		<a class="am-fl <eq name="sort" value="s">active</eq>" href="{:U('Shop/Product/random',array('sort'=>s))}">综合</a>
+		<a class="am-fl <eq name="sort" value="s">active</eq>" href="{:U('Shop/Product/random',array('sort'=>d))}">销量</a>
+		<a class="am-fl <eq name="sort" value="s">active</eq>" href="{:U('Shop/Product/random',array('sort'=>$sort))}">价格</a>
+		<a href="#" class="am-fl "><i class="am-icon-th-large"></i><i class="am-icon-caret-down am-icon-sm"></i></a>
+	</div>
+	<div class="items-wrp">
+		<volist name="list" id="vo">
+			<div  class="item" >
+				<img class="am-responsive-width" src="{$vo.main_img}"alt="图片" />
+			</div>
+		</volist>
+	</div>
+	
+	
+</block>
+
+<block name="area_footer">
+	
+	<script type="text/javascript">
+		var wrp = $('.items-wrp');
+		var msnry = new Masonry( wrp, { columnWidth: 60 });
+		
+		eventie.bind( button, 'click', function() {
+		  // create new item elements
+		  var elems = [];
+		  var fragment = document.createDocumentFragment();
+		  for ( var i = 0; i < 3; i++ ) {
+		    var elem = getItemElement();
+		    fragment.appendChild( elem );
+		    elems.push( elem );
+		  }
+		  // append elements to container
+		  container.appendChild( fragment );
+		  // add and lay out newly appended elements
+		  msnry.appended( elems );
+		});
+
+		$(function(){
+			var q = $(".header input[name='q']").val();
+			var type = $(".header select[name='type']").val();
+			
+		})
+		
+	</script>
+</block>
+

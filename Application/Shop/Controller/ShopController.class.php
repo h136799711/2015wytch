@@ -31,11 +31,16 @@ class ShopController extends  Controller {
 		}
 		C('SHOW_PAGE_TRACE', false);//设置不显示trace
 		$this -> refreshWxaccount();
-		$this->getDebugUser();
-//		$url = $this->getCurrentURL();
-//		$this->getWxuser($url);
+		$debug = true;
+		
+		if($debug){
+			$this->getDebugUser();
+		}else{
+			$url = getCurrentURL();
+			$this->getWxuser($url);
+		}
 		if(empty($this->userinfo)){
-			echo "无法获取到用户信息！";
+			$this->error("无法获取到用户信息！");
 			exit();
 		}
 		$this->assign("userinfo",$this->userinfo);
@@ -57,10 +62,6 @@ class ShopController extends  Controller {
 	}
 	
 	
-	protected function getCurrentURL(){
-		$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		return $url;
-	}
 
 	public function getWxuser($url) {
 

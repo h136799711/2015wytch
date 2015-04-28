@@ -91,7 +91,7 @@
 	<div class="order-confirm">
 		
 		<form class="js_order_form" method="post" action="{:U('Shop/Orders/save')}">
-			<input type="hidden" name="address_id" value="{$default_address['id']}" />
+			<input type="hidden" name="address_id" id="address_id" value="{$default_address['id']}" />
 			<input type="hidden" name="province_name" value="{$default_address['province_name']}" />
 			<input type="hidden" name="city_name" value="{$default_address['city_name']}" />
 			<input type="hidden" name="area_name"  value="{$default_address['area_name']}" />
@@ -107,7 +107,7 @@
             			<a href="{:U('Shop/Address/add')}">
 	            		<i class="am-icon-map-marker am-icon-lg am-text-primary am-fl"></i>
 	            		
-            			<div class="receiver-info am-fl">收货人：{$default_address['contactname']}   {$default_address['mobile']} <br/><span class="am-text-sm">收货地址：{$default_address['province_name']}{$default_address['city_name']}{$default_address['area_name']}{$default_address['detail']}</span></div>
+            			<div class="receiver-info am-fl">收货人：{$default_address['contactname']}   {$default_address['mobile']} <br/><span class="am-text-sm">收货地址：{$default_address['province_name']}{$default_address['city_name']}{$default_address['area_name']}{$default_address['detailinfo']}</span></div>
 	            		<!--<i class="am-icon-chevron-right am-icon-lg am-text-primary am-fr"></i>-->
 	            		</a>
             		</empty>
@@ -190,7 +190,7 @@
 	
 	function check(){
 		var $address_id = $("#address_id").val();
-		if($address_id.length == 0){
+		if(!$address_id || $address_id.length == 0){
 			alertMsg("请先选择收货地址!");
 			return false;
 		}

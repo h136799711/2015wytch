@@ -10,6 +10,46 @@ namespace Shop\Controller;
 
 class ProductController extends ShopController{
 	
+	public function test(){
+		
+		$map = array();
+		$page = array('curpage'=>I('post.p',0),'size'=>20);
+		if($sort == 's'){
+			$order = " price desc , ";
+		}
+		$order = " id desc ";
+		$params = false;
+		$result = apiCall("Shop/Wxproduct/query", array($map,$page,$order,$params));
+		
+		echo json_encode($result['info']['list']);
+		exit();
+	}
+	
+	/**
+	 * 发现
+	 */
+	public function random(){
+		//排序： s 综合 ，d 销量 ,p 价格 从小到大, pd 价格 从大到小
+		$sort = I('get.sort','s');
+		
+		$map = array();
+		$page = array('curpage'=>I('post.p',0),'size'=>20);
+		if($sort == 's'){
+			$order = " price desc , ";
+		}
+		$order = " id desc ";
+		$params = false;
+		$result = apiCall("Shop/Wxproduct/query", array($map,$page,$order,$params));
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		$this->assign("curpage",$page['curpage']);
+		$this->assign("show",$result['info']['show']);
+		$this->assign("list",$result['info']['list']);
+		$this->display();
+	}
+	
 	/**
 	 * 商品详情查看
 	 */

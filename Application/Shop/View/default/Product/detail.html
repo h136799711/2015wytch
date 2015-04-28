@@ -418,12 +418,16 @@
 			//默认图标
 			var default_icon = "{$product.main_img}";
 			//当前SKU_ID
-			var sku_id = $("#skuchecked").val();
+			var sku_id = $("#hebidu_skuchecked").val();
 			if(window.hasChoosed){
+				
+				console.log("改变当前规格属性");
+				console.log(sku_id,"sku_id值");
 				//必须在所有规格都有选择下才遍历处理
 				//对库存为0 的设置disabled
 				var current_sku = window.sku_list[sku_id];
 //				console.log(current_sku);
+				console.log(current_sku,"current_sku值");
 				if(current_sku){	
 					if(current_sku.icon_url){
 						$(".sku-info .js_sku_icon_url").attr("src",current_sku.icon_url);

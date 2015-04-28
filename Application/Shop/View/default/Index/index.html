@@ -121,9 +121,9 @@
 	      <img src="__IMG__/logo.png?v=1.1" alt="logo"  />
 	    </a>
 	  </div>
-	  <div class="top-search-wrp col-10">
+	  <div class="js_top_search top-search-wrp col-10">
 	  	<span class="i-search"><i class="am-icon-search"></i>搜索商品、店铺</span>
-	  	<input type="text" class="am-form-control top-search js_top_search" value="" name="q" />
+	  	<input disabled="disabled" type="text" class="am-form-control top-search " value="" name="q" />
 	  </div>
 	</header>
 	<div data-am-widget="slider" class="am-slider am-slider-a5" data-am-slider='{&quot;directionNav&quot;:false}'>
@@ -245,12 +245,12 @@
 	<script type="text/javascript">
 		$(function(){
 			$(".start-page").height($(window).height());
-			$(".js_top_search").on("tap",function(){
-				alertMsg("jquery tap");
-			});
-//			$(".js_top_search").on("click",function(){
-//				alertMsg("jquery click");
+//			$(".js_top_search").on("tap",function(){
+//				alertMsg("jquery tap");
 //			});
+			$(".js_top_search").on("click",function(){
+				window.location.href = "{:U('Shop/Product/random')}";
+			});
 		})
 		
 	</script>
