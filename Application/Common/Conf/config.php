@@ -80,9 +80,10 @@ return array(
 		'SSLKEYPATH'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 		'CURL_PROXY_HOST' => "0.0.0.0",
 		'CURL_PROXY_PORT' => '0',
-		'REPORT_LEVENL' => 1
+		'REPORT_LEVENL' => 1,
+		'PROCESS_URL'=>'http://2test.8raw.com/index.php/Shop/WxpayNotify/aysncNotify?key=hebidu',//异步处理地址
 	),
-
+	
 	'PROMOTIONCODE'=>array(
 		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode_default.jpg',
 		'mergeFolder'=>'./Uploads/QrcodeMerge', //合并后的二维码存储位置

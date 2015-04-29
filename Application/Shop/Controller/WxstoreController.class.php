@@ -25,5 +25,21 @@ class WxstoreController extends ShopController{
 		$this->error("TODO:查看所有的宝贝分类");
 //		$this->display();
 	}
+	
+	/**
+	 * 搜索店铺
+	 */
+	public function search(){
+//		
+//		$q = I('get.q');
+//		
+//		$map = array();
+//		$map['name'] = array('like','%'.$q.'%');
+//		
+//		$result = apiCall("Shop/Wxstore/query", array($map));
+//		
+		$this->display();
+		
+	}
 }
 

@@ -8,22 +8,22 @@
 
 namespace Shop\Controller;
 use Think\Controller;
-class OnlinePayController extends Controller {
+class OnlinePayController extends ShopController {
 	
-	protected function __initialize(){
-		// 获取配置
-		$this -> getConfig();
-
-		if (!defined('APP_VERSION')) {
-			//定义版本
-			if (defined("APP_DEBUG") && APP_DEBUG) {
-				define("APP_VERSION", time());
-			} else {
-				define("APP_VERSION", C('APP_VERSION'));
-			}
-		}
-		C('SHOW_PAGE_TRACE', false);//设置不显示trace
-	}
+//	protected function __initialize(){
+//		// 获取配置
+//		$this -> getConfig();
+//
+//		if (!defined('APP_VERSION')) {
+//			//定义版本
+//			if (defined("APP_DEBUG") && APP_DEBUG) {
+//				define("APP_VERSION", time());
+//			} else {
+//				define("APP_VERSION", C('APP_VERSION'));
+//			}
+//		}
+//		C('SHOW_PAGE_TRACE', false);//设置不显示trace
+//	}
 	
 	/**
 	 * 更改订单为货到付款
@@ -138,7 +138,9 @@ class OnlinePayController extends Controller {
 			$jsApiParameters = "";
 			//①、获取用户openid
 			$tools = new \Common\Api\Wxpay\JsApi($config);
-			$openId = $tools -> GetOpenid();
+			
+//			$openId = $tools -> GetOpenid();
+			$openId = $this->openid;
 			//②、统一下单
 			$input = new \Common\Api\Wxpay\WxPayUnifiedOrder();
 			$input -> setConfig($config);

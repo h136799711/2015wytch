@@ -113,7 +113,7 @@ class OrdersModel extends Model{
 	/**
 	 * 货到付款
 	 */
-	const ORDER_CASH_ON_DELIVERY = 3;
+	const ORDER_CASH_ON_DELIVERY = 5;
 	/**
 	 * 已支付
 	 */

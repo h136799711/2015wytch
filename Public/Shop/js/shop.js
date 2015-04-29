@@ -7,7 +7,7 @@ function alertMsg(txt){
 		ele = $("#alertMsg-mobile");
 	}
 	if(txt){
-		$(".am-modal-bd",ele).text(txt);
+		$(".am-modal-bd",ele).html(txt);
 	}else{
 		return ;
 //		$(".am-modal-bd",ele).text(txt);
@@ -196,7 +196,7 @@ $(function() {
 			}).done(function(data) {
 				if (data.status == 1) {
 					if (data.url) {
-						alertMsg(data.info + ' 页面即将自动跳转~');
+						alertMsg(data.info + ' <br/>页面即将自动跳转~');
 					} else {
 						alertMsg(data.info);
 					}

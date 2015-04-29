@@ -35,8 +35,14 @@ class OrdersController extends ShopController {
 		}
 		
 		if(intval($fromsession) == 1){
+			if(session("?confirm_order_info")){
+				$this->redirect('Shop/Index/index');
+			}
 			//从session中取
 			$list = session("confirm_order_info");
+			if(is_null($list)){
+				$this->redirect('Shop/Index/index');
+			}
 		}else{
 			
 			if(count($p_id_arr) == 0){
@@ -252,7 +258,7 @@ class OrdersController extends ShopController {
 			session("shoppingcart",null);
 			session("confirm_order_info",null);
 //			addWeixinLog($ids,'订单IDs');
-			$this->success("订单保存成功，前往支付！",C('SITE_URL')."/index.php/Shop/OnlinePay/pay/id/$ids");
+			$this->success("订单保存成功，前往支付！",C('SITE_URL')."/index.php/Shop/OnlinePay/pay/id/$ids?showwxpaytitle=1");
 			
 //			$this->success("订单保存成功，前往支付！",C('SITE_URL')."/index.php?m=Shop&c=OnlinePay&a=pay&id=$ids&showwxpaytitle=1");
 		} else {

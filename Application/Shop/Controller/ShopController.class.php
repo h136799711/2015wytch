@@ -17,7 +17,7 @@ class ShopController extends  Controller {
 	protected $openid;
 	
 	protected function _initialize() {
-		
+		header("X-AUTHOR:HEBIDU");
 		// 获取配置
 		$this -> getConfig();
 

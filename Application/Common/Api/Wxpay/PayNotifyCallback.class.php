@@ -50,8 +50,15 @@ class PayNotifyCallback extends WxPayNotify {
 //			$msg = "订单查询失败";
 //			return false;
 //		}
-
-		addWeixinLog($data,"[成功通知处理数据结构]");
+		
+		//支付成功通知地址
+//		$url = "http://2test.8raw.com/index.php/Shop/WxpayNotify/aysncNotify?key=hebidu";
+		$url = $this->config['PROCESS_URL'];
+		addWeixinLog(json_encode($data),"[成功通知处理数据结构]");
+		
+		$entity = array();
+		
+		fsockopenRequest($url, $data);
 		//TODO: 异步处理流程
 	
 //	<xml><appid><![CDATA[wx5f9ed360f5da5370]]></appid>

@@ -245,11 +245,9 @@
 	<script type="text/javascript">
 		$(function(){
 			$(".start-page").height($(window).height());
-//			$(".js_top_search").on("tap",function(){
-//				alertMsg("jquery tap");
-//			});
+			
 			$(".js_top_search").on("click",function(){
-				window.location.href = "{:U('Shop/Product/random')}";
+				window.location.href = "{:U('Shop/Product/search')}";
 			});
 		})
 		

@@ -7,6 +7,19 @@ use Common\Api\Wxpay;
 
 class WxpayTestController extends Controller{
 	
+	public  function test1(){
+		$p_ids = array(1,2,3,4,5,6);
+		$result = apiCall("Shop/Orders/monthlySales", array($p_ids));
+	
+		dump($result);
+		
+	}
+	
+	
+	public function testTask(){
+		$this->display();
+	}
+	
 	public function jsapi(){
 		$jsApiParameters = "";
 		

@@ -17,10 +17,33 @@
   	}
 	
 	/**
+	 * 月销量统计
+	 * @param $p_ids 商品ID数组
+	 */
+	public function monthlySales($p_ids){
+		
+		$currentTime = time();
+		$prevTime = $currentTime - 24*3600*30;
+		if(count($p_ids) == 0){
+			$p_ids = array(-1);
+		}
+		$map['ord_it.p_id'] = array('in',$p_ids);
+		$map['ord.createtime'] = array(array('gt',$prevTime),array('lt',$currentTime));
+		$result = $this->model->field("count(ord_it.p_id ) as sales,p_id")->alias(" ord ")->join(" LEFT JOIN __ORDERS_ITEM__ as ord_it on ord.id = ord_it.orders_id and (ord.pay_status = 1 or ord.pay_status = 5) ")->where($map)->group("ord_it.p_id")->fetchSql(false)->select();
+		
+		if($result === false){
+			return $this->apiReturnErr($this->model->getDbError());
+		}
+		
+		return $this->apiReturnSuc($result);
+	}
+	
+	
+	/**
 	 * 事务增加订单信息
 	 */
 	public function addOrder($entity){
-		addWeixinLog($entity['items'],'add order 订单 0');
+//		addWeixinLog($entity['items'],'add order 订单 0');
 //		addWeixinLog($entity['items'],'add order 订单 0.0');
 		$flag = true;
 		$error = "";
@@ -32,15 +55,15 @@
 				'price' => $entity['price'], 
 				'note' => $entity['note'], 
 				'orderid' => $entity['orderid'], 
-				'items'=>'',
-//				'items'=>serialize($entity['items']),
+//				'items'=>'',
+				'items'=>serialize($entity['items']),
 			 );
-		addWeixinLog($order,'add order 订单 1');
+//		addWeixinLog($order,'add order 订单 1');
 		
 		$this->model->startTrans();
 		$result = $this->add($order);
 		
-		addWeixinLog($result,'add order 订单 2');
+//		addWeixinLog($result,'add order 订单 2');
 		
 		$orderid = '';
 		if($result['status']){
@@ -85,7 +108,7 @@
 			//3. 插入到orders_item表中
 			$products = $entity['items']['products'];
 			$items_arr = array();
-			
+			$currentTime = time();
 			foreach($products as $vo){
 				$tmp = array(
 					'orders_id'=>$orderid,
@@ -99,6 +122,7 @@
 					'post_price'=>$vo['post_price']*100.0,
 					'sku_id'=>'',
 					'sku_desc'=>'',
+					'createtime'=>$currentTime
 				);
 				
 				if(intval($vo['has_sku']) == 1){

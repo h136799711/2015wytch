@@ -46,8 +46,8 @@
 			</div>
 			<ul class="am-avg-sm-3 am-list p-extra lgray">
 				<li class="am-text-left" ><if condition="$product['attrext_ispostfree'] eq 1" >包邮<else/>{$express_str}</if></li>
-				<!-- TODO: 销量统计 -->
-				<li class="am-text-center">月销：{:(mt_rand(0,1000))}</li>
+				 
+				<li class="am-text-center">月销：{$monthlySales}</li>
 				<li class="am-text-right">{$product.loc_city}</li>
 			</ul>
 		</div>
