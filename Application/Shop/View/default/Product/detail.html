@@ -87,8 +87,8 @@
                 	时间：2015-04-23
                 	描述：单店铺－所有宝贝查看
                 -->
-				<a class="c-btn" href="{:U('Shop/Wxstore/allCategory',array('store_id'=>$product['storeid']))}" style="border-right: 1px solid #FAE4E4;">
-					<span><i class="am-icon-th-list"></i>查看宝贝分类
+				<a class="c-btn" href="{:U('Shop/Wxstore/allCategory',array('id'=>$product['storeid']))}" style="border-right: 1px solid #FAE4E4;">
+					<span><i class="am-icon-th-list"></i>查看所有商品
 					</span>
 				</a>
 				<!--
@@ -96,7 +96,7 @@
                 	时间：2015-04-23
                 	描述：单店铺查看
                 -->
-				<a href="{:U('Shop/Wxstore/view',array('store_id'=>$product['storeid']))}" class="">
+				<a href="{:U('Shop/Wxstore/view',array('id'=>$product['storeid']))}" class="">
 					<span><i class="am-icon-university"></i>
 						进入店铺
 					</span>

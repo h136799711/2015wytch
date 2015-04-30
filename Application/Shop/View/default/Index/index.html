@@ -3,15 +3,20 @@
 <block name="area_header">
 	<style type="text/css">
 		.domloaded .start-page{
-			opacity:0;
+			/*opacity:0;*/
 		}
 		.start-page{
-			transition-property: opacity;
-			transition-delay: 1s;
-			transition-duration: 4s;
+			/*transition-property: opacity;
+			transition-delay: 3s;
+			transition-duration: 6s;
 			transition-timing-function: ease;
+			-webkit-transition-property: opacity;
+			-webkit-transition-delay: 3s;
+			-webkit-transition-duration: 6s;
+			-webkit-transition-timing-function: ease;*/
 			width: 100%;
-			height: 100%;
+			height: 1008px;
+			max-height: 1200px;
 			position: absolute;
 			z-index: 100000;
 		}
@@ -107,6 +112,15 @@
 			padding-left: 8px;
 		}
 	</style>
+	<script type="text/javascript">
+		
+		$(function(){
+			$(".start-page").height($(window).height());
+			$(".start-page").css("top",$(window).scrollTop());
+			$(".start-page").delay(2500).fadeOut(4000);
+		});
+	</script>
+	<script type="text/javascript" src="__CDN__/amazeui-lazyload/1.9.3/amazeui.lazyload.min.js"  ></script>
 </block>
 
 <block name="area_body">
@@ -115,10 +129,11 @@
 			<img class="am-responsive-width" src="{:C('SHOP_START_PAGE')}"  />
 		</div>
 	</if>
+	
 	<header class="am-header am-header-default grid">
 	  <div class="logo col-2">
 	    <a href="#" >
-	      <img src="__IMG__/logo.png?v=1.1" alt="logo"  />
+	      <img src="__IMG__/logo.png?v=2" alt="logo"  />
 	    </a>
 	  </div>
 	  <div class="js_top_search top-search-wrp col-10">
@@ -131,7 +146,7 @@
 	  	<volist name="banners" id="vo">
 	  		<li>
 	  			<a href="<empty name='vo.url'>#<else/>{$vo['url']}</empty>">
-	  				<img src="{$vo.img}" alt="{$vo.title}" />
+	  				<img src='{$vo.img}'  alt="{$vo.title}"  />
 	  			</a>
 	  		</li>
 	  	</volist>
@@ -141,7 +156,7 @@
 	<div class="store_types grid">
 		<volist name="store_types" id="vo">
 			<div class="type-item col-3">
-				<img  src="{$vo.iconurl}" alt="{$vo.name}" />
+				<img  src="__IMG__/p240x240.jpg" data-original="{$vo.iconurl}" class="lazy" alt="{$vo.name}" />
 				<span>{$vo.name}</span>
 			</div>
 		</volist>
@@ -153,19 +168,19 @@
 	<div class="grid activity">
 		<if condition="count($fourgrid) gt 3"> 
 		<div class="col-6 text-center" style="border: 1px solid #F0F0EE;height: 4rem;  border-left: 0px;background: #FFFFFF;">
-			<img src="{$fourgrid[0]['iconurl']}" alt="{$fourgrid[0]['name']}" class="am-responsive-width"/>
+			<img src="{$fourgrid[0]['iconurl']}" alt="{$fourgrid[0]['name']}" class="am-responsive-width lazy"/>
 		</div>
 		<div class=" text-center" >			
 			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
-				<img  src="{$fourgrid[1]['iconurl']}" alt="{$fourgrid[1]['name']}"class="am-responsive-width" />
+				<img  src="{$fourgrid[1]['iconurl']}" alt="{$fourgrid[1]['name']}" class="am-responsive-width lazy" />
 			</div>
 			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
-				<img src="{$fourgrid[2]['iconurl']}" alt="{$fourgrid[2]['name']}" class="am-responsive-width" />
+				<img src="{$fourgrid[2]['iconurl']}" alt="{$fourgrid[2]['name']}" class="am-responsive-width lazy" />
 			</div>
 		</div>
 		<div class=" text-center" >			
 			<div class="col-6 text-center"  style="border: 0px solid #F0F0EE;border-top:1px;height: 2rem;background: #FFFFFF;">
-				<img  src="{$fourgrid[3]['iconurl']}" alt="{$fourgrid[3]['name']}" class="am-responsive-width" />
+				<img  src="{$fourgrid[3]['iconurl']}" alt="{$fourgrid[3]['name']}" class="am-responsive-width lazy" />
 			</div>
 		</div>
 		<else/>
@@ -176,9 +191,9 @@
 	
 	<div class="ad ad0">
 		<if condition="count($ads) gt 0">
-		<a href="{$ads[0].url}" ><img src="{$ads[0].img|default='__IMG__/ad_default.jpg?v=1.0'}" alt="{$ads[0].title}" /></a>
+		<a href="{$ads[0].url}" ><img src="__IMG__/p640x200.jpg" class="lazy" data-original="{$ads[0].img|default='__IMG__/ad_default.jpg?v=1.0'}" alt="{$ads[0].title}" /></a>
 		<else />
-		<img src="__IMG__/ad_default.jpg?v=1.0" alt="广告位招租" />
+		<img src="__IMG__/ad_default.jpg?v=1.0"  alt="广告位招租" />
 		</if>
 	</div>
 	<div class="demo">
@@ -196,7 +211,7 @@
   				<volist name="rec_stores" id="vo">
 			  		<li>
 			  			<a href="<empty name='vo.url'>#<else/>{$vo['url']}</empty>">
-			  				<img src="{$vo.img}" alt="{$vo.title}" />
+			  				<img data-original="{$vo.img}" src="__IMG__/p640x200.jpg"  class="lazy" alt="{$vo.title}" />
 	     					<div class="am-slider-desc">
 	         				{$vo.title}
 	     					</div>
@@ -219,7 +234,7 @@
 		<if condition="count($ads) gt 1">
 		<a href="{$ads[1].url}" ><img src="{$ads[1].img|default='__IMG__/ad_default.jpg?v=1.0'}" alt="{$ads[1].title}" /></a>
 		<else />
-		<img src="__IMG__/ad_default.jpg?v=1.0" alt="广告位招租" />
+		<img src="__IMG__/ad_default.jpg?v=1.0" alt="广告位招租"  class="lazy" />
 		</if>
 	</div>
 	<div class="am-text-center" style="margin: 0.2rem 0;border-bottom: 1px solid #E2CCCC;">推荐商品</div>
@@ -228,7 +243,7 @@
 				<div class="product-wrp col-6">
 					<div class="product-item">
 						<a href="{:U('Shop/Product/detail',array('id'=>$vo['id']))}">
-						<div class="p-main-img" ><img src="{$vo.main_img}" alt="{$vo.name}"/></div>
+						<div class="p-main-img" ><img src="__IMG__/p240x240.jpg" data-original="{$vo.main_img}" class="lazy" alt="{$vo.name}"/></div>
 						<div class="p-name" >{$vo.name}</div>
 						<div class="p-price" >¥{:number_format($vo['price']/100,1)}<del>¥{:number_format($vo['ori_price']/100,1)}</del></div>
 						<i class="zk">{:number_format(10.0*($vo['price']/$vo['ori_price']),1)}折</i>
@@ -243,11 +258,66 @@
 	<include  file="partial/footermenu" />
 	
 	<script type="text/javascript">
+			
+		function appendList(){		
+			if(window.ajaxing ){
+				console.log("cache");
+				return ;	
+			}
+			window.ajaxing = false;
+			$.ajax({
+				type:'post',
+				url:"{:U('Shop/Product/search')}",
+				data:{p:window.myshop.p},
+				dataType:"json",
+				beforeSend:function(){
+					window.ajaxing = true;
+				}
+			}).always(function(){
+				window.ajaxing = false;
+			}).done(function(data){
+				
+				if(data.status){
+					window.myshop.p++;
+					if(data.info){						
+						for(var i=0;i<data.info.length;i++){
+							console.log(data.info[i]);
+							appendItem(data.info[i]);
+						}
+				
+					}else{
+						//TODO: 没有数据了
+						
+					}
+					
+					
+				}else{
+					alertMsg(data.info);
+				}
+			});
+		}
+	
+	
 		$(function(){
 			$(".start-page").height($(window).height());
+			$(".start-page").css("top",$(window).scrollTop());
 			
+			$(".js_top_search").on("tap",function(){
+				window.location.href = "{:U('Shop/Product/search')}";
+			});
 			$(".js_top_search").on("click",function(){
 				window.location.href = "{:U('Shop/Product/search')}";
+			});
+			$("img.lazy").lazyload({effect : 'fadeIn'});
+			
+			
+			window.myshop = { p : 1 };
+			$(window).on("scroll",function(ev){
+				if($(document).height() - $(window).height() - $(window).scrollTop() < 50){
+//					console.log("trigger");
+					appendList();
+				}
+//				console.log(ev);
 			});
 		})
 		

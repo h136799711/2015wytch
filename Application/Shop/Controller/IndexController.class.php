@@ -17,9 +17,7 @@ class IndexController extends ShopController{
 			//一小时过期
 			cookie("last_entry_time",time(),3600);
 			$last_entry_time = time();			
-		}
-		
-		if(time() - $last_entry_time < 20*60){
+		}elseif(time() - $last_entry_time < 20*60){
 			$showStartPage = false;
 		}else{
 			//一小时过期

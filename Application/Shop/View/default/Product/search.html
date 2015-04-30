@@ -119,24 +119,32 @@
   			width:50%;
   			float:left;
   			height: 220px;
- 			margin-bottom: 10px;
+  			margin-bottom: 5px;
+  			margin-top: 5px;
+  			background: #FAF2F2;
+  			padding: 5px;
+  			border: 0px;
   		}
   		.items-wrp.grid .item-img{
   			float:left;
   			width: 100%;
   			text-align: center;
+  			background: #fff;
+  			padding: 10px;
   			
   		}
   		
   		.items-wrp.grid .item-img img{
   			height: 100px;
-  		}
+    		}
   		
 		.items-wrp.grid .item .item-desc{
 			width: 100%;
 			padding-left: 0px;
 			float: left;
-  			margin-top: 10px;
+  			padding: 10px;
+  			background: #fff;
+
 		}
   		
   		.items-wrp.grid .item-desc .p-store{
@@ -151,11 +159,11 @@
 		<div class="am-topbar am-topbar-default">
 				<form class="am-form">
 				<select name="type">
-					<option value="1">商品</option>
-					<option value="2">店铺</option>
+					<option value="1" <eq name="type" value="2">selected="selected"</eq> >商品</option>
+					<option value="2" <eq name="type" value="2">selected="selected"</eq> >店铺</option>
 				</select>
 				<div class="search-wrp">
-					<input type="text" class="am-form-control" name="q" placeholder="搜索关键词" />
+					<input type="text" class="am-form-control" value="{$q}" name="q" placeholder="搜索关键词" />
 				</div>
 				<a href="{:U('Shop/Index/index')}"><i class="am-icon-home"></i></a>
 			</form>

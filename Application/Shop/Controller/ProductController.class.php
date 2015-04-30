@@ -57,6 +57,7 @@ class ProductController extends ShopController {
 	public function search() {
 		//排序： s 综合 ，d 销量 ,p 价格 从小到大, pd 价格 从大到小
 		$sort = I('sort', 's');
+		$type = I('type', '1');
 		$layout = I('get.layout', 'list');
 		
 		$map = array();
@@ -72,9 +73,11 @@ class ProductController extends ShopController {
 		if ($sort == 'pd') {
 			$order = " price asc";
 		}
-//		dump($page);
+		
+		
+		
 		$params = false;
-		$result = apiCall("Shop/Wxproduct/queryWithWxstore", array($q, $page, $order, $params));
+		$result = apiCall("Shop/Wxproduct/queryWithWxstore", array($q,$type, $page, $order, $params));
 		if (!$result['status']) {
 			$this -> error($result['info']);
 		}
@@ -93,6 +96,7 @@ class ProductController extends ShopController {
 //			echo json_encode($list);
 			$this->success($list);
 		}else{
+			$this -> assign("q", $q);
 			$this -> assign("layout", $layout);
 			$this -> assign("sort", $sort);
 			$this -> assign("curpage", $page['curpage']);

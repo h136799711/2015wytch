@@ -19,7 +19,7 @@ class WxproductApi extends Api{
 	/**
 	 * 查询数据 包含店铺信息
 	 */
-	public function queryWithWxstore($name,$page,$order,$params){
+	public function queryWithWxstore($name,$type,$page,$order,$params){
 		
 		
 		$query = $this->model;//->field("")->alias(" pd ")->join("LEFT JOIN __WXSTORE__ as st on st.id = pd.storeid ");
@@ -27,9 +27,14 @@ class WxproductApi extends Api{
 		$sql = "select  pd.name as name ,pd.id,pd.main_img,pd.buy_limit,pd.attrext_ispostfree,pd.attrext_ishasreceipt,pd.attrext_issupportreplace,pd.loc_country,pd.loc_province,pd.loc_city,pd.loc_address,pd.has_sku,pd.ori_price,pd.price,pd.quantity,pd.product_code,pd.cate_id,
 		pd.createtime,pd.updatetime,pd.onshelf,pd.status,pd.storeid,pd.properties,pd.sku_info,pd.detail,st.uid,st.name as storename,st.desc,st.isopen,st.logo,st.banner,st.wxno,st.exp";
 		$sql .= " from __WXPRODUCT__ as pd LEFT JOIN __WXSTORE__ as st on st.id = pd.storeid  ";
+		if($type == '1'){
+			$whereName = " pd.name ";
+		}else{
+			$whereName = "st.name";
+		}
 		
 		if(!empty($name)){
-			$sql .= " where pd.name like '%".$name."%'  and pd.onshelf = ".\Common\Model\WxproductModel::STATUS_ONSHELF;
+			$sql .= " where $whereName like '%".$name."%'  and pd.onshelf = ".\Common\Model\WxproductModel::STATUS_ONSHELF;
 		}
 		$sql .= ' order by '. $order;
 //		if(!($order === false)){
@@ -46,7 +51,7 @@ class WxproductApi extends Api{
 		}
 		$countSql = " select count(*) as cnt from __WXPRODUCT__ as pd LEFT JOIN __WXSTORE__ as st on st.id = pd.storeid   ";
 		if(!empty($name)){
-			$countSql .= " where pd.name like '%".$name."%'";
+			$countSql .= " where $whereName like '%".$name."%'";
 		}
 		
 		$count = $query->query($countSql);
