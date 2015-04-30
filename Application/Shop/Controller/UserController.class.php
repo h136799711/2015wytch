@@ -28,7 +28,10 @@ class UserController extends ShopController{
 	 */
 	public function order(){
 		
-		$this->error("TODO:个人订单");
+		if(IS_GET){
+			$this->display();
+		}
+		
 	}
 }
 

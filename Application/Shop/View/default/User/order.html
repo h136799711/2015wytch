@@ -1,0 +1,234 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	
+	<style type="text/css">
+		html{
+			font-size: 10px;
+		}
+		/**
+		 * 顶部样式
+		 */
+		.header{
+			background: #FFFFFF;
+		}
+		.header{
+			font-size: 16px;
+		}
+		.header .am-topbar{
+			font-size: 18px;
+  			padding: 5px 16px;
+  			min-height: 20px;
+  			margin-bottom: 0px;
+		}
+		.am-with-topbar-fixed-top {
+		  	padding-top:  39px;
+		}
+		
+		.myorder .am-tabs-nav{
+			width:100%;
+		}
+		.myorder .am-nav-tabs>li{
+			width:20%;
+		}
+		.myorder .am-nav-tabs>li>a{
+			font-size: 1.2rem;
+			margin: 0px;
+		}
+		.myorder .am-nav-tabs>li.am-active>a{
+			border: 0px;
+			color: #F72E5C;
+			background-color: #FAF2F2;
+			border-bottom: 1px solid #F72E5C;
+			cursor: default;
+		}
+		.myorder .empty i{
+			font-size: 32px;
+		}
+		
+		.item-p-list{
+			
+		}
+		
+		.item-p img{
+			width: 48px;
+			height: 48px;
+			float: left;
+		}
+		
+		
+	</style>
+
+	
+</block>
+
+<block name="area_body">
+	
+	<div class="header">
+		<div class="am-topbar am-topbar-default am-topbar-fixed-top"><a href="javascript:history.back(-1);"><i class="am-icon-chevron-left"></i>&nbsp;&nbsp;我的订单</a> <a href="{:U('Shop/Index/index')}"><i class="am-icon-home am-icon-sm am-fr"></i></a></div>
+		
+	</div>
+	<div class="myorder">
+		
+		<div class="am-tabs" data-am-tabs="{noSwipe: 1}">
+		  <ul id="tabs" class="am-tabs-nav am-nav am-nav-tabs">
+		    <li class="active"><a href="#tab1" data-type='0' >全部</a></li>
+		    <li class=""><a href="#tab2" data-type='1' >待付款</a></li>
+		    <li class=""><a href="#tab3" data-type='2' >待发货</a></li>
+		    <li class=""><a href="#tab4" data-type='3' >待收货</a></li>
+		    <li class=""><a href="#tab5" data-type='4' >待评价</a></li>
+		  </ul>
+		
+		  <div class="am-tabs-bd">
+		    <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+		    		<div class="panel"></div>
+		    		<div class="empty am-text-center  am-hide">
+			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
+			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
+			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
+			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
+		    		</div>
+		    </div>
+		    <div class="am-tab-panel am-fade" id="tab2">
+		    		<div class="panel"></div>
+		    		<div class="empty am-text-center  am-hide">
+			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
+			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
+			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
+			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
+		    		</div>
+		    	
+		    </div>
+		    <div class="am-tab-panel am-fade" id="tab3">
+		    		<div class="panel"></div>
+		    		<div class="empty am-text-center  am-hide">
+			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
+			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
+			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
+			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
+		    		</div>
+		    	
+		    </div>
+		    <div class="am-tab-panel am-fade" id="tab4">
+		    		<div class="panel"></div>
+		    		<div class="empty am-text-center am-hide">
+			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
+			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
+			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
+			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
+		    		</div>
+		    	
+		    </div>
+		    <div class="am-tab-panel am-fade" id="tab5">
+		    		<div class="panel"></div>
+		    		<div class="empty am-text-center am-hide">
+			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
+			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
+			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
+			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
+		    		</div>
+		    </div>
+		  </div>
+		</div>
+		
+		
+		
+	</div>
+</block>
+
+<block name="area_footer">
+	<script id="ordertemplate" type="text/x-handlebars-template">
+	{{#each data}}
+	  <div class="order-item">
+	  	<a href="{:U('Shop/Orders/view')}?id={{orderid}}">
+	  	{{order_status}}
+	  	<div class="item-p-list">
+	  		  {{#each _items}}
+	  		  <div class="item-p">
+	  		  	<img src="{{img}}" alt="商品图片" />
+	  		  	<div class="p-name">{{name}}</div>
+			  	<div class="p-desc">{{sku_desc}}</div>
+			  	<div class="pc-wrp">
+		  		  <div class="p-price">{{price}}</div>
+		  		  <div class="p-count">x{{count}}</div>
+		  		</div>
+	  		  </div>
+	  		  {{/each}}
+	  	</div>
+	  	
+	  	
+	  	</a>
+	  </div>
+	  {{/each}}
+	</script>
+	
+	<script type="text/javascript" src="__CDN__/handlebar/3.0.3/handlebars.js?v=1.0"></script>
+	<script type="text/javascript">
+		$(function(){
+			window.boye = {
+				ajaxing:false,
+				currentType:'',
+				template:'',
+			};
+			window.boye.currentType = $("#tabs .am-active").find("a").attr("data-type");
+			var source  = $("#ordertemplate").html();
+			window.boye.template = Handlebars.compile(source);
+			
+			
+			$('#tabs').find('a').on('opened.tabs.amui', function(e) {
+				console.log('[%s] 选项卡打开了', $(this).text());
+				
+				var $ele = loadingMsg();
+				if(window.boye.ajaxing){
+					console.log("Waiting ajax!");
+					return ;
+				}
+				
+				window.boye.currentType = $(this).attr("data-type");
+				window.boye.ajaxing = false;
+				
+				queryOrders($ele);
+				
+			});
+			
+			var $ele = loadingMsg();
+			queryOrders($ele);
+			
+		})	
+		
+		function queryOrders($ele){
+				$.ajax({
+					url:"{:U('Shop/Orders/orderlist')}",
+					type:"POST",
+					data: {type:window.boye.currentType},
+					dataType:"json",
+					beforeSend:function(){
+						window.boye.ajaxing = true;
+					}
+				}).always(function(){
+					$ele.modal("close");		
+					window.boye.ajaxing = false;
+				}).done(function(data){
+//					console.log(data);
+					if(data.status){
+						console.log(data.info);
+						var type = parseInt(window.boye.currentType) + 1;
+						if(data.info){
+							$("#tab"+type).find(".empty").addClass("am-hide");
+							var html = window.boye.template({data:data.info});
+							console.log($("#tab"+type).find(".panel"));
+							$("#tab"+type).find(".panel").html(html);
+							console.log(html);
+						}else{
+							$("#tab"+type).find(".empty").removeClass("am-hide");
+						}
+					}else{
+						alertMsg(data.info);
+					}
+				}).fail(function(data){
+					alertMsg(data.responseText);
+				});
+		}
+	</script>
+	
+</block>

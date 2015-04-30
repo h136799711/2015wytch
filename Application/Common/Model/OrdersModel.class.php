@@ -123,10 +123,28 @@ class OrdersModel extends Model{
 	 */
 	const ORDER_REFUND = 2;
 	
+	//订单评论状态
+	
+	
+	/**
+	 * 待评论
+	 */
+	const ORDER_TOBE_EVALUATE = 0;
+	/**
+	 * 已评论
+	 */
+	const ORDER_HUMAN_EVALUATED = 1;
+	/**
+	 * 超时、系统自动评论
+	 */
+	const ORDER_SYSTEM_EVALUATED = 2;
+	
+	
 	protected $_auto = array(
 		array('status',1,self::MODEL_INSERT),
 		array('pay_status',self::ORDER_TOBE_PAID,self::MODEL_INSERT),
 		array('order_status',self::ORDER_TOBE_CONFIRMED,self::MODEL_INSERT),
+		array('evalute_status',self::ORDER_TOBE_EVALUATE,self::MODEL_INSERT),
 		array('createtime',NOW_TIME,self::MODEL_INSERT),
 		array('updatetime','time',self::MODEL_BOTH,"function"),
 	);
