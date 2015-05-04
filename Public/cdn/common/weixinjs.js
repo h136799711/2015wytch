@@ -1,3 +1,7 @@
+/**
+ * 微信js分享设置js文件，单独文件，不依赖jquery
+ * 
+ */
 function wxready() {
 	console.log("weixinready");
 	window.isWxReady = true;
