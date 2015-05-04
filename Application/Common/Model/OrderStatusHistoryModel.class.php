@@ -6,18 +6,14 @@
 // | Copyright (c) 2013-2016, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace WeixinShop\Controller;
-use Think\Controller;
-use WeixinShop\Model\CateModel;
+namespace Common\Model;
+use Think\Model;
 
-class IndexController extends Controller{
+class OrderStatusHistoryModel extends Model{
 	
-	public function index(){
-		$model = new CateModel();
-		$model->id = 1;
-		dump($model);
-	}
-	
+	protected $_auto = array(
+		array('create_time',NOW_TIME,self::MODEL_INSERT)
+	);
 	
 }
 

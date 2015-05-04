@@ -14,6 +14,7 @@
 		<div class="admin-main-content">
 			{:W('Menus/breadcrumb')}
 			
+			<div class="h4">订单基本信息</div>
 			<form>
 			  <a href="javascript:history.back(-1);" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
 			  <div class="form-group">
@@ -22,7 +23,7 @@
 			  </div> 
 			  <div class="form-group">
 			    <label class="control-label" >订单总价</label>
-			    <div class="control-label " >{$order.price}元</div>
+			    <div class="control-label " >{:number_format($order['price']/100.0,1)}元</div>
 			  </div>
 			  <div class="form-group">
 			    <label class="control-label" >订单状态</label>
@@ -47,7 +48,8 @@
 			  
 			  
 			</form>
-			
+			<hr />
+			<div class="h4">购买商品列表</div>
 			<table class="table">
 				<tr>
 					<th>序号</th>
@@ -56,9 +58,10 @@
 					<th>购买价格</th>
 					<th>购买数量</th>
 				</tr>
+				
 				<empty name="items">
 					<tr>
-						<td colspan="5">
+						<td colspan="5" class="text-center">
 							没有相关信息
 						</td>
 					</tr>
@@ -67,17 +70,45 @@
 				<volist name="items" id="vo">
 					<tr>
 						<td>{$key+1}</td>
-						<td>{$vo.item}</td>
-						<td><a href="{$vo.pic}"><img src="{$vo.pic}" alt="商品图片" style="width:60px;"/></a></td>
-						<td>{$vo.price}元</td>
-						<td>{$vo.n}</td>
+						<td>{$vo.name}</td>
+						<td><a href="{$vo.img}" target="_blank"><img src="{$vo.img}" alt="商品图片" style="width:60px;"/></a></td>
+						<td>{:number_format($vo['price']/100.0,1)}元</td>
+						<td>{$vo.count}</td>
 					</tr>
 				</volist>
 				
 				</empty>
+				
 			</table>
-
-			  <a href="javascript:history.back(-1);" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
+			<hr />
+			<div class="h4">订单状态变更历史</div>
+			<table class="table">
+				<tbody>
+					<tr>
+						<th>时间</th>
+						<th>状态变更</th>
+						<th>原因</th>
+						<th>是否自动</th>
+					</tr>
+				</tbody>
+				<empty name="statushistory">
+					<tr>
+						<td colspan="4" class="text-center">
+							没有相关信息
+						</td>
+					</tr>
+				<else/>
+				<volist name="statushistory" id="vo">
+						<tr>
+							<td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+							<td>{:getOrderStatus($vo['cur_status'])}->{:getOrderStatus($vo['next_status'])}</td>
+							<td>{$vo.reason}</td>
+							<td>{$vo.isauto|yesorno}</td>
+						</tr>
+				</volist>
+				
+				</empty>
+			</table>
 		</div>
 		<!-- END admin-main-content -->
 	</div>

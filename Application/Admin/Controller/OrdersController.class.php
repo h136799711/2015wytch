@@ -17,6 +17,44 @@ class OrdersController extends AdminController {
 	}
 	
 	/**
+	 * 商家主动退回订单
+	 */
+	public function backOrder(){
+		$id = I('post.orderid',0);
+		$reason = I('post.reason','商家主动取消订单');
+		
+		$result = apiCall("Admin/Orders/getInfo", array('id'=>$id));
+		
+		if(!$result['status']){
+			$this->error($result['status']);
+		}
+		
+		if(is_null($result)){
+			$this->error("订单信息获取失败，请重试！");
+		}
+		$wxuserid = $result['info']['wxuser_id'];
+		$orderid = $result['info']['orderid'];
+		$cur_status = $result['info']['order_status'];
+		//检测当前订单状态是否合法
+		if($cur_status != 2){
+			$this->error("当前订单状态无法变更！");
+		}
+		
+		//
+		$result = apiCall("Admin/Orders/backOrder", array($id,$reason,false,UID));
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		$text = "您的订单:".$orderid." [被退回],原因:".$reason.". [查看详情]";
+		$orderViewLink = "<a href=\"".C('SITE_URL').U('Shop/Orders/View',array('id'=>$id))."\">$text</a>";
+		$this->sendTextTo($wxuserid,$orderViewLink);
+		$this->success("退回成功!");
+		
+		
+	}
+	
+	/**
 	 * 统计
 	 */
 	public function statics(){
@@ -193,8 +231,25 @@ class OrdersController extends AdminController {
 			$map = array('id' => $id);
 			$result = apiCall("Admin/OrdersInfoView/getInfo", array($map));
 			if ($result['status']) {
-				$this -> assign("items", unserialize($result['info']['items']));
+				$orderid = $result['info']['orderid'];			
 				$this -> assign("order", $result['info']);
+				$result = apiCall("Admin/OrdersItem/queryNoPaging", array(array('orders_id'=>$id)));
+				if(!$result['status']){
+					ifFailedLogRecord($result, __FILE__.__LINE__);
+					$this->error($result['info']);
+				}
+//				dump($result);
+				$this -> assign("items", $result['info']);
+				
+				//查询订单状态变更纪录				
+				$result = apiCall("Admin/OrderStatusHistory/queryNoPaging", array(array('orders_id'=>$orderid),"create_time desc"));
+				
+				if(!$result['status']){
+					ifFailedLogRecord($result, __FILE__.__LINE__);
+					$this->error($result['info']);
+				}
+				
+				$this -> assign("statushistory", $result['info']);
 				$this -> display();
 			} else {
 				$this -> error($result['info']);
@@ -225,10 +280,12 @@ class OrdersController extends AdminController {
 			$this->assign("expresslist",$expresslist);
 			$this->display();
 		} elseif (IS_POST) {
+			
 			$expresscode = I('post.expresscode','');
 			$expressno = I('post.expressno','');
 			$wxuserid = I('post.wxuserid',0);
 			$orderid = I('post.orderid','');
+			$orderOfid = I('post.orderOfid','');
 			if(empty($expresscode) || !isset($expresslist[$expresscode])){
 				$this->error("快递信息错误！");
 			}
@@ -257,15 +314,17 @@ class OrdersController extends AdminController {
 			
 			if($result['status']){
 				
+				// 1. 修改订单状态为已发货
+				$result = ServiceCall("Common/Order/shipped", array($orderOfid,false,UID));				
+				if(!$result){
+					ifFailedLogRecord($result['info'], __FILE__.__LINE__);
+				}
 				$text = "亲，您订单($orderid)已经发货，快递单号：$expressno,快递公司：".$expresslist[$expresscode].",请注意查收";
 				//DONE:
-				// 1.发送提醒信息给指定用户
+				// 2.发送提醒信息给指定用户
 				$this->sendTextTo($wxuserid,$text);
-				// 2. 修改订单状态为已发货
-				$orderstatus = \Common\Model\OrdersModel::ORDER_SHIPPED;
-				$result = apiCall("Admin/Orders/saveOrderStatus", array($entity['orderid'],$orderstatus));
 				
-				$this->success(L('RESULT_SUCCESS'));
+				$this->success(L('RESULT_SUCCESS'),U('Admin/Orders/deliverGoods'));
 			}else{
 				$this->error($result['info']);
 			}
@@ -357,10 +416,21 @@ class OrdersController extends AdminController {
 			if ($ids === -1) {
 				$this -> error(L('ERR_PARAMETERS'));
 			}
-			$ids = implode(',', $ids);
-			$map = array('id' => array('in', $ids));
-			$entity = array('order_status' => \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED);
-			$result = apiCall("Admin/Orders/save", array($map, $entity));
+			
+//			$ids = implode(',', $ids);
+//			$map = array('id' => array('in', $ids));
+//			$entity = array('order_status' => \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED);
+//			$result = apiCall("Admin/Orders/save", array($map, $entity));
+			
+			
+			foreach($ids as $id){
+				$result = apiCall("Admin/Orders/sureOrder", array($id , false , UID));
+				if (!$result['status']) {
+					$this -> error($result['info']);
+				}
+			}
+			
+			
 			if ($result['status']) {
 				$this -> success(L('RESULT_SUCCESS'), U('Admin/Orders/sure'));
 			} else {

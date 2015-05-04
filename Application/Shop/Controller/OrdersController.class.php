@@ -38,7 +38,7 @@ class OrdersController extends ShopController {
 		if ($type == 1) {
 			//待付款
 			$map['pay_status'] = \Common\Model\OrdersModel::ORDER_TOBE_PAID;
-		} else {
+		} elseif($type != 0) {
 			//货到付款，在线已支付
 			$map['pay_status'] = array('in', array(\Common\Model\OrdersModel::ORDER_PAID, \Common\Model\OrdersModel::ORDER_CASH_ON_DELIVERY));
 
@@ -141,10 +141,15 @@ class OrdersController extends ShopController {
 					'orders_id'=>$vo['orders_id'],
 					'createtime'=> date("Y-m-d H:i:s",$vo['createtime']),
 				);
-				array_push($result_list[$vo['orders_id']]['_items'], $entity);
+				
+				if(isset($result_list[$vo['orders_id']['_items']])){
+					array_push($result_list[$vo['orders_id']]['_items'], $entity);
+				}
+				
 			}
 
 		}
+		
 		if(IS_POST){
 			$this->success($result_list);
 		}else{
@@ -377,6 +382,13 @@ class OrdersController extends ShopController {
 		}
 
 	}
+	
+	/**
+	 *  订单评价
+	 */
+	public function evaluation(){
+		$this->error("暂不支持评价!");
+	}
 
 	//==============单订单状态变更操作
 	
@@ -386,13 +398,37 @@ class OrdersController extends ShopController {
 	 */
 	public function confirmReceive(){
 		
+		$id= I('get.id',0);
+		
+		$result = serviceCall("Common/Order/confirmReceive", array($id,false,UID));
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		$this->success("操作成功!");
+		
 	}
 	
 	 /**
 	 * TODO: 取消订单
 	 */
 	public function cancelOrder(){
+		//检测订单状态
+		//订单状态只能为,
+		$map = array(
+			'id'=>I('get.id',0)
+		);
 		//假删除订单
+		$result = apiCall("Shop/Orders/pretendDelete", array($map));
+		ifFailedLogRecord($result, __FILE__.__LINE__);
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		$this->success("取消成功！");
+		
 	}
 	
 

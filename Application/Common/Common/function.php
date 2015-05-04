@@ -36,6 +36,13 @@ function apiCall($url, $vars, $layer = 'Api') {
 	//TODO:考虑使用func_get_args 获取参数数组
 	return R($url, $vars, $layer);
 }
+/**
+ * ServiceCall
+ */
+function serviceCall($url, $vars) {
+	//TODO:考虑使用func_get_args 获取参数数组
+	return R($url, $vars, 'Service');
+}
 
 /**
  * 记录日志，系统运行过程中可能产生的日志
@@ -293,6 +300,8 @@ function getOrderStatus($status) {
 			return "订单已关闭";
 		case \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS :
 			return "已收货";
+		case \Common\Model\OrdersModel::ORDER_BACK :
+			return "卖家退回";
 		default :
 			return "未知";
 	}

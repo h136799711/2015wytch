@@ -99,6 +99,7 @@ class WxPayApi
 		$inputObj->SetMch_id(self::$config['MCHID']);//商户号
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
+//		dump(self::$config);
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
 		

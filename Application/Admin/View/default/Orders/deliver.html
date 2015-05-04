@@ -18,6 +18,7 @@
 			<form class="form form-horizontal validateForm deliverForm">
 				<input type="hidden" value="{$order.wxuser_id}" name="wxuserid" />
 				<input type="hidden" value="{$order.orderid}" name="orderid" />
+				<input type="hidden" value="{$order.id}" name="orderOfid" />
 				<input type="hidden" value="{$express.id}" name="id" />
 				<fieldset>
 					<legend>发货信息填写
@@ -27,12 +28,12 @@
 								<a target-form="deliverForm" href="{:U('Admin/Orders/deliver')}" class="ajax-post btn btn-default btn-sm"><i class="fa fa-save"></i>保存</a>
 								<a href="javascript:history.back(-1);" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>返回</a>
 							</div>
-							<span class="help-block">保存就是对订单进行发货操作，将给用户发送提醒信息，可多次修改已发货商品的发货信息！</span>
+							<span class="help-block h4">保存就是对订单进行发货操作，将给用户发送提醒信息，可多次修改已发货商品的发货信息！</span>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-lg-2 col-md-2">快递公司</label>
 							<div class="col-lg-10 col-md-10">
-								<select name="expresscode" class="required form-control">
+								<select name="expresscode" id="expresscode" class="required form-control">
 									<foreach name="expresslist" item="vo" key="k">
 										<option value="{$k}" <eq name="express.expresscode" value="$k" >selected="selected"</eq> >{$vo}</option>
 									</foreach>
@@ -43,7 +44,9 @@
 						<div class="form-group">
 							<label class="control-label col-lg-2 col-md-2">快递单号</label>
 							<div class="col-lg-10 col-md-10">
-								<input type="text" name="expressno" value="{$express.expressno}" placeholder="请输入快递单号" class="required form-control" />
+								<input type="text" name="expressno" id="expressno" value="{$express.expressno}" placeholder="请输入快递单号" class="required form-control" />
+								<a href="javascript:void(0)" class="btn btn-sm btn-default js_random_str"><i class="fa fa-random"></i>随机生成</a>
+							<div class="help-block">如果没有快递单号，请点击[随机生成]</div>
 							</div>
 						</div>
 
@@ -64,7 +67,27 @@
 			</form>
 
 			<script type="text/javascript">
-				$(function() {});
+				
+				function randomString(len) {
+				　　len = len || 32;
+				　　var $chars = 'abcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+				　　var maxPos = $chars.length;
+				　　var pwd = '';
+				　　for (i = 0; i < len; i++) {
+				　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+				　　}
+				　　return pwd;
+				}
+				
+				$(function() {
+					$(".js_random_str").click(function(ev){
+						var rand_str = $("#expresscode").val()+"_{$order.orderid}";
+						
+						$("#expressno").val(rand_str);
+						
+					});
+					
+				});
 			</script>
 		</div>
 		<!-- END admin-main-content -->

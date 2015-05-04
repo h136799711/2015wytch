@@ -7,9 +7,42 @@
 // |-----------------------------------------------------------------------------------
 
 namespace Admin\Controller;
+use \Common\Api\Wxpay;
+use \Common\Api\Wxpay\WxPayApi;
 
 class WxpayController extends AdminController {
-	public function orderQuery() {
+	
+	public function orderQuery(){
+		$out_trade_no = I('get.orderid', '');
+		if (empty($out_trade_no)) {
+			$out_trade_no = I('post.orderid', '');
+		}
+		$config = C('WXPAY_CONFIG');
+		
+		$query = new \Common\Api\Wxpay\OrderQuery($config);
+		
+		$orderQueryResult = ($query->queryByOutTradeNo($out_trade_no));
+		
+		//商户根据实际情况设置相应的处理流程,此处仅作举例
+		if ($orderQueryResult["return_code"] == "FAIL") {
+			$this -> assign("error", "通信出错：" . $orderQueryResult['return_msg']);
+		} elseif ($orderQueryResult["result_code"] == "FAIL") {
+			$this -> assign("error", $orderQueryResult['err_code_des']);
+		} else {
+			$orderQueryResult['trade_state'] = self::$WXPAY_TRADE_STATE[$orderQueryResult['trade_state']];
+			$orderQueryResult['time_end'] = date('Y-m-d H:i:s', strtotime($orderQueryResult['time_end']));
+			$this -> assign("orderQueryResult", $orderQueryResult);
+		}
+		$this -> assign("out_trade_no", $out_trade_no);
+		
+		$this->display();
+		
+	}
+	
+
+	
+	
+	public function orderQuery_old() {
 		$out_trade_no = I('get.orderid', '');
 		if (empty($out_trade_no)) {
 			$out_trade_no = I('post.orderid', '');
@@ -55,19 +88,6 @@ class WxpayController extends AdminController {
 				$orderQueryResult['trade_state'] = self::$WXPAY_TRADE_STATE[$orderQueryResult['trade_state']];
 				$orderQueryResult['time_end'] = date('Y-m-d H:i:s', strtotime($orderQueryResult['time_end']));
 				$this -> assign("orderQueryResult", $orderQueryResult);
-				//				echo "交易状态：" . $orderQueryResult['trade_state'] . "<br>";
-				//				echo "设备号：" . $orderQueryResult['device_info'] . "<br>";
-				//				echo "用户标识：" . $orderQueryResult['openid'] . "<br>";
-				//				echo "是否关注公众账号：" . $orderQueryResult['is_subscribe'] . "<br>";
-				//				echo "交易类型：" . $orderQueryResult['trade_type'] . "<br>";
-				//				echo "付款银行：" . $orderQueryResult['bank_type'] . "<br>";
-				//				echo "总金额：" . $orderQueryResult['total_fee'] . "<br>";
-				//				echo "现金券金额：" . $orderQueryResult['coupon_fee'] . "<br>";
-				//				echo "货币种类：" . $orderQueryResult['fee_type'] . "<br>";
-				//				echo "微信支付订单号：" . $orderQueryResult['transaction_id'] . "<br>";
-				//				echo "商户订单号：" . $orderQueryResult['out_trade_no'] . "<br>";
-				//				echo "商家数据包：" . $orderQueryResult['attach'] . "<br>";
-				//				echo "支付完成时间：" . $orderQueryResult['time_end'] . "<br>";
 			}
 			$this -> assign("out_trade_no", $out_trade_no);
 			$this -> display();

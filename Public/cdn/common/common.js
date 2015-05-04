@@ -1,3 +1,8 @@
+window.console = window.console || (function(){  
+    var c = {}; c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile  
+    = c.clear = c.exception = c.trace = c.assert = function(){};  
+    return c;  
+})();  
 (function($, w) {
 
 	function redirectTo(url) {
@@ -199,7 +204,7 @@
 				var that = this;
 			
 				if ((target = $(this).attr('href')) || (target = $(this).attr('url'))) {
-
+					
 					if ($(this).hasClass('confirm')) {
 
 						var conf = $.scojs_confirm({

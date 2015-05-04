@@ -88,18 +88,28 @@ function confirmMsg(data){
 $(window).load(function() {
 	$("body").addClass("domloaded")
 //	setTimeout(function(){},1300);
-	$.AMUI.progress.done();
+	if($.AMUI && $.AMUI.progress){
+		$.AMUI.progress.done();
+	}
 });
 
 $(function() {
-		$.AMUI.progress.start();//.start();
+		if($.AMUI && $.AMUI.progress){
+			$.AMUI.progress.start();//.start();
+		}
 		//nprogress
 		$(document).ajaxStart(function() {
-			$.AMUI.progress.start();
+			if($.AMUI && $.AMUI.progress){
+				$.AMUI.progress.start();
+			}
 		}).ajaxStop(function() {
-			$.AMUI.progress.done();
+			if($.AMUI && $.AMUI.progress){
+				$.AMUI.progress.done();
+			}
 		}).ajaxComplete(function() {	
-			$.AMUI.progress.inc();
+			if($.AMUI && $.AMUI.progress){
+				$.AMUI.progress.inc();
+			}
 		});
 		
 		
@@ -195,9 +205,9 @@ $(function() {
 			var ele = loadingMsg("请求中...");
 			$.post(target, query).always(function() {
 				ele.modal("close");
-				setTimeout(function() {
+//				setTimeout(function() {
 //					$(that).button("reset");					
-				}, 1400);
+//				}, 1400);
 			}).done(function(data) {
 				if (data.status == 1) {
 					if (data.url) {
@@ -229,6 +239,88 @@ $(function() {
 			});
 		}
 		
+		//get 请求
+		//ajax get请求
+		
+		/**
+		 * 绑定ajax-get 操作
+		 * @param {Object} selector 标签选择器jquery支持格式
+		 */
+		function bindAjaxGet(selector){
+			var selector = selector || ".ajax-get";
+			$(selector).click(function(ev) {
+				console.log("ajax-get");
+				ev.preventDefault();
+				ajaxgetHandler(this);
+			});
+			$(selector).on("tap",function(ev){
+				console.log("ajax-get");
+				ev.preventDefault();
+				ajaxgetHandler(this);
+			})
+		}
+		
+		function ajaxgetHandler(that){
+			var target;
+			var content = $(that).attr("data-tip") || "确认要执行该操作吗";
+			if ((target = $(that).attr('href')) || (target = $(that).attr('url'))) {
+
+				if ($(that).hasClass('confirm')) {
+					confirmMsg({
+						content: content,
+						action: function() {
+							ajaxget(that, target);
+						}
+					});
+				}else{
+					ajaxget(that, target);
+				}
+			}
+			return false;
+		}
+
+		function ajaxget(that, target) {
+//				$(that).button("loading");
+				var ele = loadingMsg("请求中...");
+				$.get(target).always(function() {
+//					;
+//					setTimeout(function(){
+						ele.modal("hide");
+//					},1400);
+				}).success(function(data) {
+					if (data.status == 1) {
+						if (data.url) {								
+							alertMsg(data.info + '<br/>页面即将自动跳转~');
+						} else {
+							alertMsg(data.info);
+						}
+						setTimeout(function() {
+							if (data.url) {
+								location.href = data.url;
+								} else if ($(that).hasClass('no-refresh')) {
+							} else {
+								location.reload();
+							}
+						}, 1500);
+					} else {
+						alertMsg(data.info);
+						setTimeout(function() {
+							if (data.url) {
+								location.href = data.url;
+							} else {
+								
+							}
+						}, 1500);
+					}
+			});
+	}//END ajaxget function 
+	bindAjaxGet();
+	
+	window.hbd_mobile = {
+		rebindAjaxGet:bindAjaxGet //针对插入的ajax-get 标签 ，需要手动调用绑定
+		
+	};
+	
 }) //end $.ready
 
 

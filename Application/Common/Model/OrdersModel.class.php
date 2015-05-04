@@ -75,8 +75,14 @@ class OrdersModel extends Model{
 	// 11.交易未成功
 	// 12、取消：
 	// 若您订单中所订的商品缺货，或您的订单过了等款的订单保留期限，您的订单将被系统取消；或若您将订单进行取消操作，也将显示“取消”状态。
+	
+	
 	/**
-	 * 待确认，
+	 * 订单退回
+	 */
+	const ORDER_BACK = 12;
+	/**
+	 * 待确认
 	 */
 	const ORDER_TOBE_CONFIRMED = 2;
 	/**

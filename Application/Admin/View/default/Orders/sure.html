@@ -58,7 +58,7 @@
 							用户ID
 						</th>
 						<th>
-							联系微信号
+							联系电话
 						</th>
 						<th>
 							总价格(元)
@@ -92,19 +92,21 @@
 									{$vo.wxuser_id}
 								</td>
 								<td>
-									{$vo.wxno}
+									{$vo.mobile}
 								</td>
 								<td>
-									{$vo.price}
+									{:number_format($vo['price']/100.0,1)}
 								</td>
-								<td>
-									{$vo.country},{$vo.province},{$vo.city},{$vo.area},{$vo.detailinfo}
+								<td>{$vo.province},{$vo.city},{$vo.area},{$vo.detailinfo}
 								</td>
 								<td>
 									[{$vo.pay_status|getPayStatus}]
 								</td>
 								<td>
 									{$vo.createtime|date='Y-m-d h:i:s',###}
+								</td>
+								<td>
+									<button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-orderid="{$vo.id}" data-target="#cancelModel"><i class="fa fa-reply"></i>退回订单</button>
 								</td>
 							</tr>
 
@@ -113,8 +115,42 @@
 				</tbody>
 			</table>
 			<div>{$show}</div>
-
+			
+			<div class="modal fade" id="cancelModel" tabindex="-1" role="dialog" aria-labelledby="cancelModelLabel" aria-hidden="true">
+			  <div class="modal-dialog" style="z-index: 12345678;">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="exampleModalLabel">取消订单原因</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form class="cancelOrderForm" action="{:U('Admin/Orders/backOrder')}">
+			        	<input type="hidden" name="orderid" id="orderid" value="" />
+			          <!--<div class="form-group">
+			            <label for="recipient-name" class="control-label">订单ID:</label>
+			            <input type="text" class="form-control" id="orderId">
+			          </div>-->
+			          <div class="form-group">
+			            <label for="message-text" class="control-label">原因:</label>
+			            <textarea class="form-control" rows="5" name="reason" id="message-text"></textarea>
+			          </div>
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i>关闭</button>
+			        <button type="button" url="{:U('Admin/Orders/backOrder')}" target-form="cancelOrderForm" class="ajax-post btn btn-primary"><i class="fa fa-save"></i>保存</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 			<script type="text/javascript">
+			$('#cancelModel').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget); // Button that triggered the modal
+			  var orderid = button.data('orderid'); // Extract info from data-* attributes
+			  var modal = $(this);
+//			  modal.find('.modal-title').text('New message to ' + recipient);
+			  modal.find('.modal-body #orderid').val(orderid);
+			})
 				$(function() {
 //							$(".orderstatus").click(function(){
 //								$(".searchForm").submit();
@@ -143,16 +179,30 @@
 	<script src="__CDN__/select2/4.0.0/js/select2.min.js"></script>
 	<script src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
 	<script type="text/javascript">
-	function autoRefresh(){
-		var refreshFlag = $.cookie('autoRefresh'); 
-		if(refreshFlag == "false"){
-			return ;
+		function cancelOrder(){
+			$('#cancelModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget) // Button that triggered the modal
+			  var recipient = button.data('whatever') // Extract info from data-* attributes
+			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+			  var modal = $(this)
+			  modal.find('.modal-title').text('New message to ' + recipient)
+			  modal.find('.modal-body input').val(recipient)
+			})
 		}
 		
-		window.location.href = "__SELF__";
-	}
+		function autoRefresh(){
+			var refreshFlag = $.cookie('autoRefresh'); 
+			if(refreshFlag == "false"){
+				return ;
+			}
+			
+			window.location.href = "__SELF__";
+		}
+		
 		$(function(){
 			
+			cancelOrder();
 			var refreshFlag = $.cookie('autoRefresh'); 
 			if(refreshFlag == "true"){
 				var interval = setTimeout(function(){

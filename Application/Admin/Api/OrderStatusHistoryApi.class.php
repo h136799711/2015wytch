@@ -5,28 +5,17 @@
 // | Author: 贝贝 <hebiduhebi@163.com>
 // | Copyright (c) 2013-2016, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
+namespace Admin\Api;
 
+use Common\Model\OrderStatusHistoryModel;
+use Common\Api\Api;
 
-namespace WeixinShop\Controller;
-
-class ProductController extends WeixinShopController{
+class OrderStatusHistoryApi extends Api{
 	
-	/**
-	 * 选择类目
-	 */
-	public function cate(){
-		if(IS_POST){
-			//保存
-		}else{
-			$this->display();
-		}
-	}
-	
-	/**
-	 * 添加商品
-	 */
-	public function add(){
-		
-	}
+	protected function _init(){
+		$this->model = new OrderStatusHistoryModel();
+	}	
+
 	
 }
+

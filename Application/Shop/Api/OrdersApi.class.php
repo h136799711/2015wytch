@@ -181,19 +181,7 @@
 		}
 	}
 
-	/**
-	 * 设置订单状态
-	 */
-	public function saveOrderStatus($orderid,$orderstatus){
-		$result = $this->model->where(array('orderid'=>$orderid))->save(array('order_status'=>$orderstatus));
-		if($result === FALSE){
-			$error = $this->model->getDbError();
-			return $this->apiReturnErr($error);
-		}else{
-			return $this->apiReturnSuc($result);
-		}
-	}
-	
+
 	
 	
   }

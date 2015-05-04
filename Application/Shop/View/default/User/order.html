@@ -24,7 +24,16 @@
 		.am-with-topbar-fixed-top {
 		  	padding-top:  39px;
 		}
-		
+		.theme-shop .am-gotop-fixed{
+		  width: 32px;
+		  height: 32px;
+		  bottom: 64px;
+  		}
+  		.theme-shop .am-gotop-fixed .am-gotop-icon {
+		  width: 32px;
+		  height: 32px;
+		  line-height: 28px;
+  		}
 		.myorder .am-tabs-nav{
 			width:100%;
 		}
@@ -91,7 +100,7 @@
 			padding: 10px;
 			margin: 10px 0px;
 		}
-		.order-item a{
+		.order-item>a{
 			color: #414649;
 		}
 		.am-tabs-bd .am-tab-panel{
@@ -113,7 +122,7 @@
 <block name="area_body">
 	
 	<div class="header">
-		<div class="am-topbar am-topbar-default am-topbar-fixed-top"><a href="javascript:history.back(-1);"><i class="am-icon-chevron-left"></i>&nbsp;&nbsp;我的订单</a> <a href="{:U('Shop/Index/index')}"><i class="am-icon-home am-icon-sm am-fr"></i></a></div>
+		<div class="am-topbar am-topbar-default am-topbar-fixed-top"><a href="{:U('Shop/User/info')}"><i class="am-icon-chevron-left"></i>&nbsp;&nbsp;我的订单</a> <a href="{:U('Shop/Index/index')}"><i class="am-icon-home am-icon-sm am-fr"></i></a></div>
 		
 	</div>
 	<div class="myorder">
@@ -199,9 +208,6 @@
 	  	</div>	
 	  	<a href="{:U('Shop/Orders/view')}?id={{orderid}}">
 	  	
-	  	{{order_status}}
-	  	{{order_status}}
-	  	{{pay_status}}
 	  	<div class="item-p-list">
 	  		  {{#each _items}}
 	  		  <div class="item-p am-cf">
@@ -218,7 +224,7 @@
 	  	
 	  	
 	  	</a>
-	  	<div class="btn-controls">
+	  	<div class="btn-controls  am-padding-sm am-text-right">
 	  		<!--
               	作者：hebiduhebi@126.com
               	时间：2015-05-02
@@ -230,17 +236,24 @@
               	5. 全部 － 删除订单［］
               -->
               {{#eq pay_status 0}}
-              <a href="{:U('Shop/OnlinePay/pay')}?id={{orderid}}" class="am-btn-xs am-btn am-btn-weixin">立即支付</a>
-              <a href="{:U('Shop/Orders/cancelOrder')}" class="am-btn-xs am-btn am-btn-default">取消订单</a>              
+              <a href="{:U('Shop/OnlinePay/pay')}?id={{orderid}}" class="am-btn-xs am-btn am-btn-primary">立即支付</a>
+              <a href="{:U('Shop/Orders/cancelOrder')}?id={{orderid}}" data-tip="确定取消订单?操作无法恢复!" class="ajax-get confirm am-btn-xs am-btn am-btn-default">取消订单</a>              
 	  		 {{/eq}}
               
+              
+              {{#eq order_status 3}}
+              <span class="am-text-xs">店铺微信号: {{_store.wxno}},联系电话: <a href="tel:{{_store.service_phone}}">{{_store.service_phone}}</a></span>
               <!--<a class="am-btn-xs am-btn am-btn-default">提醒发货</a>-->
+              {{/eq}}
               <!--<a class="am-btn-xs am-btn am-btn-default">立即评价</a>-->
               
               {{#eq order_status 4}}
-              <a href="{:U('Shop/Orders/confirmReceive')}" class="am-btn-xs am-btn am-btn-primary">确认收货</a>
+              <a href="{:U('Shop/Orders/confirmReceive')}?id={{orderid}}" data-tip="确定收到货了?" class="ajax-get confirm am-btn-xs am-btn am-btn-primary">确认收货</a>
               {{/eq}}
               
+              {{#eq order_status 5}}
+              <a href="{:U('Shop/Orders/evaluation')}?id={{orderid}}" class="am-btn-xs am-btn am-btn-secondary">订单评价</a>
+              {{/eq}}
               <!--<a class="am-btn-xs am-btn am-btn-primary">删除订单</a>-->
               
 	  	</div>
@@ -336,6 +349,7 @@
 								var html = window.boye.template({data:data.info});
 //								console.log($("#tab"+type).find(".panel"));
 								$("#tab"+type).find(".panel").html(html);
+								window.hbd_mobile.rebindAjaxGet("#tab"+type+" .ajax-get");
 							}
 							
 						}
