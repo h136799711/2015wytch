@@ -1,0 +1,166 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	
+	<style type="text/css">
+		html{
+			font-size: 10px;
+		}
+		/**
+		 * 顶部样式
+		 */
+		.header{
+			background: #FFFFFF;
+		}
+		.header{
+			font-size: 16px;
+		}
+		.header .am-topbar{
+			font-size: 18px;
+  			padding: 5px 16px;
+  			min-height: 20px;
+  			margin-bottom: 0px;
+		}
+		.am-with-topbar-fixed-top {
+		  	padding-top:  39px;
+		}
+		
+		.myorder .am-tabs-nav{
+			width:100%;
+		}
+		.myorder .am-nav-tabs>li{
+			width:20%;
+		}
+		.myorder .am-nav-tabs>li>a{
+			font-size: 1.2rem;
+			margin: 0px;
+		}
+		.myorder .am-nav-tabs>li.am-active>a{
+			border: 0px;
+			color: #F72E5C;
+			background-color: #FAF2F2;
+			border-bottom: 1px solid #F72E5C;
+			cursor: default;
+		}
+		.myorder .empty{
+			padding: 20px 0px;
+		}
+		.myorder .empty i{
+			font-size: 32px;
+		}
+		
+		.item-p-list{
+			
+		}
+		
+		.item-p-list .item-p{
+			position: relative;
+			font-size: 0.8rem;
+			border-bottom: 1px solid #E2E2E1;
+			height: 60px;
+		}
+		.item-p img{
+			width: 36px;
+			height: 48px;
+			position: absolute;
+		}
+		.item-p .pc-wrp{
+			position: absolute;
+			right: 0px;
+			top:0px;
+			line-height: 1.0;
+			
+		}
+		.item-p .p-name{
+			height: 2rem;
+			line-height: 1;
+  			width: 100%;
+  			padding-left: 50px;
+  			padding-right: 70px;
+			
+		}
+		.item-p .p-desc{
+			height: 1rem;
+			line-height: 1;
+  			width: 100%;
+  			padding-left: 50px;
+  			padding-right: 70px;
+		}
+		.myorder .order-item{
+			background: #FFFFFF;
+			padding: 10px;
+			margin: 10px 0px;
+		}
+		.order-item a{
+			color: #414649;
+		}
+		.am-tabs-bd .am-tab-panel{
+			padding: 0px;
+		}
+		
+		.am-icon-weixin{
+			color: #DA955C;
+		}
+		.store-info-wrp{
+			border-bottom: 1px solid #E2E2E1;
+			margin-bottom: 10px;
+		}
+	</style>
+
+	
+</block>
+
+<block name="area_body">
+	
+	<div class="header">
+		<div class="am-topbar am-topbar-default am-topbar-fixed-top"><a href="{:U('Shop/User/order')}"><i class="am-icon-chevron-left am-margin-right-xs"></i>订单详情</a> <a href="{:U('Shop/Index/index')}"><i class="am-icon-home am-icon-sm am-fr"></i></a></div>
+	</div>
+	<div class="myorderinfo">
+	
+
+	  <div class="order">
+	  	{{order_status}}
+	  	{{order_status}}
+	  	{{pay_status}}
+	  	<div class="item-p-list">
+	  		  {{#each _items}}
+	  		  <div class="item-p am-cf">
+	  		  	<img src="{{img}}" class="am-fl" alt="商品图片" />
+	  		  	<div class="p-name am-text-truncate">{{name}}</div>
+			  	<div class="p-desc am-text-truncate">{{sku_desc}}</div>
+			  	<div class="pc-wrp am-fr">
+		  		  <div class="p-price"><h6>¥{{price}}</h6></div>
+		  		  <div class="p-count am-link-muted am-text-xs am-text-right">x{{count}}</div>
+		  		</div>
+	  		  </div>
+	  		  {{/each}}
+	  	</div>
+	  </div>
+		
+	  	<div class="btn-controls">
+             
+              <a href="{:U('Shop/OnlinePay/pay')}?id={{orderid}}" class="am-btn-xs am-btn am-btn-weixin">立即支付</a>
+              <a href="{:U('Shop/Orders/cancelOrder')}" class="am-btn-xs am-btn am-btn-default">取消订单</a>              
+	 
+              
+              <!--<a class="am-btn-xs am-btn am-btn-default">提醒发货</a>-->
+              <!--<a class="am-btn-xs am-btn am-btn-default">立即评价</a>-->
+              
+              <a href="{:U('Shop/Orders/confirmReceive')}" class="am-btn-xs am-btn am-btn-primary">确认收货</a>
+             
+              
+              <!--<a class="am-btn-xs am-btn am-btn-primary">删除订单</a>-->
+              
+	  	</div>
+		
+	</div>
+</block>
+
+<block name="area_footer">
+	<script type="text/javascript">
+		
+		
+		
+	</script>
+	
+</block>

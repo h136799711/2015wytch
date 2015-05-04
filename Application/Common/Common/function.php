@@ -290,7 +290,7 @@ function getOrderStatus($status) {
 		case \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED :
 			return "待发货";
 		case \Common\Model\OrdersModel::ORDER_CANCEL :
-			return "已关闭";
+			return "订单已关闭";
 		case \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS :
 			return "已收货";
 		default :
@@ -309,6 +309,9 @@ function getPayStatus($status) {
 			return "待支付";
 		case \Common\Model\OrdersModel::ORDER_REFUND :
 			return "已退款";
+		case \Common\Model\OrdersModel::ORDER_CASH_ON_DELIVERY :
+			return "货到付款";
+			
 		default :
 			return "未知";
 	}
@@ -410,3 +413,11 @@ function fsockopenRequest($url, $post_data = array(), $cookie = array(), $repeat
 	fclose($fp);
 	return true;
 }
+/**
+ * 获取当前完整url
+ */
+function getCurrentURL(){
+	$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+	return $url;
+}
+

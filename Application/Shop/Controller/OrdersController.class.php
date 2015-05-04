@@ -13,6 +13,18 @@ class OrdersController extends ShopController {
 	protected function _initialize() {
 		parent::_initialize();
 	}
+	
+	
+	/**
+	 * 订单详情
+	 */
+	public function view(){
+		$id = I('get.id',0);
+		
+	}
+	
+	
+	
 	/**
 	 * 获取订单
 	 * @param post.type 0=全部,1=待付款,2=待发货,3=待收货,4＝待评论
@@ -73,9 +85,10 @@ class OrdersController extends ShopController {
 		foreach ($order_list as $vo) {
 			$entity = array(
 				'orderid' => $vo['id'], 
-				'price' => $vo['price'], //订单总价
+				'price' => number_format($vo['price']/100.0,2), //订单总价
 				'storeid' => $vo['storeid'], 
 				'order_status'=>$vo['order_status'],
+				'order_status_desc'=> getTaobaoOrderStatus($vo['order_status']),
 				'pay_status'=>$vo['pay_status'],
 				'_items' => array(), //商品列表
 				'_store' => array(), //店铺信息
@@ -112,11 +125,23 @@ class OrdersController extends ShopController {
 			$mapStore = array();
 			$mapStore['orders_id'] = array('in', $order_ids);
 			$result = apiCall("Shop/OrdersItem/queryNoPaging", array($mapOrder));
-
+			
 			ifFailedLogRecord($result, __FILE__ . __LINE__);
-
+			
 			foreach ($result['info'] as $vo) {
-				array_push($result_list[$vo['orders_id']]['_items'], $vo);
+				$entity = array(
+					'name'=>$vo['name'],
+					'p_id'=>$vo['p_id'],
+					'img'=>$vo['img'],
+					'price'=> number_format($vo['price']/100.0,2),
+					'ori_price'=> number_format($vo['ori_price']/100.0,2),
+					'sku_id'=>$vo['sku_id'],
+					'sku_desc'=>$vo['sku_desc'],
+					'count'=>$vo['count'],
+					'orders_id'=>$vo['orders_id'],
+					'createtime'=> date("Y-m-d H:i:s",$vo['createtime']),
+				);
+				array_push($result_list[$vo['orders_id']]['_items'], $entity);
 			}
 
 		}
@@ -352,6 +377,25 @@ class OrdersController extends ShopController {
 		}
 
 	}
+
+	//==============单订单状态变更操作
+	
+	/**
+	 * TODO: 确认收货
+	 * 	权限验证
+	 */
+	public function confirmReceive(){
+		
+	}
+	
+	 /**
+	 * TODO: 取消订单
+	 */
+	public function cancelOrder(){
+		//假删除订单
+	}
+	
+
 
 	//===================private
 

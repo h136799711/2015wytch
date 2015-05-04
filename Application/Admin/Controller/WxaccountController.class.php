@@ -89,13 +89,13 @@ class WxaccountController extends AdminController{
 	public function store(){
 		if(IS_POST){
 			import("Org.String");
-			$id= I('post.id','');
+			$id= I('post.id',0,'intval');
 			$len = 43;
 			$EncodingAESKey= I('post.encodingAESKey','');
 			if(empty($EncodingAESKey)){
-        		$EncodingAESKey =  \String::randString($len,0,'0123456789');
+        			$EncodingAESKey =  \String::randString($len,0,'0123456789');
 			}
-        	$tokenvalue = \String::randString(8,3);	
+       	 	$tokenvalue = \String::randString(8,3);	
 			$entity = array(
 				'wxname'=>I('post.wxname',''),
 				'appid'=>I('post.appid'),
@@ -105,22 +105,30 @@ class WxaccountController extends AdminController{
 				'headerpic'=>I('post.headerpic',''),
 				'qrcode'=>I('post.qrcode',''),
 				'wxuid'=>I('post.wxuid'),
-				'uid'=>UID,
-				'encodingaeskey'=>$EncodingAESKey,
+//				'uid'=>UID,
+				'encodingAESKey'=>$EncodingAESKey,
 			);
+			
 			if(!empty($id) && $id > 0){
-				$entity['id'] = $id;
-				$result = apiCall('Admin/' . CONTROLLER_NAME . '/saveByID', array($id, $entity));
+//				dump("save");
+//				$entity['id'] = $id;
+				$result = apiCall('Admin/Wxaccount/saveByID', array($id, $entity));
 				if ($result['status'] === false) {
 					LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 					$this -> error($result['info']);
 				} else {
 					$this -> success(L('RESULT_SUCCESS'), U('Admin/Wxaccount/edit'));
 				}
-//				parent::save('id', $entity , U('Admin/Wxaccount/edit')); 
 			}else{
-				$entity['token'] = $tokenvalue.time();				
-				parent::add($entity , U('Admin/Wxaccount/edit')); 
+				$entity['uid'] = UID;
+				$entity['token'] = $tokenvalue.time();			
+				$result = apiCall('Admin/Wxaccount/add', array($entity));
+				if ($result['status'] === false) {
+					LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
+					$this -> error($result['info']);
+				} else {
+					$this -> success(L('RESULT_SUCCESS'),  U('Admin/Wxaccount/edit'));
+				}
 			}
 		}
 	}
@@ -136,5 +144,7 @@ class WxaccountController extends AdminController{
 		
 		return $token;
 	}
+
+	
 	
 }

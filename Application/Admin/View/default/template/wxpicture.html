@@ -264,7 +264,7 @@
 			if(!imgsrc){
 				imgsrc = '{:C("SITE_URL")}'+data.path;
 			}
-			$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + imgsrc + "'/><p class='img-desc'>"+data.savename+"</p></div>");
+			$item = $("<div class='img-item '><img class='img-responsive  thumbnail js_img_click' src='" + imgsrc + "'/><p class='img-desc'>"+data.ori_name+"</p></div>");
 			$(".imgs-list").prepend($item);
 			
 		} else {

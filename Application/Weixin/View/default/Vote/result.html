@@ -1,0 +1,128 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	<!--顶部区域 -->
+	<style type="text/css">
+		.vote-page{
+			font-size:0.8rem;
+			padding: 10px;
+		}
+		.vote-page .vote{
+			padding: 10px;
+		}
+		.vote-page .vote-item {
+			padding: 10px;
+			border-bottom: 1px solid #E7CAD5;
+		}
+		.vote-page .vote-item .vote-img{
+			width:75px;
+			height: 75px;
+		}
+		.vote-page .vote{
+			background: #FFFFFF;
+			border: 1px solid #E7CAD5;
+			border-radius:5px;
+			margin-bottom: 1rem;
+			position: relative;
+		} 
+		
+		.vote-page .vote .group-name{
+			font-size: 1.2rem;
+		}
+		
+		.vote-page .vote.end{
+			background: #DDC6C6;
+			color: #fff;
+ 		 }
+ 		 .vote-page .vote.end:after{
+			content:"投票已结束";
+			position: absolute;
+			top: 0%;
+			left: 0px;
+			background: rgba(42, 38, 38, 0.18);
+			color: #FFFFFF;
+			height: 100%;
+			width: 100%;
+			text-align: center;
+			vertical-align: middle;
+			border-radius: 5px;
+ 		 }	 
+ 		 
+		.vote-page .vote-item .option-desc{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+
+		}
+		.vote-page .vote-item .option-desc img{
+			width:46px;
+			height: 46px;
+		}
+		.vote-page .vote-item .option-desc .option-name{
+			
+		}
+		.vote-page .vote-item .vote-progress .am-progress{
+			height: 5px;
+		}
+		
+		.vote-page .vote-item .vote-progress .am-btn-block{
+			padding: 5px 0px;
+			font-size: 0.8rem;
+		}
+		.am-gotop-fixed .am-gotop-icon {
+			  width: 100%;
+			  line-height: 32px;
+			  background-color: #F41A1A;
+			  vertical-align: middle;
+			  color: #ddd;
+			  border-radius: 50%;
+			  font-size: 1rem;
+			}
+	</style>
+</block>
+
+<block name="area_body">
+	<div class="am-text-lg am-text-center am-text-danger">只展示前十名</div>
+	<form class="voteform" method="post" action="__SELF__">
+		<div class="vote-page">
+			<volist name="resultArr" id="vo">
+				<div class="vote">
+					<div class="group-name">{$key+1}. {$vo['vote_name']}</div>
+					<volist name="vo['_top_options']" id="vote">
+						<if condition="$key elt 10 ">
+							<div class="vote-item">
+								<div class="option-desc am-cf">
+									<img src="{$vote.img_url}" class="lazy am-fl am-img-thumbnail am-circle" alt="宝贝图片" />
+									<div class="option-name am-fl">{$vote.option_name}</div>
+								</div>
+								<div class="vote-progress">
+
+									<div class="am-progress am-margin-bottom-xs">
+										<div class="am-progress-bar am-progress-bar-secondary " style="width: {:number_format($vote['_vote_cnt']*100.0/$vo['_total'],0)}%"></div>
+									</div>
+									<span class="vote-info">
+
+							{$vote._vote_cnt}票&nbsp;&nbsp;&nbsp;&nbsp;
+
+							{:number_format($vote['_vote_cnt']*100.0/$vo['_total'],0)}%
+
+							</span>
+									<div>
+										<a href="#" class="am-btn am-btn-xs am-btn-block am-btn-danger">第{$vote._rank}名</a>
+									</div>
+								</div>
+							</div>
+
+						</if>
+					</volist>
+				</div>
+			</volist>
+		</div>
+
+	</form>
+
+</block>
+<block name="area_footer">
+	<script type="text/javascript">
+	</script>
+</block>

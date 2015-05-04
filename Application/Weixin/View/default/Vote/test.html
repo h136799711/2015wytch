@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js";></script>
+
+	</head>
+	<body>
+		<script>
+// 新浪根据ip获取地址
+function getcity()
+{
+var province = '' ; 
+var city = '' ; 
+console.log(remote_ip_info);
+var str = "";
+for(var key in remote_ip_info){ 
+	
+//	console.log(key,a[key]);
+	str = str+ key+ " = "+remote_ip_info[key]+"<br/>";
+}
+province = remote_ip_info["province"]; 
+city = remote_ip_info["city"]; 
+return  str;
+}
+</script>
+<script>document.write(getcity())</script>
+	</body>
+</html>

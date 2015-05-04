@@ -1,0 +1,17 @@
+html{
+	font-size: 20px;
+}
+/**
+ * Alert框
+ */
+#alertMsg-mobile .am-modal-dialog,
+#loading-mobile .am-modal-dialog {
+	border-radius: 0;
+	background: rgba(44, 23, 23, 0.82);
+	color: #fff;
+}
+
+#loading-mobile .am-modal-dialog ,
+#alertMsg-mobile .am-modal-bd {
+	padding: 10px 5px;
+}

@@ -1,0 +1,352 @@
+<extend name="template/base_index2" />
+
+<block name="area_header">
+	<!--顶部区域 -->
+	<style type="text/css">
+		.vote-page{
+			font-size:0.8rem;
+			padding: 10px;
+		}
+		.vote-page .vote{
+			padding: 10px;
+		}
+		.vote-page .vote-item {
+			padding: 10px;
+			border-bottom: 1px solid #E7CAD5;
+		}
+		.vote-page .vote-item .vote-img{
+			width:75px;
+			height: 75px;
+		}
+		.vote-page .vote{
+			background: #FFFFFF;
+			border: 1px solid #E7CAD5;
+			border-radius:5px;
+			margin-bottom: 1rem;
+			position: relative;
+		} 
+		
+		.vote-page .vote .group-name{
+			font-size: 1.2rem;
+		}
+		
+		.vote-page .vote.end{
+			background: #DDC6C6;
+			color: #fff;
+ 		 }
+ 		 .vote-page .vote.end:after{
+			content:"当前投票已结束";
+			position: absolute;
+			top: 0%;
+			left: 0px;
+			background: rgba(42, 38, 38, 0.18);
+			color: #111111;
+			height: 100%;
+			width: 100%;
+			text-align: center;
+			vertical-align: middle;
+			border-radius: 5px;
+			font-weight: bold;
+			font-size: 1.6rem;
+ 		 }	 
+ 		 
+		.vote-page .vote-item .option-desc{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+
+		}
+		.vote-page .vote-item .option-desc img{
+			width:48px;
+			height: 48px;
+			
+		}
+		.vote-page .vote-item .option-desc .option-name{
+			
+		}
+		.vote-page .vote-item .vote-progress .am-progress{
+			height: 5px;
+		}
+		
+		.vote-page .vote-item .vote-progress .am-btn-block{
+			padding: 5px 0px;
+			font-size: 0.8rem;
+		}
+		.am-gotop-fixed .am-gotop-icon {
+			  width: 100%;
+			  line-height: 32px;
+			  background-color: #F41A1A;
+			  vertical-align: middle;
+			  color: #ddd;
+			  border-radius: 50%;
+			  font-size: 1rem;
+			}
+			#big_picture{
+				width:100%;
+				height:100%;
+				overflow: hidden;
+				position: absolute;
+				top: 0px;
+				background: rgba(3, 2, 2, 0.61);
+			}
+			
+			#big_picture img{
+				height: 300px;
+				width: 300px;
+				position: absolute;
+				top: 50%;
+				margin-top: -150px;
+				left: 50%;
+				margin-left: -150px;
+			}
+			.am-topbar-btn{
+				margin-top: 0px;
+				margin-right: 0px;
+				font-size: 16px;
+			}
+			.am-topbar-brand {
+				height: 36px;
+				line-height: 36px;
+				font-size: 16px;
+				font-weight: bolder;
+			}
+			.am-topbar form a{
+				color:#FFFFFF;
+			}
+			.am-topbar{
+				min-height: 40px;
+			}
+			/**
+			 * 页面宽度大于400px时
+			 */
+			@media only screen and (min-width: 400px) {
+				.am-topbar-brand {
+					 font-size: 20px;
+				 }
+				 
+			}
+	</style>
+</block>
+
+<block name="area_body">
+<header class="am-topbar">
+  <h6 class="am-topbar-brand am-text-xs">
+    <a href="{:U('Weixin/Vote/index',array('group'=>I('get.group','')))}" >华润万家第三届"魅力之星"万达店</a>
+  </h6>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+    
+
+    <form class="am-topbar-form am-topbar-left am-form-inline  am-collapse am-in" role="search">
+      <div class="am-form-group">
+        <input type="text" class="am-form-field am-input-sm baobao_name" placeholder="输入姓名或编号">
+      </div>
+      <div class="am-form-group">
+     	 <button type="button" class="js_search am-btn am-btn-primary am-btn-sm" >查找宝贝</button>
+      </div>
+      <div class="am-form-group">
+     	 <a href="{:U('Weixin/Vote/result',array('group'=>I('get.group','')))}"  class="am-btn am-btn-danger am-topbar-btn am-btn-sm">查看结果</a>
+      </div>
+    </form>
+
+    </div>
+
+  </div>
+</header>
+	<!--<div class="am-text-xs">当前ID: {$userinfo['real_ip']}</div>-->
+	<div class="am-text-center"><img class="lazy am-responsive-width" src="__CDN__/common/loading.gif" data-original="__IMG__/vote/banner.jpg" /></div>
+
+
+	<div class="am-text-warning am-text-xs am-padding-xs">注: 每天每人可以投每个组里的宝贝{$perUserMaxTicket}票 .</div>
+	<form class="voteform" method="post" action="__SELF__"> 
+		<input type="hidden" name="real_ip" value="{$userinfo['real_ip']}"  />
+		<div class="vote-page"> 
+			<volist name="sortArr"   id="vo">
+				<div class="vote <eq name="resultArr[$vo]['is_end']" value="1">end</eq>">
+				<div class="group-name">{$key}. {$resultArr[$vo]['vote_name']} <a href="javascript:void(0)" data-toggle="js_options{$key}" class="js_toggle am-fr">[收起]</a></div>
+				{$resultArr[$vo]._is_start}
+				<div class="js_options{$key}">
+				<volist name="resultArr[$vo]['_options']"   id="vote">
+					<div class="vote-item"  data-id="{$vote.option_id}" >
+						<div class="option-desc am-cf">
+							<img width="48px" height="48px" src="__CDN__/common/loading.gif" data-original="{$vote.img_url}" class="show-big-pic lazy am-fl am-img-thumbnail am-circle"  style="width:48px;height:48px;" alt="宝贝图片" />
+							
+							<div class="am-fl">编号: <span class="am-margin-right-xs baobao_bh">{$i} <!--{$vote.option_id}--></span></div>
+							<div class="option-name am-fl">{$vote.option_name}</div>
+						</div>
+						<div class="vote-progress">					
+							
+							<div class="am-progress am-margin-bottom-xs">
+								<div class="am-progress-bar am-progress-bar-secondary"  style="width: {:number_format($vote['_vote_cnt']*100.0/$resultArr[$vo]['_total'],0)}%"></div>
+							</div>
+							<span class="vote-info">
+							
+							<!--第{$vote._rank}名&nbsp;&nbsp;-->
+							{$vote._vote_cnt}票&nbsp;&nbsp;&nbsp;&nbsp;
+							{:number_format($vote['_vote_cnt']*100.0/$resultArr[$vo]['_total'],0)}%
+							</span>
+							<div>
+								<eq name='resultArr[$vo]._is_start' value="0">
+									<a href="javascript:void(0)" class=" am-btn am-btn-xs am-btn-block am-btn-default am-disabled counttimedata" data-counttime="{$resultArr[$vo]['_count_time']}">尚未开始,倒计时<span class="counttime"></span></a>
+								<else/>
+								
+								<eq name='resultArr[$vo]._cant_vote' value="1">									
+									<a href="javascript:void(0)" class=" am-btn am-btn-xs am-btn-block am-btn-default am-disabled">已达每日限额</a>
+								<else/>
+								<eq name="vote._limit" value="1">
+									<a href="javascript:void(0)" class=" am-btn am-btn-xs am-btn-block am-btn-default am-disabled">已达每日限额</a>
+								<else/>
+									<a  href="{:U('Weixin/Vote/addResult',array('group'=>$group,'vote_id'=>$vote['vote_id'],'option_id'=>$vote['option_id']))}" class="  <eq name="resultArr[$vo]['is_end']" value="1">am-disabled</eq> ajax-get am-btn am-btn-xs am-btn-block am-btn-primary">投一票</a>
+								
+								</eq>
+								
+								</eq>
+								
+								
+								</eq>
+								
+								
+							</div>
+						</div>
+					</div>
+				</volist>
+				</div>
+				</div>
+			</volist>
+		</div>
+		
+		<div class="am-text-center"><img class="lazy am-responsive-width" src="__CDN__/common/loading.gif" data-original="__IMG__/vote/qrcode001.jpg" /></div>
+	</form>
+	<div id="big_picture" style="display: none;" >
+		<div class="img-wrp"></div>
+	</div>
+	
+</block>
+<block name="area_footer">
+	<script type="text/javascript" src="__CDN__/amazeui-lazyload/1.9.3/amazeui.lazyload.min.js"  ></script>
+<script type="text/javascript">
+	
+	function GetRTime(t){
+
+       var d=Math.floor(t/60/60/24);
+       var h=Math.floor(t/60/60%24);
+       var m=Math.floor(t/60%60);
+       var s=Math.floor(t%60);
+       str_time = "";
+//     console.log(d,h,m,s);
+       if(d > 0){
+			str_time = str_time + d +  "天 ";
+       }
+       
+       if(! (d == 0 && h == 0)){
+       		str_time = str_time + h +  "时";
+       }
+       if(! (d == 0 && h == 0 && m == 0)){
+       		str_time = str_time + m +  "分";
+       }
+       
+       str_time = str_time + s +  "秒";
+       
+       
+      return str_time;
+       
+   	}
+	
+	function counttime(){
+		$(".counttimedata").each(function(index,item){
+			var countdata = $(item).attr("data-counttime");
+//			console.log(countdata);
+			var str_time = GetRTime(countdata);
+			 $(item).find(".counttime").text(str_time);
+			 $(item).attr("data-counttime",countdata-1);
+		});
+	}
+	
+	
+	$(function(){
+		//
+		$("img.lazy").lazyload({effect : 'fadeIn'});
+		$(".js_toggle").click(function(ev){
+			var toggle = $(ev.target).attr("data-toggle");
+			if($("."+toggle).is(":hidden")){
+				$(ev.target).text("[收起]");
+				$("."+toggle).show();
+			}else{
+				$(ev.target).text("[展开]");
+				$("."+toggle).hide();
+			}
+		});
+		setInterval(counttime,1000);
+		
+//		$("img.show-big-pic").on("tap",function(ev){
+//			console.log(this);
+//			var src = $(ev.target).attr("data-original");
+//			
+//			var img = $("#big_picture .img-wrp img");
+//			if(img.length == 0){
+//				var img = $("<img />").appendTo("#big_picture .img-wrp");
+//				$("#big_picture").on("tap",function(ev){
+//					$("#big_picture").hide(1500);
+//				});
+//			}
+//			
+//			img.attr("src",src);
+//			var top = $(window).scrollTop();
+//			$("#big_picture").css({top:top}).height($(window).height()).show("slow");
+//			
+//		});
+		
+		
+		
+		$("img.show-big-pic").on("click",function(ev){
+			console.log(this);
+			var src = $(ev.target).attr("data-original");
+			
+			var img = $("#big_picture .img-wrp img");
+			if(img.length == 0){
+				var img = $("<img />").appendTo("#big_picture .img-wrp");
+				$("#big_picture").on("click",function(ev){
+					$("#big_picture").hide(1500);
+				});
+			}
+			
+			img.attr("src",src);
+			var top = $(window).scrollTop();
+			$("#big_picture").css({top:top}).height($(window).height()).show("slow");
+			
+		});
+		
+		
+		$(".js_search").click(function(){
+			try{
+			var name = $(".baobao_name").val();
+			var bh = parseInt(name);
+			console.log(name);
+			$(".vote-item").each(function(index,item){
+				
+				var option_name = $(item).find(".option-name").text();
+				var baobao_bh = parseInt($(item).find(".baobao_bh").text());
+//				console.log(bh,baobao_bh);
+				if(bh == baobao_bh){
+					$(item).removeClass("am-hide");
+				}else{
+					
+//				console.log(name,option_name);
+					if(option_name.indexOf(name) == -1){
+						$(item).addClass("am-hide");
+					}else{
+						$(item).removeClass("am-hide");
+					}
+				}
+				
+			});
+			}catch(er){
+				console.log(er);
+			}
+		})
+		
+	})
+</script>
+</block>

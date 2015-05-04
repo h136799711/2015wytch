@@ -1,0 +1,32 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+	<link rel="stylesheet" type="text/css" media="all" href="__CDN__/jquery-datetimepicker/jquery.datetimepicker.css">
+	<script type="text/javascript" src="__CDN__/jquery-datetimepicker/jquery.datetimepicker.js"></script>
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+				
+				<!-- 操作按钮 -->
+				<div class="btn-controls">
+					<a class="btn btn-primary btn-sm" href="{:U('Admin/Vote/index')}"><i class="fa fa-plus"></i>返回</a>
+				</div>
+				
+				
+				
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>
