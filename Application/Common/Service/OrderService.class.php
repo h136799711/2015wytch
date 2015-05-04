@@ -32,7 +32,7 @@ class OrderService extends Service{
 			return $this->returnErr("订单ID错误!");			
 		}
 		
-		if($result['order_status'] != 3){
+		if($result['order_status'] != \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED){
 			return $this->returnErr("当前订单状态无法变更！");
 		}
 		
@@ -98,7 +98,7 @@ class OrderService extends Service{
 			return $this->returnErr("订单ID错误!");			
 		}
 		
-		if($result['order_status'] != 2){
+		if($result['order_status'] != \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED){
 			return $this->returnErr("当前订单状态无法变更！");
 		}
 		
@@ -163,8 +163,8 @@ class OrderService extends Service{
 		if(is_null($result)){
 			return $this->returnErr("订单ID错误!");			
 		}
-		
-		if($result['order_status'] != 2){
+		dump($result);
+		if($result['order_status'] != \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED){
 			return $this->returnErr("当前订单状态无法变更！");
 		}
 		
@@ -235,7 +235,7 @@ class OrderService extends Service{
 		}
 		
 		$entity = array(
-			'reason'=>"订单发货操作!",
+			'reason'=>"确认收货操作!",
 			'orders_id'=>$result['orderid'],
 			'operator'=>$uid,
 			'status_type'=>'ORDER',
@@ -278,6 +278,73 @@ class OrderService extends Service{
 			return $this->returnErr($return);
 		}
 	}
+
+	
+	/**
+	 * 退货操作
+	 */
+	public function returned($id,$isauto,$uid){
+		$orderStatusHistoryModel = new \Common\Model\OrderStatusHistoryModel();
+		$result = $this->model->where(array('id'=>$id))->find();
+		
+		if($result == false){
+			return $this->returnErr($this->model->getDbError());			
+		}
+		
+		if(is_null($result)){
+			return $this->returnErr("订单ID错误!");			
+		}
+		
+		if($result['order_status'] == \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS ){
+			return $this->returnErr("当前订单状态出错!");
+		}
+		
+		$entity = array(
+			'reason'=>"订单退货操作!",
+			'orders_id'=>$result['orderid'],
+			'operator'=>$uid,
+			'status_type'=>'ORDER',
+			'cur_status'=>$result['order_status'],
+			'next_status'=>\Common\Model\OrdersModel::ORDER_RETURNED,
+		);
+		
+		$this->model->startTrans();
+		$flag = true;
+		$return = "";
+		
+		$result = $this->model->where(array('id'=>$id))->save(array('order_status'=>\Common\Model\OrdersModel::ORDER_RETURNED));
+		if($result === false){
+			$flag = false;
+			$return = $this->model->getDbError();
+		}
+		
+		if($result == 0){
+			$flag = false;
+			$return = "订单ID有问题!";
+		}
+		
+		if($orderStatusHistoryModel->create($entity,1)){
+			$result = $orderStatusHistoryModel->add();
+			if($result === false){
+				$flag = false;
+				$return = $orderStatusHistoryModel->getDbError();
+			}
+		}else{
+			$flag = false;
+			$return = $orderStatusHistoryModel->getError();
+		}
+		
+		
+		
+		if($flag){
+			$this->model->commit();
+			return $this->returnSuc($return);
+		}else{
+			$this->model->rollback();
+			return $this->returnErr($return);
+		}
+	}
+	
 	
 }
 

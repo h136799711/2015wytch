@@ -52,6 +52,54 @@ class TaskController extends Controller{
 		$this->toCancel();
 	}
 	
+	
+	/**
+	 * 
+	 * 1. 订单[取消]－》检测 time() - updatetime > 指定时间，暂定1小时 满足条件变更为订单[取消]
+	 */
+	private function toCancel(){
+		
+		$interval = 3600*1;//1小时
+		$result = apiCall("Tool/Orders/orderStatusToCancel",array($interval));
+		if(!$result['status']){
+			LogRecord($result['info'], __FILE__.__LINE__);
+		}else{
+			addWeixinLog("更新订单为取消影响记录数：".$result['info']);
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * 1. 订单[已发货]－》检测 time() - updatetime > 指定时间，暂定30天 满足条件变更为订单[已发货]
+	 */
+	private function toRecieved(){
+		$interval = 24*3600*30;//30天
+		$result = apiCall("Tool/Orders/orderStatusToRecieved",array($interval));
+		if(!$result['status']){
+			LogRecord($result['info'], __FILE__.__LINE__);
+		}else{
+			addWeixinLog("更新订单为已收货影响记录数：".$result['info']);
+		}
+	}
+	
+	/**
+	 * 
+	 * 1. 订单[已收货]－》检测 time() - updatetime > 指定时间，暂定15天 满足条件变更为订单[已收货]
+	 */
+	private function toCompleted(){
+		$interval = 24*3600*15;//15天
+		$result = apiCall("Tool/Orders/orderStatusToCompleted",array($interval));
+		if(!$result['status']){
+			LogRecord($result['info'], __FILE__.__LINE__);
+		}else{
+			addWeixinLog("更新订单为已完成影响记录数：".$result['info']);
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * 订单自动处理
 	 */
@@ -314,50 +362,6 @@ class TaskController extends Controller{
 //		
 //		
 //	}
-	
-	/**
-	 * 
-	 * 1. 订单[取消]－》检测 time() - updatetime > 指定时间，暂定1小时 满足条件变更为订单[取消]
-	 */
-	private function toCancel(){
-		
-		$interval = 3600*1;//1小时
-		$result = apiCall("Tool/Orders/orderStatusToCancel",array($interval));
-		if(!$result['status']){
-			LogRecord($result['info'], __FILE__.__LINE__);
-		}else{
-			addWeixinLog("更新订单为取消影响记录数：".$result['info']);
-		}
-	}
-	
-	
-	/**
-	 * 
-	 * 1. 订单[已发货]－》检测 time() - updatetime > 指定时间，暂定30天 满足条件变更为订单[已发货]
-	 */
-	private function toRecieved(){
-		$interval = 24*3600*30;//30天
-		$result = apiCall("Tool/Orders/orderStatusToRecieved",array($interval));
-		if(!$result['status']){
-			LogRecord($result['info'], __FILE__.__LINE__);
-		}else{
-			addWeixinLog("更新订单为已收货影响记录数：".$result['info']);
-		}
-	}
-	
-	/**
-	 * 
-	 * 1. 订单[已收货]－》检测 time() - updatetime > 指定时间，暂定15天 满足条件变更为订单[已收货]
-	 */
-	private function toCompleted(){
-		$interval = 24*3600*15;//15天
-		$result = apiCall("Tool/Orders/orderStatusToCompleted",array($interval));
-		if(!$result['status']){
-			LogRecord($result['info'], __FILE__.__LINE__);
-		}else{
-			addWeixinLog("更新订单为已完成影响记录数：".$result['info']);
-		}
-	}
 	
 	
 	

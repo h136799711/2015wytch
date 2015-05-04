@@ -109,7 +109,7 @@
 									{$vo.mobile}
 								</td>
 								<td>
-									{$vo.price}
+									{:number_format($vo['price']/100.0,1)}
 								</td>
 								<td>
 									{$vo.country},{$vo.province},{$vo.city},{$vo.area},{$vo.detailinfo}

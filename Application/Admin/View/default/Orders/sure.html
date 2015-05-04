@@ -36,6 +36,27 @@
 						<button type="submit" class="btn btn-default"><i class="fa fa-search"></i>{:L('BTN_SEARCH')}</button>
 						<button type="button" id="autoRefresh" class="btn btn-warning"><i class="fa fa-refresh"></i><span>自动刷新</span></button>
 					</div>
+					<div class="form-group row col-lg-12 col-md-12">
+						<div class="input-group " style="  width: 860px;">
+
+							<div class="input-group-addon">支付状态</div>
+							<div class="form-control ">
+								<label class="radio-inline">
+									<input type="radio" name="payStatus" class="payStatus" <eq name="payStatus" value="">checked="checked"</eq> value="">不限
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="payStatus" class="payStatus" <eq name="payStatus" value="0">checked="checked"</eq> value="0">待付款
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="payStatus" class="payStatus" <eq name="payStatus" value="1">checked="checked"</eq> value="1">已支付
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="payStatus" class="payStatus" <eq name="payStatus" value="5">checked="checked"</eq> value="5">货到付款
+								</label>
+								
+							</div>
+						</div>
+					</div>
 				</form>
 			</div>
 			<!-- 操作按钮 -->
@@ -121,7 +142,7 @@
 			    <div class="modal-content">
 			      <div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="exampleModalLabel">取消订单原因</h4>
+			        <h4 class="modal-title" id="exampleModalLabel">退回订单原因</h4>
 			      </div>
 			      <div class="modal-body">
 			        <form class="cancelOrderForm" action="{:U('Admin/Orders/backOrder')}">
@@ -185,7 +206,7 @@
 			  var recipient = button.data('whatever') // Extract info from data-* attributes
 			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
 			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-			  var modal = $(this)
+			  var modal = $(this);
 			  modal.find('.modal-title').text('New message to ' + recipient)
 			  modal.find('.modal-body input').val(recipient)
 			})
@@ -201,7 +222,9 @@
 		}
 		
 		$(function(){
-			
+			$(".payStatus").click(function(){
+				$(".searchForm").submit();
+			});
 			cancelOrder();
 			var refreshFlag = $.cookie('autoRefresh'); 
 			if(refreshFlag == "true"){

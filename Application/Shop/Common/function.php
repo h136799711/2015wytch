@@ -149,6 +149,8 @@ function getTaobaoOrderStatus($status) {
 			return "交易关闭";
 		case \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS :
 			return "买家已收货";
+		case \Common\Model\OrdersModel::ORDER_BACK :
+			return "卖家退回了该订单";
 		default :
 			return "未知";
 	}

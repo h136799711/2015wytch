@@ -23,7 +23,7 @@ class OrdersController extends AdminController {
 		$id = I('post.orderid',0);
 		$reason = I('post.reason','商家主动取消订单');
 		
-		$result = apiCall("Admin/Orders/getInfo", array('id'=>$id));
+		$result = apiCall("Admin/Orders/getInfo", array(array('id'=>$id)));
 		
 		if(!$result['status']){
 			$this->error($result['status']);
@@ -35,6 +35,7 @@ class OrdersController extends AdminController {
 		$wxuserid = $result['info']['wxuser_id'];
 		$orderid = $result['info']['orderid'];
 		$cur_status = $result['info']['order_status'];
+
 		//检测当前订单状态是否合法
 		if($cur_status != 2){
 			$this->error("当前订单状态无法变更！");
@@ -138,11 +139,16 @@ class OrdersController extends AdminController {
 	 */
 	public function sure() {
 		$orderid = I('orderid', '');
+		$payStatus = I('payStatus', \Common\Model\OrdersModel::ORDER_PAID);
+		
 		$userid = I('uid', 0);
 		$params = array();
 		$map = array();
 		$map['order_status'] = \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED;
-		$map['pay_status'] = \Common\Model\OrdersModel::ORDER_PAID;
+		if(!empty($payStatus)){
+			$map['pay_status'] = $payStatus;			
+		}
+		
 		$map['wxaccountid']=getWxAccountID();
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " createtime desc ";
@@ -162,6 +168,7 @@ class OrdersController extends AdminController {
 		//
 		if ($result['status']) {
 			$this -> assign('orderid', $orderid);
+			$this -> assign('payStatus', $payStatus);
 			$this -> assign('orderStatus', $orderStatus);
 			$this -> assign('show', $result['info']['show']);
 			$this -> assign('list', $result['info']['list']);
@@ -386,9 +393,13 @@ class OrdersController extends AdminController {
 			$this->assign("id",$id);
 			$this->display();
 		}elseif(IS_POST){
-			$id = I('post.id',0);
-			$entity = array('order_status'=>\Common\Model\OrdersModel::ORDER_RETURNED,'status_note'=>'|[退货]'.I('post.note',''));
-			$result = apiCall("Admin/Orders/saveByID",array($id,$entity) );
+			$id = I('post.id',0,'intval');
+
+//			$entity = array('order_status'=>\Common\Model\OrdersModel::ORDER_RETURNED,'status_note'=>'|[退货]'.I('post.note',''));
+//			$result = apiCall("Admin/Orders/saveByID",array($id,$entity) );
+			
+			$result = serviceCall("Common/Order/returned", array($id,false,UID));
+			
 			if($result['status']){
 				$this->success("操作成功！",U('Admin/Orders/returned'));
 			}else{

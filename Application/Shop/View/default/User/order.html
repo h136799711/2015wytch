@@ -254,6 +254,11 @@
               {{#eq order_status 5}}
               <a href="{:U('Shop/Orders/evaluation')}?id={{orderid}}" class="am-btn-xs am-btn am-btn-secondary">订单评价</a>
               {{/eq}}
+              
+              
+              {{#eq order_status 12}}
+              <span class="am-text-xs am-text-danger">因卖家退回订单,若您已支付,将退款给您,请注意核查!</span>
+              {{/eq}}
               <!--<a class="am-btn-xs am-btn am-btn-primary">删除订单</a>-->
               
 	  	</div>

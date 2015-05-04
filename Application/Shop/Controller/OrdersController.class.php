@@ -20,7 +20,23 @@ class OrdersController extends ShopController {
 	 */
 	public function view(){
 		$id = I('get.id',0);
-		
+		$map = array('id' => $id);
+		$result = apiCall("Shop/OrdersInfoView/getInfo", array($map));
+		if ($result['status']) {
+			$orderid = $result['info']['orderid'];			
+			$this -> assign("order", $result['info']);
+			$result = apiCall("Shop/OrdersItem/queryNoPaging", array(array('orders_id'=>$id)));
+			if(!$result['status']){
+				ifFailedLogRecord($result, __FILE__.__LINE__);
+				$this->error($result['info']);
+			}
+
+			$this -> assign("items", $result['info']);
+			
+			$this -> display();
+		} else {
+			$this -> error($result['info']);
+		}
 	}
 	
 	
