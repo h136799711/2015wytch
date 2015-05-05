@@ -403,7 +403,42 @@ class OrdersController extends ShopController {
 	 *  订单评价
 	 */
 	public function evaluation(){
-		$this->error("暂不支持评价!");
+		if(IS_GET){
+			$this->display();
+		}else{
+			$id = I("get.id",0);
+			//TODO: 检测订单
+			$score = I("post.score",0);
+			if($score == 0){
+				$this->error("请评价订单！");
+			}
+			//其它评分
+			$score1 = I("post.score",0);
+			$score2 = I("post.score",0);
+			$score3 = I("post.score",0);
+			$text = I('post.text','');
+			$entity = array(
+				'orders_id'=>$id,
+				'score'=>$score,
+				'logistics_service'=>$score1,
+				'delivery_speed'=>$score2,
+				'service_attitude'=>$score3,
+				'comment'=>$text,
+				'user_id'=>$this->userinfo['id'],
+			);
+			
+			$result = apiCall("Shop/OrderComment/add", array($entity));
+			
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			$result = serviceCall("Common/Order/evaluation", array($id,false,$this->userinfo['id']));
+			
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			$this->success("评价成功!",U('Shop/User/order'));
+		}
 	}
 
 	//==============单订单状态变更操作

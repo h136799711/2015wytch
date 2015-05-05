@@ -1,0 +1,23 @@
+html {
+	font-size: 12px;
+}
+.header {
+	background: #FFFFFF;
+	font-size: 16px;
+}
+.header .am-topbar {
+	font-size: 18px;
+	padding: 5px 16px;
+	min-height: 20px;
+	margin-bottom: 0px;
+}
+.theme-shop .am-gotop-fixed {
+	width: 32px;
+	height: 32px;
+	bottom: 64px;
+}
+.theme-shop .am-gotop-fixed .am-gotop-icon {
+	width: 32px;
+	height: 32px;
+	line-height: 28px;
+}

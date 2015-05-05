@@ -129,15 +129,15 @@
 		
 		<div class="am-tabs" data-am-tabs="{noSwipe: 1}">
 		  <ul id="tabs" class="am-tabs-nav am-nav am-nav-tabs">
-		    <li class="active"><a href="#tab1" data-type='0' >全部</a></li>
-		    <li class=""><a href="#tab2" data-type='1' >待付款</a></li>
-		    <li class=""><a href="#tab3" data-type='2' >待发货</a></li>
-		    <li class=""><a href="#tab4" data-type='3' >待收货</a></li>
-		    <li class=""><a href="#tab5" data-type='4' >待评价</a></li>
+		    <li class="<eq name='datatype' value='0' >am-active</eq> "><a href="#tab1" data-type='0' >全部</a></li>
+		    <li class="<eq name='datatype' value='1' >am-active</eq> "><a href="#tab2" data-type='1' >待付款</a></li>
+		    <li class="<eq name='datatype' value='2' >am-active</eq> "><a href="#tab3" data-type='2' >待发货</a></li>
+		    <li class="<eq name='datatype' value='3' >am-active</eq> "><a href="#tab4" data-type='3' >待收货</a></li>
+		    <li class="<eq name='datatype' value='4' >am-active</eq> "><a href="#tab5" data-type='4' >待评价</a></li>
 		  </ul>
 		
 		  <div class="am-tabs-bd">
-		    <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+		    <div class="am-tab-panel am-fade <eq name='datatype' value='0' >am-in am-active</eq> " id="tab1">
 		    		<div class="panel"></div>
 		    		<div class="empty am-text-center  am-hide">
 			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
@@ -146,17 +146,7 @@
 			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
 		    		</div>
 		    </div>
-		    <div class="am-tab-panel am-fade" id="tab2">
-		    		<div class="panel"></div>
-		    		<div class="empty am-text-center  am-hide">
-			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
-			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
-			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
-			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
-		    		</div>
-		    	
-		    </div>
-		    <div class="am-tab-panel am-fade" id="tab3">
+		    <div class="am-tab-panel am-fade <eq name='datatype' value='1' >am-in am-active</eq> " id="tab2">
 		    		<div class="panel"></div>
 		    		<div class="empty am-text-center  am-hide">
 			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
@@ -166,7 +156,17 @@
 		    		</div>
 		    	
 		    </div>
-		    <div class="am-tab-panel am-fade" id="tab4">
+		    <div class="am-tab-panel am-fade <eq name='datatype' value='2' >am-in am-active</eq> " id="tab3">
+		    		<div class="panel"></div>
+		    		<div class="empty am-text-center  am-hide">
+			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
+			    		<div class="am-text-sm am-padding-sm">您还没有相关订单</div>
+			    		<div class="am-text-xs am-link-muted  am-padding-sm">可以去看看有哪些想买的</div>
+			    		<div><a href="{:U('Shop/Index/index')}" class="am-btn am-btn-xs am-btn-primary">随便逛逛</a></div>
+		    		</div>
+		    	
+		    </div>
+		    <div class="am-tab-panel am-fade <eq name='datatype' value='3' >am-in am-active</eq> " id="tab4">
 		    		<div class="panel"></div>
 		    		<div class="empty am-text-center am-hide">
 			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
@@ -176,7 +176,7 @@
 		    		</div>
 		    	
 		    </div>
-		    <div class="am-tab-panel am-fade" id="tab5">
+		    <div class="am-tab-panel am-fade <eq name='datatype' value='4' >am-in am-active</eq> " id="tab5">
 		    		<div class="panel"></div>
 		    		<div class="empty am-text-center am-hide">
 			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
