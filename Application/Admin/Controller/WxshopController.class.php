@@ -12,7 +12,17 @@ namespace Admin\Controller;
 class WxshopController extends AdminController{
 	
 	protected function _initialize(){
+		//解决uploadify上传session问题
+		session('[pause]');
+		$session_id = I('get.session_id','');
+		if (!empty($session_id)) {
+		    session_id($session_id);
+			session('[start]');
+//			dump($_SESSION);
+		}
+		
 		parent::_initialize();
+		
 	}
 	
 /**
@@ -59,7 +69,7 @@ class WxshopController extends AdminController{
 
 		$map = array();
 		if(!empty($name)){
-			$map['name'] = array('like',"%"+$name+"%");
+			$map['name'] = array('like',"%".$name."%");
 		}
 		
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
