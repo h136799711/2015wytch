@@ -124,25 +124,25 @@
 		}
 		.evaluation .text{
 		}
-		#J_rate_plugin{
+		.J_rate_plugin{
 			height: 20px;
 			padding: 4px 0 0 118px;
 		}
-		#J_rate_plugin .oc-star-n{
+		.J_rate_plugin .oc-star-n{
 		  	margin-top: -2px;
 		  	background: url(__IMG__/star.png) no-repeat;
 		  	text-align: left;
 		  	width: 130px;
 		}
-		#J_rate_plugin .oc-star-n .star5 {
+		.J_rate_plugin .oc-star-n .star5 {
 			background-position: 0 -30px;
 		}
-		#J_rate_plugin .oc-star-n ul {
+		.J_rate_plugin .oc-star-n ul {
 			background: url(__IMG__/star.png) no-repeat;
 			height: 20px;
 			padding-left: 0px;
 		}
-		#J_rate_plugin .oc-star-n li {
+		.J_rate_plugin .oc-star-n li {
   			display: inline-block;
   			width: 20px;
   			height: 20px;
@@ -151,19 +151,19 @@
   			padding: 0;
   			margin-bottom: 0;
 		}
-		#J_rate_plugin .oc-star-n .star1 {
+		.J_rate_plugin .oc-star-n .star1 {
 			background-position: -104px -60px;
 		}
-		#J_rate_plugin .oc-star-n .star2 {
+		.J_rate_plugin .oc-star-n .star2 {
 			background-position: -78px -60px;
 		}
-		#J_rate_plugin .oc-star-n .star3 {
+		.J_rate_plugin .oc-star-n .star3 {
 			background-position: -52px -30px;
 		}
-		#J_rate_plugin .oc-star-n .star4 {
+		.J_rate_plugin .oc-star-n .star4 {
 			background-position: -26px -30px;
 		}
-		#J_rate_plugin .oc-star-n .star5 {
+		.J_rate_plugin .oc-star-n .star5 {
 			background-position: 0 -30px;
 		}
 		
@@ -183,24 +183,45 @@
 		
 		
 	 	<form class="evaluationForm am-form am-cf am-form-horizontal">
-	 		<div class="am-form-group">
-      			<label for="doc-ipt-pwd-1" class="am-fl">订单评价：</label>
-      			<div id="J_rate_plugin">      				
-					<div class="oc-star-n"> 
-						<ul class="star">  
-							<li val="1"> star1 </li>  
-							<li val="2"> star2 </li>  
-							<li val="3"> star3 </li>
-							<li val="4"> star4 </li>  
-							<li val="5"> star5 </li>  
-						</ul> 
-					</div>
-					<input type="hidden" name="score"  id="orderMerchandiseScore0" value="0">
-      			</div>
-	 		</div>
-	 		<div class="am-form-group">
-	 			<textarea class="text am-form-control"  name="text" rows="5"></textarea>	 			
-	 		</div>
+	 		
+	 		<volist name="items" id="vo">
+	 			
+		 		<div class="am-form-group">
+		 			<div class="am-cf am-margin-bottom-sm">
+		 				<img  src="{$vo.img}" class="am-fl am-margin-right-sm" alt='' style="width:68px;height:96px" />
+		 				<div class="p-name">
+		 					{$vo.name}
+		 				</div>
+		 				<div class="p-price">
+		 					¥{:number_format($vo['price']/100.0,2)}
+		 				</div>
+		 			</div>
+	      			<label for="doc-ipt-pwd-1" class="am-fl">订单评价：</label>
+	      			<div class="J_rate_plugin">      				
+						
+						<div class="oc-star-n"> 
+							<ul class="star5">  
+								<li val="1"> star1 </li>  
+								<li val="2"> star2 </li>  
+								<li val="3"> star3 </li>
+								<li val="4"> star4 </li>  
+								<li val="5"> star5 </li>  
+							</ul> 
+						</div>
+						
+						<input type="hidden" name="pid[]" class="pid"  value="{$vo.p_id}">
+						<input type="hidden" name="score[]" class="score"  value="5">
+	      			</div>
+	      			
+			 		<div class="am-form-group">
+			 			<textarea class="text am-form-control"  name="text[]" rows="5"></textarea>	 			
+			 		</div>
+		 		</div>
+	 		
+	 		</volist>
+	 		
+	 		
+	 		
 	 	</form>
 	 	
 	  	<div class="btn-controls">
@@ -214,24 +235,26 @@
 <block name="area_footer">
 	<script type="text/javascript">
 		function check(){
-			if($("#orderMerchandiseScore0").val() == "0"){
-				alertMsg("订单必须评价!");
-				return false;
-			}
+			
+			$(".score").each(function(index,item){
+				if($(item).val() == "0"){
+					alertMsg("订单必须评价!");
+					return false;
+				}
+			})
+			
 			return true;
 		}
 		
 		$(function(){
-			$("#J_rate_plugin li").on("click",function(ev){
-				var score = $(ev.target).attr("val");
-				$("#orderMerchandiseScore0").val(score);
-				$(ev.target).parent().removeClass().addClass("star"+score);
+			$(".J_rate_plugin li").on("click",function(ev){
 				
-			});
-			$("#J_rate_plugin li").on("tap",function(ev){
-//				var score = $(ev.target).attr("val");
-//				$("#orderMerchandiseScore0").val(score);
-//				$(ev.target).parent().removeClass().addClass("star"+score);
+				var score = $(ev.target).attr("val");
+				
+				var ele = $(ev.target).parents(".J_rate_plugin");
+				ele.find(".score").val(score);
+				
+				ele.find("ul").removeClass().addClass("star"+score);
 			});
 		})
 		

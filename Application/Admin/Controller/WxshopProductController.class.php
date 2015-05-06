@@ -312,6 +312,7 @@ class WxshopProductController extends AdminController {
 				$this->error("商品信息获取失败！");
 			}
 			
+			
 			$this->assign("detail",json_decode(htmlspecialchars_decode($detail),JSON_UNESCAPED_UNICODE));
 			$this->assign("productid",$productid);
 			$this->assign("storeid",$storeid);
@@ -356,7 +357,7 @@ class WxshopProductController extends AdminController {
 
 		$map = array();
 		if (!empty($name)) {
-			$map['name'] = array('like', '%' + $name + '%');
+			$map['name'] = array('like', '%'.$name.'%');
 			$params['name'] = $name;
 		}
 		$map['onshelf'] = $onshelf;
@@ -372,6 +373,13 @@ class WxshopProductController extends AdminController {
 			$this -> assign('storeid', $storeid);
 			$this -> assign('show', $result['info']['show']);
 			$this -> assign('list', $result['info']['list']);
+			
+			
+			$store = apiCall('Admin/Wxstore/getInfo', array(array('id'=>$storeid)));
+			if(!$store['status']){
+				$this->error($store['info']);
+			}
+			$this->assign("store",$store['info']);
 			$this -> display();
 		} else {
 			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);

@@ -152,14 +152,15 @@ class ProductController extends ShopController {
 			$this -> assign("banners", $banners);
 			$this -> assign("product", $result['info']);
 			$result = apiCall("Admin/Wxstore/getInfo", array( array('id' => $result['info']['storeid'])));
-
+			
 			if ($result['status']) {
 				$this -> assign("wxstore", $result['info']);
 			}
-
+			
 			$monthlySales = $this -> getMonthlySales($id);
 			//获取月销量
 			$this -> assign("monthlySales", $monthlySales);
+			
 			$this -> display();
 
 		}

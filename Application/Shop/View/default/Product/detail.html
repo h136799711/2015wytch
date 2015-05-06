@@ -78,8 +78,9 @@
 			</div>
 			<div class="p-desc am-cf">
 				{$wxstore['name']}<br/>
-				<i class="am-icon-weixin color-weixin am-margin-right-xs"></i>微信号：<small class=" am-margin-right-xs">{$wxstore['wxno']}</small>
-				<a href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i><small class="">{$wxstore['service_phone']}</small></a>
+				<i class="am-icon-weixin color-weixin am-margin-right-xs"></i>微信号：<span class=" am-margin-right-xs">{$wxstore['wxno']}</span>
+				<!--<a href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i>{$wxstore['service_phone']}</a>-->
+				<a href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i>点击联系商家</a>
 			</div>
 			
 			<div class="p-quick am-cf">
@@ -109,8 +110,8 @@
 			 2. 产品参数
 			-->
 		<div class="p-content">
-			<div data-am-widget="tabs" class="am-tabs am-tabs-d2">
-				<ul class="am-tabs-nav am-cf">
+			<div data-am-widget="tabs"  class="am-tabs am-tabs-d2">
+				<ul class="am-tabs-nav am-cf" id="detail-tabs">
 					<li class="am-active">
 						<a href="[data-tab-panel-0]">图文详情</a>
 					</li>
@@ -118,7 +119,7 @@
 						<a href="[data-tab-panel-1]">产品参数</a>
 					</li>
 					<li class="">
-						<a href="[data-tab-panel-2]">累计评价</a>
+						<a href="[data-tab-panel-2]" data-item="evaluation">累计评价</a>
 					</li>
 				</ul>
 				<div class="am-tabs-bd">
@@ -146,8 +147,10 @@
 						</volist>
 						</ul>	
 					</div>	
-					<div data-tab-panel-2 class="am-tab-panel ">
-						评论功能正在加班加点开发中...
+					<div data-tab-panel-2 class="am-tab-panel comments">
+						<div class="loading">
+							<i class="am-icon-spinner am-icon-spin"></i>
+						</div>
 					</div>
 				</div>
 	
@@ -225,6 +228,24 @@
 	
 	<include  file="partial/product_footer" />
 	
+	<script type="text/javascript" src="__CDN__/handlebar/3.0.3/handlebars.js?v=1.0"></script>
+	
+	
+	
+	<script id="commenttemplate" type="text/x-handlebars-template">
+		<ul class="am-list">
+		{{#each data}}
+			<li class="am-padding-sm am-text-sm">
+				<div>
+					<img src="{{_userlogo}}" style="width: 36px;" class="am-responsive-width am-circle" />
+					{{_encrypt_nickname}}
+				</div>
+				<div>{{comment}}</div>
+				<div class="am-link-muted">{{_createtime}}</div>
+			</li>
+		{{/each}}
+		</ul>
+	</script>
 	<script type="text/javascript">
 		function addToCart(){
 			if(checkHasSku(0)){
@@ -375,12 +396,15 @@
 				var last_sku_id = sku_key;
 				
 				if(loop){
+					
 					for(var i=0;i<ids.length;i++){
 						
 						for(var j=0;j<ids.length;j++){
 							
 							if(i != j ){
+								
 								last_sku_id = last_sku_id.replace(ids[j]+";","");
+								
 							}
 							
 						}
@@ -392,12 +416,15 @@
 							}
 						});
 					}
+					
 				}else{
+					
 					for(tmp in ids){
 						
 						if(last_sku_id.indexOf(ids[tmp]) >= 0){
 							last_sku_id = last_sku_id.replace(ids[tmp]+";","");
-						}					
+						}
+						
 					}
 					
 					//last_sku_id 表示当前规格中剩下的规格值，替换掉选中的规格值
@@ -557,8 +584,84 @@
 			
 			
 			$("img.lazy").lazyload({effect : 'fadeIn'});
-		})
+			
+			
+			//评论加载
+			loadComment();
+		});
+		
+		function loadComment(){
+			window.loadcomment = {p:0,template:""};
+			
+			var source  = $("#commenttemplate").html();
+			window.loadcomment.template = Handlebars.compile(source);
+			//
+			$('#detail-tabs').find('a').on('opened.tabs.amui', function(e) {
+				
+				var item = $(this).attr("data-item");
+				if(item == "evaluation"){
+					queryComments();
+				}else{
+					
+				}
+				
+				console.log('[%s] 选项卡打开了' , item );
+				
+			});
+			
+			window.loadcomment.prevScrollY = 0;
+			window.loadcomment.directionY = 1;
+			$(window).on("scroll",function(ev){
+				
+				if(window.loadcomment.prevScrollY - $(window).scrollTop() > 0){
+					window.loadcomment.directionY = -1;
+				}else{
+					window.loadcomment.directionY = 1;
+				}
+				
+				window.loadcomment.prevScrollY = $(window).scrollTop();
+				
+				if(window.loadcomment.directionY == 1 && $(document).height() - $(window).height() - $(window).scrollTop() < 20){
+//					var $ele = loadingMsg();
+					queryComments();
+				}
+			});
+			
+		}
+		
+		function queryComments(productid){
+			if(window.loadcomment.ajaxing){
+				console.log("cache");
+				return false;
+			}
+			
+			var productid = "{$product.id}";
+			$.ajax({
+				url:"{:U('Shop/OrderComment/index')}",
+				type:"post",
+				data:{p:window.loadcomment.p,productid:productid},
+				beforeSend:function(){
+					$(".loading").show();
+					window.loadcomment.p++;
+					window.loadcomment.ajaxing = true;
+				}
+			}).always(function(){
+				$(".loading").hide();
+				window.loadcomment.ajaxing = false;
+			}).done(function(data){						
+				var panel = $(".comments");
+				console.log(data);
+				if(data.status){
+					var html = window.loadcomment.template({data:data.info});
+					panel.html(panel.html()+html);
+					console.log(html);
+				}else{
+					alertMsg(data.info);
+				}
+			});
+		}
 		
 	</script>
+	
 </block>
 

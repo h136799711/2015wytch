@@ -413,35 +413,35 @@ class OrdersController extends ShopController {
 	 */
 	public function evaluation(){
 		if(IS_GET){
-			$this->display();
-		}else{
-			$id = I("get.id",0);
-			//TODO: 检测订单
-			$score = I("post.score",0);
-			if($score == 0){
-				$this->error("请评价订单！");
-			}
-			//其它评分
-			$score1 = I("post.score",0);
-			$score2 = I("post.score",0);
-			$score3 = I("post.score",0);
-			$text = I('post.text','');
-			$entity = array(
-				'orders_id'=>$id,
-				'score'=>$score,
-				'logistics_service'=>$score1,
-				'delivery_speed'=>$score2,
-				'service_attitude'=>$score3,
-				'comment'=>$text,
-				'user_id'=>$this->userinfo['id'],
-			);
-			
-			$result = apiCall("Shop/OrderComment/add", array($entity));
+			$id = I('get.id',0,'intval');
+			$result = apiCall("Shop/OrdersItem/queryNoPaging", array(array( 'orders_id'=>$id )));
 			
 			if(!$result['status']){
 				$this->error($result['info']);
 			}
-			$result = serviceCall("Common/Order/evaluation", array($id,false,$this->userinfo['id']));
+//			dump($result);
+			$this->assign("items",$result['info']);
+			$this->display();
+		}else{
+			
+			$orders_id = I('get.id',0,'intval');
+			$pid_arr = I("post.pid",array());
+			$score_arr = I("post.score",array());
+			$text_arr = I("post.text",array());
+			
+			
+			$result = apiCall("Shop/OrderComment/addArray", array($orders_id,$this->userinfo['id'],$pid_arr,$score_arr,$text_arr));
+			
+			
+			
+//			//其它评分
+			
+			
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			
+//			$result = serviceCall("Common/Order/evaluation", array($id,false,$this->userinfo['id']));
 			
 			if(!$result['status']){
 				$this->error($result['info']);

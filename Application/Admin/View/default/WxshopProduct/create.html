@@ -4,6 +4,9 @@
 	<link rel="stylesheet" type="text/css" media="all" href="__CSS__/wxshop.css">
 	<link type="text/css" rel="stylesheet" src="__CDN__/jquery-uploadify/3.2.1/uploadify.css" />
 	<script type="text/javascript" src="__CDN__/jquery-uploadify/3.2.1/jquery.uploadify.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/select2.min.js"></script>
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
 </block>
 
 <block name="area_body">
@@ -301,11 +304,18 @@
 	<script type="text/javascript">
 		function getData(){
 			$(".property").val("");
-			$(".prop-list .selected").each(function(index,item){
-				$propid = $(item).parents(".prop-item").attr("data-id");
-				$propvalueid = $(item).parents(".propvalue-item").attr("data-id");
-				$(".property").val($(".property").val()+$propid+","+$propvalueid+";");
+			$(".propsel").each(function(index,item){
+				$propvalue = $(item).val();
+				if($propvalue != "=请选择="){
+					$(".property").val($(".property").val()+$propvalue+";");
+				}
 			});
+			
+//			$(".prop-list .selected").each(function(index,item){
+//				$propid = $(item).parents(".prop-item").attr("data-id");
+//				$propvalueid = $(item).parents(".propvalue-item").val();//.attr("data-id");
+//				$(".property").val($(".property").val()+$propid+","+$propvalueid+";");
+//			});
 			
 			var main_img = $(".main_img .img-preview img").attr("src");
 			if(main_img){
@@ -323,7 +333,7 @@
 		
 		function check(){
 			getData();
-//			return false;
+			return false;
 			var txt = $(".js_product_name").val();
 			var len = txt.replace(/[^\x00-\xff]/g, 'xx').length ; 
 			if(len == 0){					
@@ -337,6 +347,37 @@
 			return true;
 		}
 	
+//		function appendProp(list){
+////			console.log(list);
+//			
+//			$ele = $(".js_prop .prop-list");
+//			$ele.empty();
+//			for(var i=0;i<list.length;i++){
+//				//创建一个dropdown
+//				$dropdown = $("<button type='button' data-toggle='dropdown' class='btn btn-primary dropdown-toggle'>选择<span class='caret'></span></button>")
+//				$propName = $('<span>'+list[i].name+'</span>');
+//				$prop = $('<div class="dropdown dropdown-toggle"></div>');
+//				$prop.append($dropdown);
+//				$ele.append($("<div class='prop-item' ></div>").attr("data-id",list[i].id).append($propName).append($prop));
+//
+//				if(list[i].property_value){
+////					console.log(list[i].property_value);
+//					$propValue = $("<ul class='propvalue-list dropdown-menu'></ul>");
+//					$prop.append($propValue);
+//					var propvaluelist = list[i].property_value;
+//					for(var j=0;j<propvaluelist.length;j++){
+//						$propValueItem = $("<li class='propvalue-item'></li>");
+//						$propValueItem.attr("data-id",propvaluelist[j].id).html("<a class='btn link_a' onclick='return false' href='javascript:' >"+propvaluelist[j].valuename+"</a>");
+//						$propValue.append($propValueItem);
+//					}
+////					$propValue.append("<li class='propvalue-item'><a class='btn prop-custom js_propnewname' href='javascript:void(0);' >自定义</a></li>");
+//				}
+//
+//			}	
+//			
+//			
+//		}
+//		
 		function appendProp(list){
 //			console.log(list);
 			
@@ -344,20 +385,23 @@
 			$ele.empty();
 			for(var i=0;i<list.length;i++){
 				//创建一个dropdown
-				$dropdown = $("<button type='button' data-toggle='dropdown' class='btn btn-primary dropdown-toggle'>选择<span class='caret'></span></button>")
+//				$dropdown = $("<button type='button' data-toggle='dropdown' class='btn btn-primary dropdown-toggle'>选择<span class='caret'></span></button>")
 				$propName = $('<span>'+list[i].name+'</span>');
 				$prop = $('<div class="dropdown dropdown-toggle"></div>');
-				$prop.append($dropdown);
+//				$prop.append($dropdown);
 				$ele.append($("<div class='prop-item' ></div>").attr("data-id",list[i].id).append($propName).append($prop));
-
+				
 				if(list[i].property_value){
 //					console.log(list[i].property_value);
-					$propValue = $("<ul class='propvalue-list dropdown-menu'></ul>");
+					$propValue = $("<select class='propsel propvalue-list dropdown-menu'></select>");
 					$prop.append($propValue);
 					var propvaluelist = list[i].property_value;
+					$propValue.append("<option class='propvalue-item'>=请选择=</option>");
 					for(var j=0;j<propvaluelist.length;j++){
-						$propValueItem = $("<li class='propvalue-item'></li>");
-						$propValueItem.attr("data-id",propvaluelist[j].id).html("<a class='btn link_a' onclick='return false' href='javascript:' >"+propvaluelist[j].valuename+"</a>");
+						$propValueItem = $("<option class='propvalue-item'></option>");
+						$propValueItem.attr("data-id",propvaluelist[j].id).text(propvaluelist[j].valuename).val(list[i].id+","+propvaluelist[j].id);
+						
+//						$propValueItem.attr("data-id",propvaluelist[j].id).html("<a class='btn link_a' onclick='return false' href='javascript:' >"+propvaluelist[j].valuename+"</a>");
 						$propValue.append($propValueItem);
 					}
 //					$propValue.append("<li class='propvalue-item'><a class='btn prop-custom js_propnewname' href='javascript:void(0);' >自定义</a></li>");
@@ -367,8 +411,6 @@
 			
 			
 		}
-		
-		
 		
 		
 		
@@ -390,6 +432,20 @@
 						return ;
 					}
 					appendProp(data.info);
+					$(".propsel").select2({
+						placeholder: "=选择=",
+						language: "zh-CN",
+//						minimumInputLength: 0,
+//						templateSelection: function (repo) {
+//							console.log(repo);
+//							if(repo.id != "=请选择="){
+//								$propvalueid = repo.id;
+//								$propid = "";
+//								$(".property").val($(".property").val()+$propid+","+$propvalueid+";");
+//							}
+//	  						return repo.text;
+//						},
+					});
 				} else {
 					$.scojs_message('添加失败!', $.scojs_message.TYPE_ERROR);
 				}
