@@ -79,6 +79,7 @@ class WxshopController extends AdminController{
 		}
 	}
 	
+	
 	public function add(){
 		if(IS_GET){
 			$this->display();

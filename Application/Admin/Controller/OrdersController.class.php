@@ -48,7 +48,7 @@ class OrdersController extends AdminController {
 			$this->error($result['info']);
 		}
 		$text = "您的订单:".$orderid." [被退回],原因:".$reason.". [查看详情]";
-		$orderViewLink = "<a href=\"".C('SITE_URL').U('Shop/Orders/View',array('id'=>$id))."\">$text</a>";
+		$orderViewLink = "<a href=\"".C('SITE_URL').U('Shop/Orders/view')."?id=$id\">$text</a>";
 		$this->sendTextTo($wxuserid,$orderViewLink);
 		$this->success("退回成功!");
 		

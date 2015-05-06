@@ -138,6 +138,7 @@
 		
 		  <div class="am-tabs-bd">
 		    <div class="am-tab-panel am-fade <eq name='datatype' value='0' >am-in am-active</eq> " id="tab1">
+		    		
 		    		<div class="panel"></div>
 		    		<div class="empty am-text-center  am-hide">
 			    		<div><i class="am-link-muted am-icon-list-alt am-icon-lg"></i></div>
@@ -196,6 +197,7 @@
 <block name="area_footer">
 	<script id="ordertemplate" type="text/x-handlebars-template">
 	{{#each data}}
+	
 	  <div class="order-item">
 	  	<div class="store-info-wrp am-cf  am-text-xs am-margin-bottom-xs">
 	  			<div class="store-info am-fl">
@@ -240,6 +242,10 @@
               <a href="{:U('Shop/Orders/cancelOrder')}?id={{orderid}}" data-tip="确定取消订单?操作无法恢复!" class="ajax-get confirm am-btn-xs am-btn am-btn-default">取消订单</a>              
 	  		 {{/eq}}
               
+              {{#eq pay_status 5}}
+              
+              <span class="am-text-xs">您选择了货到付款,请准备好现金，送货员马上就到！</span>
+              {{/eq}}
               
               {{#eq order_status 3}}
               <span class="am-text-xs">店铺微信号: {{_store.wxno}},联系电话: <a href="tel:{{_store.service_phone}}">{{_store.service_phone}}</a></span>
@@ -267,20 +273,23 @@
 	</script>
 	
 	<script type="text/javascript" src="__CDN__/handlebar/3.0.3/handlebars.js?v=1.0"></script>
+	
 	<script type="text/javascript">
 		function eq(v1,v2,options){
            if(v1 == v2){
              //满足添加继续执行
              return options.fn(this);
            }else{
-             //不满足条件执行{{else}}部分
+             //不满足条件执行
              return options.inverse(this);
            }
          }
-		
+
+	    
 		
 	
 		$(function(){
+			
 			window.boye = {
 				ajaxing:false,
 				prevType:'',
@@ -288,7 +297,7 @@
 				currentPage:0,
 				template:'',
 			};
-			window.boye.currentType = $("#tabs .am-active").find("a").attr("data-type");
+			window.boye.prevType = window.boye.currentType = $("#tabs .am-active").find("a").attr("data-type");
 			var source  = $("#ordertemplate").html();
 			window.boye.template = Handlebars.compile(source);
 			Handlebars.registerHelper("eq",eq);
@@ -313,7 +322,26 @@
 			var $ele = loadingMsg();
 			queryOrders($ele);
 			window.boye.currentPage++;
-		})	
+			
+			window.boye.prevScrollY = 0;
+			window.boye.directionY = 1;
+			$(window).on("scroll",function(ev){
+				
+				if(window.boye.prevScrollY - $(window).scrollTop() > 0){
+					window.boye.directionY = -1;
+				}else{
+					window.boye.directionY = 1;
+				}
+				
+				window.boye.prevScrollY = $(window).scrollTop();
+				
+				if(window.boye.directionY == 1 && $(document).height() - $(window).height() - $(window).scrollTop() < 10){
+					var $ele = loadingMsg();
+					queryOrders($ele);
+				}
+			});
+			
+		})
 		
 		function queryOrders($ele){
 				console.log(window.boye);
@@ -353,7 +381,12 @@
 								$("#tab"+type).find(".empty").addClass("am-hide");
 								var html = window.boye.template({data:data.info});
 //								console.log($("#tab"+type).find(".panel"));
-								$("#tab"+type).find(".panel").html(html);
+								if(window.boye.prevType != window.boye.currentType){
+									$("#tab"+type).find(".panel").html(html);
+								}else{
+									$("#tab"+type).find(".panel").html($("#tab"+type).find(".panel").html()+html);
+								}
+								
 								window.hbd_mobile.rebindAjaxGet("#tab"+type+" .ajax-get");
 							}
 							

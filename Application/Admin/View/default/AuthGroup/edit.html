@@ -16,18 +16,19 @@
 				<input type="hidden" name="id" value="{$entity.id}" />
 				<fieldset>
 					<legend>
-						用户组-添加</legend>
+						用户组-编辑</legend>
 					<div class="form-group">
 						<label for="inputtitle" class="col-md-2 col-lg-2 control-label">{:L('TITLE')}</label>
 						<div class="col-md-10 col-lg-10">
-							<input type="text" class="required form-control input-short" name="title" id="inputtitle" value="{$entity.title}" placeholder="{:L('PLACEHOLDER_TITLE')}">
+							<label>{$entity.title}</label>
+							<!--<input type="text" class="required form-control input-short" name="title" id="inputtitle" value="{$entity.title}" placeholder="{:L('PLACEHOLDER_TITLE')}">-->
 							<!--<div class="help-block">用户组名称</div>-->
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="inputnotes" class="col-md-2 col-lg-2 control-label">{:L('TITLE')}</label>
+						<label for="inputnotes" class="col-md-2 col-lg-2 control-label">描述</label>
 						<div class="col-md-10 col-lg-10">
-							<textarea rows="5" class="required form-control input-short" name="notes" id="inputnotes" value="{$entity.notes}" placeholder="请输入用户组描述信息"></textarea>
+							<textarea rows="5" class="required form-control input-short" name="notes" id="inputnotes">{$entity.notes}</textarea>
 							<!--<div class="help-block">用户组描述信息</div>-->
 						</div>
 					</div>

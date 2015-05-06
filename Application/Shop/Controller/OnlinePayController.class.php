@@ -29,21 +29,44 @@ class OnlinePayController extends ShopController {
 	 * 更改订单为货到付款
 	 */
 	public function cashOndelivery() {
-		//TODO: 货到付款
-
+		
 		$ids = I('post.id', 0);
 		$ids = rtrim($ids, "-");
 		$ids = split("-", $ids);
-		$map['id'] = array('in', $ids);
-		$map['pay_status'] = 0;
-		$result = apiCall("Shop/Orders/savePayStatus", array($map, \Common\Model\OrdersModel::ORDER_CASH_ON_DELIVERY));
-
+//		$map['id'] = array('in', $ids);
+//		$map['pay_status'] = 0;
+		$result = serviceCall("Common/Order/cashOndelivery", array($ids,false,$this->userinfo['id']));
+		
 		if (!$result['status']) {
 			$this -> error($result['info']);
 		}
+		$wxuserid = $this->userinfo['id'];
+		
+		$text = "用户ID:$wxuserid,时间:" . date("Y-m-d H:i:s",time()) . ",订单ID:" . rtrim(I('post.id', 0),"-") . ",选择了货到付款,请登录后台查看订单。";
+		$token = C('SHOP_TOKEN');
+		$this->sendToWxaccount($token, $text);
+
 		$this -> success("操作成功！");
 	}
-
+	
+	private function sendToWxaccount($token, $text) {
+		$result = apiCall("Shop/Wxaccount/getInfo", array(array('token' => $token)));
+		if ($result['status']) {
+			$wxapi = new \Common\Api\WeixinApi($result['info']['appid'], $result['info']['appsecret']);
+			$map = array('name' => "WXPAY_OPENID");
+			$result = apiCall("Admin/Config/getInfo", array($map));
+			
+			addWeixinLog($result, "接收订单支付成功的OPENID");
+			if ($result['status']) {
+				$openidlist = split(",", $result['info']['value']);
+				foreach ($openidlist as $openid) {
+					$wxapi -> sendTextToFans($openid, $text);
+				}
+			}
+		} else {
+			LogRecord($result['info'], __FILE__ . __LINE__ . "货到付款成功消息失败");
+		}
+	}
 	/**
 	 * 微信支付页面
 	 */

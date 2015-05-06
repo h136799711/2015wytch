@@ -38,6 +38,22 @@ class AuthGroupController extends AdminController{
 		
 	}
 	
+	public function save(){
+		$id = I('post.id',0);
+		if(IS_POST){
+			$entity = array(
+				'notes'=>I('post.notes','','trim')
+			);
+			$result = apiCall("Admin/AuthGroup/saveByID", array($id,$entity));
+			if($result['status']){
+				$this->success("操作成功~页面将自动跳转",U('Admin/AuthGroup/index'));
+			}else{
+				LogRecord($result['info'], __FILE__.__LINE__);
+				$this->error($result['info']);
+			}
+		}
+	}
+	
 	public function writeRules(){
 		$groupid = I('post.groupid',-1);
 		$modulename = I('post.modulename','');
@@ -73,6 +89,7 @@ class AuthGroupController extends AdminController{
 			$this->error($result['info']);
 		}
 	}
+	
 	
 		
 }

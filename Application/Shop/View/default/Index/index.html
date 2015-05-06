@@ -111,6 +111,9 @@
 			border-left: 5px solid #D3B640;
 			padding-left: 8px;
 		}
+		.type-item a{
+			color:#333333;
+		}
 	</style>
 	<script type="text/javascript">
 		
@@ -132,7 +135,7 @@
 	
 	<header class="am-header am-header-default grid">
 	  <div class="logo col-2">
-	    <a href="#" >
+	    <a href="{:U('Shop/Index/index')}" >
 	      <img src="__IMG__/logo.png?v=2" alt="logo"  />
 	    </a>
 	  </div>
@@ -156,8 +159,10 @@
 	<div class="store_types grid">
 		<volist name="store_types" id="vo">
 			<div class="type-item col-3">
+				<a href="{:U('Shop/Wxstore/search',array('cate_id'=>$vo['id']))}">
 				<img  src="__IMG__/p240x240.jpg" data-original="{$vo.iconurl}" class="lazy" alt="{$vo.name}" />
 				<span>{$vo.name}</span>
+				</a>
 			</div>
 		</volist>
 	</div>
@@ -168,19 +173,27 @@
 	<div class="grid activity">
 		<if condition="count($fourgrid) gt 3"> 
 		<div class="col-6 text-center" style="border: 1px solid #F0F0EE;height: 4rem;  border-left: 0px;background: #FFFFFF;">
+			<a href="{$fourgrid[0]['url']}">
 			<img src="{$fourgrid[0]['iconurl']}" alt="{$fourgrid[0]['name']}" class="am-responsive-width lazy"/>
+			</a>
 		</div>
 		<div class=" text-center" >			
 			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
+				<a href="{$fourgrid[1]['url']}">
 				<img  src="{$fourgrid[1]['iconurl']}" alt="{$fourgrid[1]['name']}" class="am-responsive-width lazy" />
+				</a>
 			</div>
 			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
+				<a href="{$fourgrid[2]['url']}">
 				<img src="{$fourgrid[2]['iconurl']}" alt="{$fourgrid[2]['name']}" class="am-responsive-width lazy" />
+				</a>
 			</div>
 		</div>
 		<div class=" text-center" >			
 			<div class="col-6 text-center"  style="border: 0px solid #F0F0EE;border-top:1px;height: 2rem;background: #FFFFFF;">
+				<a href="{$fourgrid[3]['url']}">
 				<img  src="{$fourgrid[3]['iconurl']}" alt="{$fourgrid[3]['name']}" class="am-responsive-width lazy" />
+				</a>
 			</div>
 		</div>
 		<else/>

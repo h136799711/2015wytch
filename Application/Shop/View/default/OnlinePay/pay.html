@@ -49,16 +49,16 @@
 					<span class="js_total_price" >{:number_format($total_fee/100.0,2)}元&nbsp;
 						<if condition="$total_express gt 0">含运费：{:number_format($total_express/100,2)}元</if></span></span>
 				</div>
-				<div class="am-text-left am-form">
+				<form class="am-text-left am-form">
 				    <div class="am-radio am-lg-text-left">
-				      <label>
+				      <label class="am-radio">
 				        <input type="radio" name="payway" value="1" checked>
 				        微信支付
 				      </label>
 				    </div>
 				    
 					<div class="am-radio am-lg-text-left">
-				      <label>
+				      <label class="am-radio">
 				        <input type="radio" name="payway" value="2" >
 				        货到付款
 				      </label>
@@ -68,12 +68,12 @@
 						<li >货到付款<i class="am-icon-check am-text-warning am-fr"></i></li>
 						<li >微信支付<i class="am-icon-check am-text-warning am-fr"></i></li>
 					</ul>-->
-				</div>
+				</form>
 				<div class="footer-menu am-text-right ">
 					<a href="#" onclick="choose();"  class="am-btn am-btn-sm  am-block am-btn-danger">确定</a>
 				</div>
-
 		</div>
+		<script type="text/javascript" src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
 		<script type="text/javascript">
 			
 			function choose(){
@@ -82,7 +82,7 @@
 				if(ele.value == "1"){
 					callpay();
 				}else{
-					//TODO: 货到付款
+					//货到付款
 					var url = "{:U('Shop/OnlinePay/cashOndelivery')}";
 					var ids = "{$ids}";
 					$.ajax({

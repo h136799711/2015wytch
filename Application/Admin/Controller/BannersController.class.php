@@ -92,8 +92,8 @@ class BannersController extends  AdminController{
 				'position'=>$position,
 				'title'=>$title,
 				'notes'=>$notes,
-				'img'=>I('img',''),
-				'url'=>I('url',''),
+				'img'=>I('post.img',''),
+				'url'=>I('post.url',''),
 			);
 		
 			

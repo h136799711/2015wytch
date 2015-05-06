@@ -115,7 +115,7 @@
 									<input type="radio" value="1" name="express_tmpl" class="js_express_tmpl " <eq name="delivery_type" value="1">checked="checked"</eq> />使用运费模板
 								</label>
 								<div class="express-union"  <eq name="delivery_type" value="1">style="display: none;"</eq>>
-									<div class="">
+									<div class="hidden">
 										<label class="checkbox">
 											<input type="checkbox" value="10000027" <if condition="isset($express['10000027'])">checked="checked"</if> name="express_tmpl" />平邮
 										</label>
@@ -127,7 +127,7 @@
 										</label>
 										<input type="text" name="normal" value="<if condition="isset($express['10000028'])">{$express['10000028']}</if>" style="width: 60px;" /><span>元</span>
 									</div>
-									<div class="">
+									<div class="hidden">
 										<label class="checkbox">
 											<input type="checkbox" value="10000029" <if condition="isset($express['10000029'])">checked="checked"</if> name="express_tmpl" />EMS
 										</label>

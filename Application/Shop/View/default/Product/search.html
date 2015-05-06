@@ -94,6 +94,11 @@
 			height: 100px;
 			width: 100px;
 		}
+		.item .item-img img{
+			height: 100px;
+			width: 100px;
+			
+		}
 		.item .item-desc{
 			font-size: 14px;
 			padding-left: 109px;
@@ -136,6 +141,7 @@
   		
   		.items-wrp.grid .item-img img{
   			height: 100px;
+  			width: 100px;
     		}
   		
 		.items-wrp.grid .item .item-desc{
@@ -147,6 +153,9 @@
 
 		}
   		
+  		.items-wrp a{
+  			color:#333333;
+  		}
   		.items-wrp.grid .item-desc .p-store{
   			display:none;
   		}
@@ -186,6 +195,7 @@
 	</div>
 	<div class="items-wrp {$layout}  am-cf" data-am-scrollspy="{animation:'fade'}"	data-am-scrollspy="{animation:'fade', delay: 300}">
 		<volist name="list" id="vo">
+			<a href="{:U('Shop/Product/detail',array('id'=>$vo['id']))}">
 			<div  class="item  am-cf" >
 				<div class="item-img ">
 					<img class="am-responsive-width" src="{$vo.main_img}"alt="图片" />
@@ -197,6 +207,7 @@
 					<div class="p-store">{$vo.storename} {$vo.loc_province} {$vo.loc_city}</div>
 				</div>
 			</div>
+			</a>
 		</volist>		
 	</div>
 	
@@ -212,14 +223,15 @@
 			var $ele = $("<div class='item am-cf'></div>");
 			$wrapper.append($ele);		
 			
-			var itemHtml = "<div class='item-img'><img class='am-responsive-width' src='"+item.main_img+"' alt='图片'/></div>";
+			var itemHtml = "<a href=\"{:U('Shop/Product/detail')}?id="+item.id+"\">";
 			
+			itemHtml += "<div class='item-img'><img class='am-responsive-width' src='"+item.main_img+"' alt='图片'/></div>";			
 			itemHtml += "<div class='item-desc'>";
 			itemHtml += "<div class='p-name'>"+item.name+"</div>";
 			itemHtml += "<div class='p-price am-text-danger'>¥"+(item.price/100.0)+"</div>";
 			itemHtml += "<div class='p-sales'>月销: "+item._sales+"</div>";
 			itemHtml += "<div class='p-store'>"+item.storename+item.loc_province+item.loc_city+"</div>";
-			itemHtml += "</div>";
+			itemHtml += "</div></a>";
 			$ele.html(itemHtml);
 		}
 		

@@ -1,46 +1,9 @@
 # 2015wytch
 
-
-
-CREATE TABLE `wytch_vote` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `vote_name` varchar(128) NOT NULL COMMENT '投票名称',
-  `createtime` int(11) NOT NULL,
-  `text` text NOT NULL COMMENT '投票详情',
-  `starttime` int(11) NOT NULL COMMENT '开始时间',
-  `endtime` int(11) NOT NULL COMMENT '结束时间',
-  `sort` tinyint(2) NOT NULL COMMENT '排序',
-  `group` varchar(64) NOT NULL COMMENT '分组',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8
-
-
-
-
-/*------- CREATE SQL---------*/
-CREATE TABLE `wytch_vote_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `vote_id` bigint(20) NOT NULL,
-  `option_name` varchar(64) NOT NULL COMMENT '选项名称',
-  `img_url` varchar(256) NOT NULL COMMENT '图片地址',
-  `sort` int(11) NOT NULL COMMENT '排序',
-  `createtime` int(11) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8
-
-
-/*------- CREATE SQL---------*/
-CREATE TABLE `wytch_vote_option_result` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `option_id` bigint(20) NOT NULL,
-  `wxuser_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `vote_time` int(11) NOT NULL COMMENT '投票时间',
-  `vote_id` bigint(20) NOT NULL COMMENT 'voteID',
-  `real_ip` bigint(20) NOT NULL COMMENT 'IP',
-  `group` varchar(64) NOT NULL DEFAULT '' COMMENT '分组',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
+#0506
+1. 商品分组页面   
+2. 内容详情页，新闻列表页  
+3. 链接选择 
 
 #0429
 TODO: 触发器 订单状态变更历史记录

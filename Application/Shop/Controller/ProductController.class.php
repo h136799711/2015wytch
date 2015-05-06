@@ -75,7 +75,6 @@ class ProductController extends ShopController {
 		}
 		
 		
-		
 		$params = false;
 		$result = apiCall("Shop/Wxproduct/queryWithWxstore", array($q,$type, $page, $order, $params));
 		if (!$result['status']) {
@@ -204,7 +203,8 @@ class ProductController extends ShopController {
 	 * 获取单个商品月销量
 	 */
 	private function getMonthlySales($p_id) {
-		//TODO: 统计订单数 ， 满足条件小于当前时间，大于当前时间－30天
+//		dump($p_id);
+		//统计订单数 ， 满足条件小于当前时间，大于当前时间－30天
 		$result = apiCall("Shop/OrdersItem/monthlySales", array($p_id));
 		if (!$result['status']) {
 			$this -> error($result['info']);

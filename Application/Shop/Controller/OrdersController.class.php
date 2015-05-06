@@ -32,7 +32,15 @@ class OrdersController extends ShopController {
 			}
 
 			$this -> assign("items", $result['info']);
+			$backStatus = \Common\Model\OrdersModel::ORDER_BACK;
+			$result = apiCall("Shop/OrderStatusHistory/getInfo", array(array('orders_id'=>$orderid,'status_type'=>'ORDER','next_status'=>$backStatus)));
+			if(!$result['status']){
+				ifFailedLogRecord($result, __FILE__.__LINE__);
+				$this->error($result['info']);
+			}
 			
+			$this -> assign("backStatus", $backStatus);
+			$this -> assign("backinfo", $result['info']);
 			$this -> display();
 		} else {
 			$this -> error($result['info']);
@@ -85,7 +93,8 @@ class OrdersController extends ShopController {
 		//TODO: 订单假删除时不查询
 		$map['status'] = 1;
 		$orders = " createtime desc ";
-
+		$page = array('curpage'=>I('post.p',0),'size'=>3);
+		
 		$result = apiCall("Shop/Orders/query", array($map, $page, $orders));
 
 		ifFailedLogRecord($result, __FILE__ . __LINE__);
@@ -138,8 +147,8 @@ class OrdersController extends ShopController {
 		//3. 获取订单商品信息
 
 		if (count($store_ids) > 0) {
-			$mapStore = array();
-			$mapStore['orders_id'] = array('in', $order_ids);
+			$mapOrder = array();
+			$mapOrder['orders_id'] = array('in', $order_ids);
 			$result = apiCall("Shop/OrdersItem/queryNoPaging", array($mapOrder));
 			
 			ifFailedLogRecord($result, __FILE__ . __LINE__);
@@ -158,7 +167,7 @@ class OrdersController extends ShopController {
 					'createtime'=> date("Y-m-d H:i:s",$vo['createtime']),
 				);
 				
-				if(isset($result_list[$vo['orders_id']['_items']])){
+				if(isset($result_list[$vo['orders_id']])){
 					array_push($result_list[$vo['orders_id']]['_items'], $entity);
 				}
 				

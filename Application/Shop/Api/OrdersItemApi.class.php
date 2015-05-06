@@ -32,7 +32,10 @@
 		if($result === false){
 			return $this->apiReturnErr($this->model->getDbError());
 		}
-		
+		if(is_null($result)){
+			//空无任何销量
+			return $this->apiReturnSuc(0);
+		}
 		$orders_id_arr = array();
 		
 		foreach($result as $vo){
@@ -53,7 +56,7 @@
 			return $this->apiReturnErr($this->model->getDbError());
 		}
 		
-		$orders_ids = array();
+		$orders_ids = array(-1);
 		foreach($result as $vo){
 			array_push($orders_ids,$vo['id']);
 		}

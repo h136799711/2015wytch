@@ -18,6 +18,74 @@ class OrderService extends Service{
 	}
 	
 	/**
+	 * 订单支付－货到付款操作
+	 * @param ids 订单id数组
+	 */
+	public function cashOndelivery($ids,$isauto,$uid){
+		$orderStatusHistoryModel = new \Common\Model\OrderStatusHistoryModel();
+		//
+		foreach($ids as  $id){
+		
+			$result = $this->model->where(array('id'=>$id))->find();
+			
+			if($result == false){
+				return $this->returnErr($this->model->getDbError());			
+			}
+			
+			if(is_null($result)){
+				return $this->returnErr("订单ID错误!");			
+			}
+			
+			if($result['pay_status'] != \Common\Model\OrdersModel::ORDER_TOBE_PAID){
+				return $this->returnErr("当前订单状态无法变更！");
+			}
+			
+			$entity = array(
+				'reason'=>"用户选择货到付款支付!",
+				'orders_id'=>$result['orderid'],
+				'operator'=>$uid,
+				'status_type'=>'PAY',
+				'cur_status'=>$result['pay_status'],
+				'next_status'=>\Common\Model\OrdersModel::ORDER_CASH_ON_DELIVERY,
+			);
+			
+			$this->model->startTrans();
+			$flag = true;
+			$return = "";
+			
+			$result = $this->model->where(array('id'=>$id))->save(array('pay_status'=>\Common\Model\OrdersModel::ORDER_CASH_ON_DELIVERY));
+			if($result === false){
+				$flag = false;
+				$return = $this->model->getDbError();
+			}
+			if($result == 0){
+				$flag = false;
+				$return = "订单ID有问题!";
+			}
+			
+			if($orderStatusHistoryModel->create($entity,1)){
+				$result = $orderStatusHistoryModel->add();
+				if($result === false){
+					$flag = false;
+					$return = $orderStatusHistoryModel->getDbError();
+				}
+			}else{
+				$flag = false;
+				$return = $orderStatusHistoryModel->getError();
+			}
+		//单个
+		}
+		
+		if($flag){
+			$this->model->commit();
+			return $this->returnSuc($return);
+		}else{
+			$this->model->rollback();
+			return $this->returnErr($return);
+		}
+		
+	}
+	/**
 	 * 订单发货操作
 	 */
 	public function shipped($id,$isauto,$uid){

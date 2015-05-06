@@ -78,7 +78,8 @@
 			</div>
 			<div class="p-desc am-cf">
 				{$wxstore['name']}<br/>
-				<i class="am-icon-weixin color-weixin"></i>微信号：<small>{$wxstore['wxno']}</small>
+				<i class="am-icon-weixin color-weixin am-margin-right-xs"></i>微信号：<small class=" am-margin-right-xs">{$wxstore['wxno']}</small>
+				<a href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i><small class="">{$wxstore['service_phone']}</small></a>
 			</div>
 			
 			<div class="p-quick am-cf">
@@ -192,7 +193,7 @@
 				<span class="am-fl">购买数量</span> 
 				<div class="am-fr am-form-group">
 				    <i class="js_minus am-icon-minus am-fl am-disabled" disabled="disabled" ></i>
-					<input type="text" name="sku_count" class="am-fl am-form-field am-disabled" value="1" />
+					<input type="text" name="sku_count" disabled="disabled" class="am-fl am-form-field am-disabled" value="1" />
 				    <i class="js_plus am-icon-plus am-fl"></i>
 				 </div>
 			</div>

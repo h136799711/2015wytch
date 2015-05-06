@@ -32,9 +32,9 @@ class WxproductApi extends Api{
 		}else{
 			$whereName = "st.name";
 		}
-		
+		$sql .= " where pd.onshelf = ".\Common\Model\WxproductModel::STATUS_ONSHELF;
 		if(!empty($name)){
-			$sql .= " where $whereName like '%".$name."%'  and pd.onshelf = ".\Common\Model\WxproductModel::STATUS_ONSHELF;
+			$sql .= " and  $whereName like '%".$name."%' ";
 		}
 		$sql .= ' order by '. $order;
 //		if(!($order === false)){
