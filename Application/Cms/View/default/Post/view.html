@@ -1,0 +1,46 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<link rel="stylesheet" type="text/css" href="__CSS__/view.css?v=__APP_VERSION__" />
+</block>
+
+
+<block name="area_body">
+	
+	<div class="am-article am-g am-padding-sm">
+		<div class="am-article-hd">
+			<div class="am-article-title am-margin-bottom-sm am-margin-top-sm">{$post.post_title}</div>
+			<div class="am-article-meta">{$post.post_date|date='Y-m-d',###} {:C('BRAND_NAME')}</div>
+		</div>
+		
+		<div class="am-article-divider"></div>
+		<div class="am-article-lead">{$post.post_excerpt}</div>
+		<div class="am-margin-top-xl"><img src="{$post.main_img}" class="am-thumbnail am-responsive-width" style="height: 160px;width: 100%;" />		</div>
+		<div class="am-article-divider"></div>
+		<div class="am-article-bd am-padding-sm">
+			{$content}
+		</div>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="{$post.id}" data-title="{$post.post_title}" data-url="__SELF__"></div>
+		<!-- 多说评论框 end -->
+		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+		<script type="text/javascript">
+		var duoshuoQuery = {short_name:"tch"};
+			(function() {
+				var ds = document.createElement('script');
+				ds.type = 'text/javascript';ds.async = true;
+				ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+				ds.charset = 'UTF-8';
+				(document.getElementsByTagName('head')[0] 
+				 || document.getElementsByTagName('body')[0]).appendChild(ds);
+			})();
+		</script>
+		<!-- 多说公共JS代码 end -->
+
+	</div>
+	
+</block>
+
+<block name="area_footer">
+</block>
+	

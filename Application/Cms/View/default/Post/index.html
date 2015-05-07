@@ -1,0 +1,103 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<style type="text/css">
+		html{
+			font-size: 12px;
+		}
+		body{
+			overflow: hidden;
+		}
+		.background{
+			background:url(__IMG__/bg.jpg?v=1.0) no-repeat 50% 50%;
+			background-size: cover;
+			
+		}
+		.category-list{
+			position:absolute;
+			left:0px;
+			width: 100%;
+			left: 0px;
+			top: 10%;
+			padding-top: 20%;
+			height: 50%;
+		}
+		.category-list .category-item a{
+			color:#FFFFFF;
+			font-weight: bold;
+			text-shadow: rgb(255,255,250);
+			
+		}
+		.category-list .category-item{
+			  width: 33%;
+			  padding: 1rem;
+			  color: #fff;
+			  font-size: 16px;
+			  text-align: center;
+		}
+		
+		@media only screen (max-width: 640px) {			
+			.category-list .category-item{
+			  width: 33%;
+			}
+		}
+		
+		@media only screen (max-width: 480px) {
+			.category-list .category-item{
+			  width: 33%;
+			}
+			.category-list{
+				top: 10%;
+				height: 70%;
+			}
+		}
+		
+		@media only screen (max-width: 320px) {
+			.category-list .category-item{
+			  width: 33%;
+			}
+			.category-list{
+				top: 10%;
+				height: 70%;
+			}
+		}
+		.category-item img{
+			width:64px;
+			height:64px;
+		}
+		
+	</style>
+	
+</block>
+
+
+<block name="area_body">
+	
+	<div class="background">
+		
+		<div class="category-list am-cf">
+			<volist name="cates" id="vo">
+				<div class="category-item am-fl">
+				<a href="{:U('Cms/Post/cate',array('cateid'=>$vo['id']))}">
+					<img src="{$vo.iconurl}" class="am-responsive-width am-circle" alt="icon" />
+					<div>
+						{$vo.name}
+					</div>
+				</a>
+				</div>
+			</volist>
+		</div>
+		
+	</div>
+	
+	
+</block>
+
+<block name="area_footer">
+	<script>
+	$(function(){
+		$(".background").height($(window).height());
+	})
+	</script>
+</block>
+	

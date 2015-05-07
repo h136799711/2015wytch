@@ -1,0 +1,107 @@
+<extend name="template/base_index" />
+
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<!-- 过滤\查询按钮 -->
+				<div class="filter-controls">
+					<!-- 日期查询 -->
+					<form action="{:U('Admin/CmsTemplate/index')}" method="post" class="form-inline">
+						<div class="form-group">
+							<div class="input-group">
+								<div class="input-group-addon">
+									模板名称
+									<i class="fa fa-calendar"></i>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>{:L('BTN_SEARCH')}</button>
+					</form>
+				</div>
+				<!-- 操作按钮 -->
+				<div class="btn-controls">
+					<a class="btn btn-primary btn-sm" href="{:U('Admin/CmsTemplate/add')}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+					<a target-form="selectitem" class="btn btn-danger btn-sm ajax-post confirm" href="{:U('Admin/CmsTemplate/bulkDelete')}"><i class="fa fa-trash"></i>{:L('BTN_DELETE')}</a>
+					
+				</div>
+				
+				<table class="table table-striped table table-hover  table-condensed">
+					<thead>
+						<tr>
+							<th>
+								<input type="checkbox" class="selectall" onclick="myUtils.selectall(this,'.selectitem');" />
+							</th>
+							<th>
+								商品名称
+							</th>
+							<th>
+								销售价格
+							</th>
+							<th>
+								库存量
+							</th>
+							<th>
+								销量
+							</th>
+							<th>
+								添加时间
+							</th>
+							<th>
+								操作
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<empty name="list">
+							<tr>
+								<td colspan="7" class="text-center">{:L('NO_DATA')}</td>
+							</tr>
+							<else/>
+							<volist name="list" id="vo">
+								<tr>
+									<td>
+										<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" /></td>
+									<td>
+										<a href="{:U('Admin/CmsTemplate/view',array('id'=>$vo['id']))}">{$vo.template_name}</a>
+									</td>
+									<td>
+										{$vo.template_desc}
+									</td>
+									<td>
+										{$vo.notes}
+									</td>
+									<td>
+										{$vo.sale_num}
+									</td>
+									<td>
+										{$vo.createtime|date='Y-m-d h:i:s',###}
+									</td>
+									<td>
+										<a href="{:U('Admin/CmsTemplate/edit',array('id'=>$vo['id']))}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>编辑</a>
+									</td>
+								</tr>
+
+							</volist>
+						</empty>
+					</tbody>
+				</table>
+				<div>{$show}</div>
+			</div>
+
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+		<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

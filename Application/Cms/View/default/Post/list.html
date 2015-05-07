@@ -1,0 +1,51 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+	<style type="text/css">
+		.article-list{
+			background: #F5F5F5;
+			max-width: 640px;
+			margin: 0 auto;
+		}
+		
+		.am-list>li{
+			margin-bottom: 10px;	
+			border-width: 1px;
+		}
+		.am-list>li>a{
+			color:#222222;
+		}
+		.am-list .am-list-item-dated a{
+			padding: 10px;
+		}
+	</style>
+	
+</block>
+
+
+<block name="area_body">
+	<div class="article-list am-padding-sm">
+		<h2>{$title}</h2>
+		<ul class="am-list ">
+			<volist name="list" id="vo">
+				<li class="am-g am-list-item-dated am-padding-sm">
+					<a href="{:U('Cms/Post/view',array('id'=>$vo['id']))}" class="am-list-item-hd ">
+			        <div ><span class="am-link-muted">{$vo.post_date|date='Y-m-d',###}</span></div>
+					<div class=""><strong>{$vo.post_title}</strong></div>
+					<div ><img src="{$vo.main_img}" class="am-thumbnail am-responsive-width" style="height: 160px;width: 100%;" />		</div>
+					<div class="am-link-muted">{$vo.post_excerpt}       </div>
+					<hr />
+					<div class="am-link-muted am-cf">阅读全文 <i class="am-icon-chevron-right am-fr"></i></div>
+			        </a>
+				</li>
+			</volist>
+		</ul>
+		<div>{$show}</div>
+	</div>
+	
+</block>
+
+<block name="area_footer">
+	
+</block>
+	

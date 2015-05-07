@@ -13,7 +13,7 @@ class PostController extends  AdminController{
 	public function index(){
 		//get.startdatetime
 		$startdatetime = I('startdatetime',date('Y/m/d H:i',time()-24*3600),'urldecode');
-		$enddatetime = I('enddatetime',date('Y/m/d H:i',time()),'urldecode');
+		$enddatetime = I('enddatetime',date('Y/m/d H:i',time()+24*3600),'urldecode');
 		
 		//分页时带参数get参数
 		$params = array(
@@ -59,6 +59,7 @@ class PostController extends  AdminController{
 			$post_category = I('post.post_category',20);
 
 			$entity = array(
+				'main_img'=>I('post.main_img',''),
 				'post_category'=>$post_category,
 				'post_content'=>I('post_content',''),
 				'post_excerpt'=>I('post_excerpt',''),
@@ -93,8 +94,9 @@ class PostController extends  AdminController{
 			$this->display();
 		}else{
 			$post_category = I('post.post_category',20);
-
+			
 			$entity = array(
+				'main_img'=>I('post.main_img',''),
 				'post_category'=>$post_category,
 				'post_content'=>I('post_content',''),
 				'post_excerpt'=>I('post_excerpt',''),

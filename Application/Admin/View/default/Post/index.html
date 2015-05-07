@@ -79,6 +79,7 @@
 										{$vo.post_date|date='Y-m-d h:i:s',###}
 									</td>
 									<td>
+										<a href="{:U('Cms/Post/view',array('id'=>$vo['id']))}" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i>查看</a>
 										<a href="{:U('Admin/Post/edit',array('id'=>$vo['id']))}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>编辑</a>
 										<a href="{:U('Admin/Post/delete',array('id'=>$vo['id']))}" class="ajax-get confirm btn btn-sm btn-danger"><i class="fa fa-trash"></i>删除</a>
 									</td>

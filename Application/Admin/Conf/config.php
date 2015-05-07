@@ -20,7 +20,6 @@ return array(
 	
     // 数据库配置
     'DB_TYPE'                   =>  'mysql',
-    'DB_NAME'                   =>  'db_2015wytch',
     'DB_PORT'                   =>  '3306',
     'DB_PREFIX'                 =>  'wytch_',
     
