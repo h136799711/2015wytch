@@ -5,6 +5,7 @@
  
 
 return array(
+	'BAIDU_MAP_KEY'=>'2004885a6610482ffccffbff3f9307ec',
 	'LOAD_EXT_CONFIG' => 'express,datatree', 
 	//唯一管理员用户配置	
    'USER_ADMINISTRATOR' => 1, //管理员用户ID

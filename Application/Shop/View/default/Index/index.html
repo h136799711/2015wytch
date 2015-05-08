@@ -1,24 +1,40 @@
-<extend name="template/base_index" />
 
-<block name="area_header">
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<title>{:C('WEBSITE_TITLE')}</title>
+		<meta name="keywords" content="{$seo.keywords|default=" "}" />
+		<meta name="description" content="{$seo.description|default=" "}" />
+		<meta name="author" content="{$cfg.owner|default=" Gooraye "}" />
+	    <meta content="yes" name="apple-mobile-web-app-capable" />
+	    <meta content="yes" name="apple-touch-fullscreen" />
+	    <meta content="telephone=no,email=no" name="format-detection" />
+	    <meta content="maximum-dpr=2" name="flexible" />
+	    <meta content="modeName=640-12" name="grid" />
+		<!-- 系统基本样式 -->
+		<link type="text/css" rel="stylesheet" href="__CDN__/amazeui/2.3.0/css/amazeui.min.css" />
+		
+		<!-- 商城全局样式 -->
+		<link type="text/css" rel="stylesheet" href="__CSS__/shop.css?v=__APP_VERSION__" />
+		<link type="text/css" rel="stylesheet" href="__CSS__/shop-dpr2.css?v=__APP_VERSION__" />
+		
+		<!-- 脚本 -->
+		<script type="text/javascript" src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
+		<script type="text/javascript" src="__CDN__/amazeui/2.3.0/js/amazeui.min.js"></script>
+		<script type="text/javascript" src="__CDN__/common/mobile.js?v=__APP_VERSION__"></script>
+		
+
 	<style type="text/css">
 		
 		html{
 			font-size: 14px;		
 		}
-		
-		.domloaded .start-page{
-			/*opacity:0;*/
+		body{
+			overflow-x: hidden;
 		}
 		.start-page{
-			/*transition-property: opacity;
-			transition-delay: 3s;
-			transition-duration: 6s;
-			transition-timing-function: ease;
-			-webkit-transition-property: opacity;
-			-webkit-transition-delay: 3s;
-			-webkit-transition-duration: 6s;
-			-webkit-transition-timing-function: ease;*/
 			width: 100%;
 			height: 1008px;
 			max-height: 1200px;
@@ -120,6 +136,12 @@
 		.type-item a{
 			color:#333333;
 		}
+		.domloaded .store_types{
+			display:block;
+		}
+		.store_types{
+			display:none;
+		}
 	</style>
 	<script type="text/javascript">
 		
@@ -129,10 +151,15 @@
 			$(".start-page").delay(2500).fadeOut(4000);
 		});
 	</script>
+		<!-- 商城全局样式 -->
+		<link type="text/css" rel="stylesheet" href="__CDN__/flexible/flexible.css?v=__APP_VERSION__" />
+		<script type="text/javascript" src="__CDN__/flexible/flexible.js?v=__APP_VERSION__"></script>
+		<script type="text/javascript" src="__CDN__/flexible/makegrid.js?v=__APP_VERSION__"></script>
 	<script type="text/javascript" src="__CDN__/amazeui-lazyload/1.9.3/amazeui.lazyload.min.js"  ></script>
-</block>
+</head>
+<body class="theme-default theme-shop ">
+	
 
-<block name="area_body">
 	<if  condition="$showstartpage and !empty(C('SHOP_START_PAGE'))">
 		<div class="start-page">
 			<img class="am-responsive-width" src="{:C('SHOP_START_PAGE')}"  />
@@ -162,11 +189,11 @@
 	  </ul>
 	</div>
 	
-	<div class="store_types grid">
+	<div class="store_types grid ">
 		<volist name="store_types" id="vo">
 			<div class="type-item col-3">
 				<a href="{:U('Shop/Wxstore/search',array('cate_id'=>$vo['id']))}">
-				<img  src="__IMG__/p240x240.jpg" data-original="{$vo.iconurl}" class="lazy" alt="{$vo.name}" />
+				<img  src="{$vo.iconurl}" class="lazy" alt="{$vo.name}" />
 				<span>{$vo.name}</span>
 				</a>
 			</div>
@@ -271,13 +298,30 @@
 				</div>
 		</volist>
 	</div>
-</block>
-
-<block name="area_footer">
 	<include  file="partial/footermenu" />
+	<footer data-am-widget="footer" class="am-footer am-footer-default" data-am-footer="{  }">
+			<div class="am-footer-switch">
+			</div>
+			<div class="am-footer-miscs ">
+				<p>由
+					<a href="http://www.itboye.com" title="杭州博也网络科技" target="_blank" class="">杭州博也网络科技</a>提供技术支持</p>
+				<p>&copy;2013-{:date('Y')} Version {:C('APP_VERSION')} {:C('WEBSITE_OWNER')}</p>
+				<p>{:C('WEBSITE_ICP')}</p>
+				<p>{__RUNTIME__}</p>
+			</div>
+		</footer>
+		<div data-am-widget="gotop" class="am-gotop am-gotop-fixed">
+		  <a href="#top" title="回到顶部">
+		    <span class="am-gotop-title">顶部</span>
+		    <i class="am-gotop-icon am-icon-chevron-up"></i>
+		  </a>
+		</div>
+		
 	
 	<script type="text/javascript">
-			
+			function appendItem(item){
+				//TODO: 首页商品加载
+			}
 		function appendList(){		
 			if(window.ajaxing ){
 				console.log("cache");
@@ -341,5 +385,8 @@
 		})
 		
 	</script>
-</block>
+	
+		<script type="text/html" src="{:U('Tool/Task/index')}"></script>
+</body>
+</html>
 

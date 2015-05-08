@@ -13,21 +13,7 @@
 		  	text-align: left;
 		  	width: 130px;
 		}
-		.score1 {
-			background-position: -104px -60px;
-		}
-		.score2 {
-			background-position: -78px -60px;
-		}
-		.score3 {
-			background-position: -52px -30px;
-		}
-		.score4 {
-			background-position: -26px -30px;
-		}
-		 .score5 {
-			background-position: 0 -30px;
-		}
+		
 	</style>
 </block>
 
@@ -76,8 +62,26 @@
         	时间：2015-05-07
         	描述：商品的扩展属性
         -->
-		<div class="p-ext">
-			
+		<div style="font-size: 14px;" class="p-ext am-text-sm am-link-muted am-margin-bottom-sm">
+			<div class="up-border"></div>
+			<div class="up-decorate-left"></div>
+			<div class="up-decorate-right"></div>
+			<div class="wrapper am-g am-padding-sm am-text-left  ">
+				<div class="service-item am-margin-right-sm">
+					<i class="am-icon-check-circle-o  am-text-danger  am-margin-right-xs"></i>如实描述
+				</div>
+				<div class="service-item am-margin-right-sm">
+					<i class="am-icon-check-circle-o  am-text-danger  am-margin-right-xs"></i>1小时内送货上门
+				</div>
+				<div class="service-item am-margin-right-sm">
+					<i class="am-icon-check-circle-o  am-text-danger  am-margin-right-xs"></i>支持货到付款体验
+				</div>
+				<div class="service-item am-margin-right-sm">
+					<i class="am-icon-check-circle-o  am-text-danger  am-margin-right-xs"></i>支持在线预约体验
+				</div>
+			</div>
+			<div class="bottom-border"></div>
+		
 		</div>
 		
 		<eq name="product['has_sku']" value="1">
@@ -87,11 +91,12 @@
         	时间：2015-04-23
         	描述：弹出SKU选择
         -->
-		<div class="p-pro">
-			<div class="d-sku js_sku">
+		<div class="p-pro am-padding-sm am-text-sm am-margin-bottom-sm">
+			<div class="d-sku js_sku am-pading-sm am-text-sm">
 				请选择商品规格<i class="am-icon-chevron-right am-fr"></i>
 			</div>
 		</div>
+		
 		
 		</eq>
 		
@@ -105,12 +110,16 @@
 				<img class="am-circle" src="{$wxstore['logo']}">
 			</div>
 			<div class="p-desc am-cf">
-				{$wxstore['name']}<br/>
+				{$wxstore['name']} <br/>
+				
 				<i class="am-icon-weixin color-weixin am-margin-right-xs"></i>微信号：<span class=" am-margin-right-xs">{$wxstore['wxno']}</span>
-				<!--<a href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i>{$wxstore['service_phone']}</a>-->
-				<a href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i>点击联系商家</a>
+				
 			</div>
-			
+			<div class=" am-g am-padding-sm am-text-sm am-fl">
+				<a class="am-u-sm-6 am-text-center" href="tel:{$wxstore['service_phone']}"><i class="am-icon-phone color-weixin am-margin-right-xs "></i>点击联系商家</a>
+				
+				<a class="am-u-sm-6 am-text-center" href="{:U('Tool/BaiduMap/index',array('title'=>$wxstore['name'],'text'=>'电话: '.$wxstore['service_phone'],'lat'=>$wxstore['latitude'],'lng'=>$wxstore['longitude']))}"><i class="am-icon-map-marker"></i>商家地图位置</a> 
+			</div>
 			<div class="p-quick am-cf">
 				<!--
                 	作者：hebiduhebi@126.com
