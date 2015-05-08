@@ -1,0 +1,124 @@
+
+	<!--
+        	作者：hebiduhebi@126.com
+        	时间：2015-05-08
+        	描述：百度地图-坐标拾取
+        -->
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak={:C('BAIDU_MAP_KEY')}"></script>
+<div class="modal fade" id="baidumap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">百度地图-请选择经度纬度</h4>
+			</div>
+			<div class="modal-body" style="height:560px;">
+				<div class="form form-inline">
+					<div class="am-cf">
+						<div class="am-fl">
+							<input type="text" class="js_val_key" id="hbd_suggestId" placeholder="输入关键词查询" />
+							<button class="btn-sm btn btn-primary js_search"><i class="icon-search"></i>搜索</button>
+						</div>
+						<div class="am-fr">
+							<button type="button" class="btn btn-sm btn-primary js_choose_position">确定此坐标</button>
+							<button type="button" class="btn btn-sm btn-default js_close" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+					<div class="">
+						当前经纬度:<span class="lng">120.337985</span>,<span class="lat">30.314933</span>.<span class="text-danger">注: 请确定跳动的红点必须在您选择的位置上。</span>
+					</div>
+
+				</div>
+
+				<div id="hbd_baidu_map" style="width:70%;height:420px;overflow: hidden;float:left;"></div>
+				<div id="hbd_r_result" style="width:30%;height:420px;overflow: scroll;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	(function(){
+		
+		// 百度地图API功能
+		var map = new BMap.Map("hbd_baidu_map");
+		var point = new BMap.Point(120.337985, 30.314933);
+		var marker = new BMap.Marker(point); // 创建标注
+		map.addOverlay(marker); // 将标注添加到地图中
+		marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+		marker.enableDragging();
+		map.centerAndZoom(point, 15);
+		map.enableScrollWheelZoom(true);
+		var local = new BMap.LocalSearch(map, {
+			renderOptions: {map: map, panel: "hbd_r_result"}
+		});
+		$("#baidumap .js_search").click(function(){
+			var keyword = $("#baidumap .js_val_key").val();
+			local.search(keyword);
+		})
+		
+		var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+			{
+				"input" : "hbd_suggestId","location" : map
+			});
+		map.addEventListener("click", function(e) {
+			addMarker(e.point.lng,e.point.lat);
+		
+			
+		});
+		
+		function addMarker(lng,lat){
+			
+			map.clearOverlays();
+			$("#baidumap .lng").text(lng);
+			$("#baidumap .lat").text(lat);
+			point = new BMap.Point(lng, lat);
+			marker = new BMap.Marker(point); // 创建标注
+			map.addOverlay(marker); // 将标注添加到地图中
+			marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+			marker.enableDragging();
+		}
+		
+		// plugin definition  
+		$.fn.baidumap = function(options) {  
+		  	var defaults = {  
+		  		container:'.baidumap_position'
+		  	};  
+			
+			var that = this;
+			console.log(that);
+			var opts = $.extend(defaults, options);  
+			
+			var tagname = $(".lng",opts.container).prop("tagName");
+			
+			if(tagname == "INPUT"){
+				addMarker($(".lng",opts.container).val(),$(".lat",opts.container).val());
+			}else{
+				addMarker($(".lng",opts.container).text(),$(".lat",opts.container).text());
+			}
+			
+			
+			$("#baidumap .js_choose_position").click(function(){
+				var lng = $("#baidumap .lng").text();
+				var lat = $("#baidumap .lat").text();
+				var tagname = $(".lng",opts.container).prop("tagName");
+				console.log(tagname);
+				if(tagname == "INPUT"){
+					$(".lng",opts.container).val(lng);
+					$(".lat",opts.container).val(lat);
+				}else{
+					$(".lng",opts.container).text(lng);
+					$(".lat",opts.container).text(lat);
+				}
+				
+				$("#baidumap .js_close").click();
+			})
+			
+		};  
+
+
+	})($);
+	
+</script>
+<!-- END -->

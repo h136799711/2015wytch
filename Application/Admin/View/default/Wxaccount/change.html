@@ -51,7 +51,7 @@
 									<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" />
 								</td>
 								<td>
-									<a href="{:U('Admin/Wxaccount/view',array('id'=>$vo['id']))}">{$vo.wxname}</a>
+									<a href="{:U('Admin/Wxaccount/edit',array('id'=>$vo['id']))}">{$vo.wxname}</a>
 								</td>
 								<td>
 									<a href="{$vo.headerpic}" target="_blank" title="点击查看原图" data-toggle="tooltip" ><img class="avatar" style="max-width:45px;" src="{$vo.headerpic}" alt="头像" /></a>

@@ -106,6 +106,8 @@ class WxshopController extends AdminController{
 			$weixin = array();
 			$wxnum = explode(",",$wxnum);
 			$weixin_name = explode(",",$weixin_name);
+			$lat = I('post.lat',30.314933);
+			$lng = I('post.lng',120.337985);
 			
 //			dump($wxnum);
 //			dump($weixin_name);
@@ -117,6 +119,8 @@ class WxshopController extends AdminController{
 			$service_phone = I('post.service_phone','');
 			
 			$entity = array(
+				'latitude'=>$lat,
+				'longitude'=>$lng,
 				'wxno'=>$wxno,
 				'uid'=>UID,
 				'name'=>$name,
@@ -166,6 +170,8 @@ class WxshopController extends AdminController{
 			}
 		}elseif(IS_POST){
 			$id = I('post.id',0);
+			$lat = I('post.lat',30.314933);
+			$lng = I('post.lng',120.337985);
 			$name = I('post.name','店铺名称');//
 			$desc = I('post.desc','');
 			$wxno = I('post.wxno','');
@@ -192,6 +198,8 @@ class WxshopController extends AdminController{
 				'name'=>$name,
 				'desc'=>$desc,
 				'logo'=>$logo,
+				'latitude'=>$lat,
+				'longitude'=>$lng,
 				'banner'=>$banner,
 				'cate_id'=>$cate_id,
 				'notes'=>I('post.notes',''),
