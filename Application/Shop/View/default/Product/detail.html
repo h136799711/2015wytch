@@ -8,6 +8,26 @@
 		.onlyone{
 			width:90%!important;
 		}
+		.score{
+		  	background: url(__IMG__/star.png) no-repeat;
+		  	text-align: left;
+		  	width: 130px;
+		}
+		.score1 {
+			background-position: -104px -60px;
+		}
+		.score2 {
+			background-position: -78px -60px;
+		}
+		.score3 {
+			background-position: -52px -30px;
+		}
+		.score4 {
+			background-position: -26px -30px;
+		}
+		 .score5 {
+			background-position: 0 -30px;
+		}
 	</style>
 </block>
 
@@ -50,6 +70,14 @@
 				<li class="am-text-center">月销：{$monthlySales}</li>
 				<li class="am-text-right">{$product.loc_city}</li>
 			</ul>
+		</div>
+		<!--
+        	作者：hebiduhebi@126.com
+        	时间：2015-05-07
+        	描述：商品的扩展属性
+        -->
+		<div class="p-ext">
+			
 		</div>
 		
 		<eq name="product['has_sku']" value="1">
@@ -239,6 +267,7 @@
 				<div>
 					<img src="{{_userlogo}}" style="width: 36px;" class="am-responsive-width am-circle" />
 					{{_encrypt_nickname}}
+					<div class="score score{{score}} am-fr"><i>&nbsp;</i></div>
 				</div>
 				<div>{{comment}}</div>
 				<div class="am-link-muted">{{_createtime}}</div>

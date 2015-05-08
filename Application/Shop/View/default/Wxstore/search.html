@@ -97,15 +97,17 @@
 	
 	<div class="header">
 		<div class="am-topbar am-topbar-default">
-				<form class="am-form">
-				<select name="type">
+				<form class="am-form" action="__SELF__" method="post" >
+					<input type="hidden" name="cate_id" value="{$cate_id}" />
+				<select name="type" id="wxstore_type">
+					<option value="" >全部</option>
 					<volist name="cates" id="vo">
 						<option value="{$vo.id}" <eq name="vo.id" value="$cate_id">selected="selected"</eq> >{$vo.name}</option>
 					</volist>
 				</select>
 				<div class="search-wrp">
 					<input type="text" class="am-form-control" value="{$q}" name="q" placeholder="搜索关键词" />
-					<i class="am-icon-search"></i>
+					<i class="am-icon-search am-inline-block"></i>
 				</div>
 				<a href="{:U('Shop/Index/index')}"><i class="am-icon-home"></i></a>
 			</form>
@@ -126,7 +128,7 @@
 		<a href="{:U('Shop/Product/search',array('sort'=>$sort,'layout'=>'list'))}" class="am-fl "><i class="am-icon-th-large"></i></a>
 		</eq>
 	</div>-->
-	<ul class="items-wrp am-cf am-list" data-am-scrollspy="{animation:'fade'}"	data-am-scrollspy="{animation:'fade', delay: 300}">
+	<ul class="items-wrp am-cf am-list am-padding-sm" data-am-scrollspy="{animation:'fade'}"	data-am-scrollspy="{animation:'fade', delay: 300}">
 		
 		
 		
@@ -180,6 +182,9 @@
 			var q = $(".header input[name='q']").val();
 			var cate_id = $(".header select[name='type']").val();
 			window.ajaxing = false;
+			if(q != window.boye.search.q || cate_id != window.boye.search.cate_id){
+				window.boye.p = 1;
+			}
 			
 			$.ajax({
 				type:'post',
@@ -198,7 +203,15 @@
 					if(data.info){
 						window.boye.p++;
 						var html = window.boye.template({data:data.info});
-						$(".items-wrp").html($(".items-wrp").html()+html);
+						
+						if(q != window.boye.search.q || cate_id != window.boye.search.cate_id){
+							window.boye.search.q = q;
+							window.boye.search.cate_id = cate_id;
+							$(".items-wrp").html(html);
+						}else{
+						
+							$(".items-wrp").html($(".items-wrp").html()+html);
+						}
 					}else{
 						//TODO: 没有数据了
 					}
@@ -212,6 +225,8 @@
 		
 		$(function(){
 			window.boye = { p : 0 ,template:''};
+			
+			window.boye.search = {cate_id:'',q:''};
 			var source  = $("#wxstoretemplate").html();
 			window.boye.template = Handlebars.compile(source);
 			
@@ -224,6 +239,15 @@
 			appendList();
 			
 			window.boye.p = 1;
+			
+			$(".search-wrp .am-icon-search").on("tap",function(){
+				appendList();
+			});
+			
+			
+			$("#wxstore_type").change(function(){
+				appendList();
+			})
 		})
 		
 	</script>

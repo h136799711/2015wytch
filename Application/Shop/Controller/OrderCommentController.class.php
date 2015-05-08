@@ -16,7 +16,7 @@ class OrderCommentController extends ShopController{
 			$productid = I('post.productid',0);
 			
 			$map = array('product_id'=>$productid);
-			$page = array('curpage'=>I('post.p',0),'size'=>2);
+			$page = array('curpage'=>I('post.p',0),'size'=>20);
 			$order = " createtime desc ";
 			$result = apiCall("Shop/OrderComment/query",array($map,$page,$order));
 			

@@ -76,12 +76,11 @@ class WxproductApi extends Api{
 	
 	
 	public function queryByGroup($group_id,$map,$page){
-		
-		$result = $this->model->query("select * from __WXPRODUCT_GROUP__ where g_id = ".$group_id);
+		$result = $this->model->query("select g_id,p_id from __WXPRODUCT_GROUP__ where `g_id` = ".$group_id);
 		if($result === FALSE){
 			return $this->apiReturnErr($this->model->getDbError());
 		}
-		$product_ids = array();
+		$product_ids = array(-1);
 		
 		foreach($result as $vo){
 			array_push($product_ids,$vo['p_id']);

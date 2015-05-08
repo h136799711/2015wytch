@@ -104,6 +104,43 @@ class ProductController extends ShopController {
 			$this -> display();
 		}
 	}
+	/**
+	 * 商品分组页面
+	 */
+	public function group() {
+		if(IS_GET){
+			$groupid = I('get.id',0);
+			$this->assign("groupid",$groupid);
+			$this->display();
+			
+		}elseif(IS_AJAX){
+			$p = I('post.p',0);
+			
+			$page = array('curpage'=>$p,'size'=>10);
+			$order = " updatetime desc";
+			$map = array('onshelf'=>\Common\Model\WxproductModel::STATUS_ONSHELF);
+			$group_id = I('post.groupid',0);
+			
+			$result = apiCall("Shop/Wxproduct/queryByGroup", array($group_id,$map,$page));
+			if(!$result['status']){
+				LogRecord($result['info'], __FILE__.__LINE__);
+				$this->error($result['info']);	
+			}
+			
+			$products = $result['info']['list'];
+			
+			foreach($products as &$vo){
+				
+				$vo['_zk_percent'] =  number_format(($vo['price']/$vo['ori_price'])*10.0,2);
+				$vo['price'] =  number_format($vo['price']/100.0,2);
+				$vo['ori_price'] =  number_format($vo['ori_price']/100.0,2);
+				
+			}
+			
+			$this->success($products);
+			
+		}
+	}
 
 	/**
 	 * 商品详情查看

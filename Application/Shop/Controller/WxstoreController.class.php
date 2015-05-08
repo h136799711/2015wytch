@@ -73,33 +73,25 @@ class WxstoreController extends ShopController{
 	 * 搜索店铺
 	 */
 	public function search(){
-		$name = I('name','');
+		$q = I('q','');
 		$cate_id = I('cate_id','');
+		if(IS_POST){
+			$cate_id = I('post.cate_id','');
+		}
 		
-		if(IS_GET){
-			$map = array('parentid'=>C('DATATREE.STORE_TYPE'));
-		
-			$result = apiCall('Admin/Datatree/queryNoPaging', array($map));
+		if(IS_AJAX){
 			
-			if(!$result['status']){
-				$this->error($result['info']);
-			}
-			$this->assign("cates",$result['info']);
-			
-			$this->assign("cate_id",$cate_id);
-			
-			$this->display();
-			
-		}else{
 			//分页时带参数get参数
-			
+				
 			$map = array();
-			if(!empty($name)){
-				$map['name'] = array('like',"%"+$name+"%");
+			if(!empty($q)){
+				$map['name'] = array('like',"%".$q."%");
+			}
+			if(!empty($cate_id)){
 				$map['cate_id'] = $cate_id;
 			}
 			
-			$page = array('curpage' => I('post.p', 0), 'size' => 2);
+			$page = array('curpage' => I('post.p', 0), 'size' => 10);
 			$order = " createtime desc ";
 			
 			
@@ -111,7 +103,22 @@ class WxstoreController extends ShopController{
 				LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 				$this -> error(L('UNKNOWN_ERR'));
 			}
+		
+		}else{
+			$map = array('parentid'=>C('DATATREE.STORE_TYPE'));
+	
+			$result = apiCall('Admin/Datatree/queryNoPaging', array($map));
 			
+			if(!$result['status']){
+				$this->error($result['info']);
+			}
+			
+			
+			$this->assign("q",$q);
+			$this->assign("cates",$result['info']);			
+			$this->assign("cate_id",$cate_id);
+			
+			$this->display();
 		}
 	
 		

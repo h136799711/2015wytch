@@ -2,6 +2,11 @@
 
 <block name="area_header">
 	<style type="text/css">
+		
+		html{
+			font-size: 14px;		
+		}
+		
 		.domloaded .start-page{
 			/*opacity:0;*/
 		}
@@ -30,6 +35,7 @@
 			width:100%;
 			box-sizing: border-box;
 			margin: 0.2rem 0;
+			text-align: center;
 		}
 		.product-list .product-wrp{
 			display: inline-block;
@@ -173,25 +179,25 @@
 	<div class="grid activity">
 		<if condition="count($fourgrid) gt 3"> 
 		<div class="col-6 text-center" style="border: 1px solid #F0F0EE;height: 4rem;  border-left: 0px;background: #FFFFFF;">
-			<a href="{$fourgrid[0]['url']}">
+			<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[0]['notes']))}">
 			<img src="{$fourgrid[0]['iconurl']}" alt="{$fourgrid[0]['name']}" class="am-responsive-width lazy"/>
 			</a>
 		</div>
 		<div class=" text-center" >			
 			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
-				<a href="{$fourgrid[1]['url']}">
+				<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[1]['notes']))}">
 				<img  src="{$fourgrid[1]['iconurl']}" alt="{$fourgrid[1]['name']}" class="am-responsive-width lazy" />
 				</a>
 			</div>
 			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
-				<a href="{$fourgrid[2]['url']}">
+				<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[2]['notes']))}">
 				<img src="{$fourgrid[2]['iconurl']}" alt="{$fourgrid[2]['name']}" class="am-responsive-width lazy" />
 				</a>
 			</div>
 		</div>
 		<div class=" text-center" >			
 			<div class="col-6 text-center"  style="border: 0px solid #F0F0EE;border-top:1px;height: 2rem;background: #FFFFFF;">
-				<a href="{$fourgrid[3]['url']}">
+				<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[3]['notes']))}">
 				<img  src="{$fourgrid[3]['iconurl']}" alt="{$fourgrid[3]['name']}" class="am-responsive-width lazy" />
 				</a>
 			</div>

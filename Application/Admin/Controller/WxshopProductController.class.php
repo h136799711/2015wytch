@@ -20,7 +20,7 @@ class WxshopProductController extends AdminController {
 				$this->error($result['info']);
 			}
 			
-				
+			
 			$this->assign("groups",$result['info']);
 			$this->assign("storeid",$storeid);
 			
