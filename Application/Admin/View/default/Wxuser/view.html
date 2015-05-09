@@ -1,6 +1,5 @@
 <extend name="template/base_index" />
 
-
 <block name="area_header">
 
 </block>
@@ -11,11 +10,42 @@
 		{:W('Menus/left')}
 		<div class="admin-main-content">
 			{:W('Menus/breadcrumb')}
-			<h1>暂未实现！</h1>
+			<div>
+				<form class="">
+					<legend>用户信息查看</legend>
+					<div class="form-group  col-lg-12 col-md-12">
+						<label class="control-label col-lg-2 col-md-2">会员昵称</label>
+						<div class="col-lg-10 col-md-10">
+							<img style="width:60px" src="{$vo.avatar}" /> {$vo.nickname}
+						</div>
+					</div>
+
+					<div class="form-group   col-lg-12 col-md-12">
+						<label class="control-label col-lg-2 col-md-2">性别</label>
+						<div class="col-lg-10 col-md-10">
+							{:getSex($vo['sex'])}
+						</div>
+					</div>
+					
+					<div class="form-group   col-lg-12 col-md-12">
+						<label class="control-label col-lg-2 col-md-2">地址信息</label>
+						<div class="col-lg-10 col-md-10">
+							{$vo.country}{$vo.province}{$vo.city}
+						</div>
+					</div>
+					
+					<div class="form-group col-lg-12 col-md-12">
+						<label class="control-label col-lg-2 col-md-2">关注时间</label>
+						<div class="col-lg-10 col-md-10">
+							{$vo.subscribe_time|date='Y-m-d H:i:s',###}
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 		<!-- END admin-main-content -->
 	</div>
-		<!-- END admin-main-->
+	<!-- END admin-main-->
 </block>
 
 <block name="area_footer">

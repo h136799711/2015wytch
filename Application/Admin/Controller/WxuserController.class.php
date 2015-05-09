@@ -13,6 +13,21 @@ class WxuserController extends AdminController {
 	protected function _initialize() {
 		parent::_initialize();
 	}
+	
+	/**
+	 * 查看
+	 */
+	public function view(){
+		$id = I('get.id',0);
+		$result = apiCall("Admin/Wxuser/getInfo", array(array('id'=>$id)));
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		$this->assign("vo",$result['info']);
+		$this->display();
+	}
 
 	public function index() {
 		//get.startdatetime
