@@ -173,7 +173,7 @@
 									[{$vo.pay_status|getPayStatus}]|[{$vo.order_status|getOrderStatus}]
 								</td>
 								<td>
-									{$vo.createtime|date='Y-m-d h:i:s',###}
+									{$vo.createtime|date='Y-m-d H:i:s',###}
 								</td>
 								<td>
 									<a href="{:U('Admin/Wxpay/orderQuery',array('orderid'=>$vo['orderid']))}" class="btn btn-default btn-sm "><i class="fa fa-credit-card"></i>查询订单支付记录</a>

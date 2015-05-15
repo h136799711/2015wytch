@@ -12,13 +12,15 @@ namespace Admin\Controller;
 class WxshopController extends AdminController{
 	
 	protected function _initialize(){
+		
+		//TODO: 导致session，修改不启作用，沿用上次，导致一级菜单未能存入session，使得当前激活菜单不正确
+		//FIXME:考虑，将图片上传放到另外一个类中
 		//解决uploadify上传session问题
 		session('[pause]');
 		$session_id = I('get.session_id','');
 		if (!empty($session_id)) {
 		    session_id($session_id);
 			session('[start]');
-//			dump($_SESSION);
 		}
 		
 		parent::_initialize();
@@ -295,8 +297,6 @@ class WxshopController extends AdminController{
 			if(!isset($_FILES['wxshop'])){
 				$this->error("文件对象必须为wxshop");
 			}
-			
-			
 			
 //			$wxshopapi = new \Common\Api\WxShopApi($this->appid,$this->appsecret);
 			$tmp_name = $_FILES['wxshop']['tmp_name'];

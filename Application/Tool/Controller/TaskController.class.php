@@ -16,7 +16,6 @@ class TaskController extends Controller{
 	
 	protected function _initialize(){
 //		$key = I('get.key','');
-
 		//20分钟以内的请求只处理一次
 		$prev_pro_time = S('TASK_PROCESS_TIME');
 		if($prev_pro_time === false){
@@ -24,9 +23,10 @@ class TaskController extends Controller{
 		}else{
 			echo "Cached-Time: ". date("Y-m-d H:i:s",$prev_pro_time);
 			//缓冲处理
-			exit();
+//			exit();
 		}
 		
+		$this->getConfig();
 	}
 	
 	/**
@@ -35,18 +35,26 @@ class TaskController extends Controller{
 	public function index(){
 		
 		$url = C('SITE_URL').'/index.php/Tool/Task/aysnc';
-		fsockopenRequest($url);
+//		echo $url;
+		$result = fsockopenRequest($url,array('user'=>'www.itboye.com'),"POST");
 		echo "Accept Request!";
+		echo $result;
 	}
 	
 	/**
 	 * 任务处理区域
 	 */
 	public function aysnc(){
+		$user = I('post.user','');
+		if($user != "www.itboye.com"){
+			addWeixinLog(get_client_ip(0,true),"非法用户访问");
+			return ;
+		}
 		
+		addWeixinLog(get_client_ip(0,true),"合法用户");
 		ignore_user_abort(true); // 后台运行
 		set_time_limit(0); // 取消脚本运行时间的超时上限
-		
+//		
 		$this->toRecieved();
 		$this->toCompleted();
 		$this->toCancel();
@@ -64,7 +72,7 @@ class TaskController extends Controller{
 		if(!$result['status']){
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}else{
-			addWeixinLog("更新订单为取消影响记录数：".$result['info']);
+			addWeixinLog("更新订单为取消影响记录数：".$result['info'],'0');
 		}
 	}
 	
@@ -79,7 +87,7 @@ class TaskController extends Controller{
 		if(!$result['status']){
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}else{
-			addWeixinLog("更新订单为已收货影响记录数：".$result['info']);
+			addWeixinLog("更新订单为已收货影响记录数：".$result['info'],'0');
 		}
 	}
 	
@@ -93,10 +101,61 @@ class TaskController extends Controller{
 		if(!$result['status']){
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}else{
-			addWeixinLog("更新订单为已完成影响记录数：".$result['info']);
+			addWeixinLog("更新订单为已完成影响记录数：".$result['info'],'3');
 		}
 	}
 	
+	
+	/**
+	 * 从数据库中取得配置信息
+	 */
+	protected function getConfig() {
+		$config = S('global_tool_config');
+
+		if ($config === false) {
+			$map = array();
+			$fields = 'type,name,value';
+			$result = apiCall('Admin/Config/queryNoPaging', array($map, false, $fields));
+			if ($result['status']) {
+				$config = array();
+				if (is_array($result['info'])) {
+					foreach ($result['info'] as $value) {
+						$config[$value['name']] = $this -> parse($value['type'], $value['value']);
+					}
+				}
+				//缓存配置300秒
+				S("global_tool_config", $config, 2400*1);
+			} else {
+				LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
+				$this -> error($result['info']);
+			}
+		}
+		C($config);
+	}
+
+	/**
+	 * 根据配置类型解析配置
+	 * @param  integer $type  配置类型
+	 * @param  string  $value 配置值
+	 */
+	private static function parse($type, $value) {
+		switch ($type) {
+			case 3 :
+				//解析数组
+				$array = preg_split('/[,;\r\n]+/', trim($value, ",;\r\n"));
+				if (strpos($value, ':')) {
+					$value = array();
+					foreach ($array as $val) {
+						list($k, $v) = explode(':', $val);
+						$value[$k] = $v;
+					}
+				} else {
+					$value = $array;
+				}
+				break;
+		}
+		return $value;
+	}
 	
 	
 	

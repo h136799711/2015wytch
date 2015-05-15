@@ -64,9 +64,10 @@
 		
 		.item-p-list .item-p{
 			position: relative;
-			font-size: 0.8rem;
+			font-size: 0.9rem;
 			border-bottom: 1px solid #E2E2E1;
 			height: 60px;
+			
 		}
 		.item-p img{
 			width: 36px;
@@ -212,7 +213,7 @@
 	  	
 	  	<div class="item-p-list">
 	  		  {{#each _items}}
-	  		  <div class="item-p am-cf">
+	  		  <div class="item-p am-margin-top-xs am-cf">
 	  		  	<img src="{{img}}" class="am-fl" alt="商品图片" />
 	  		  	<div class="p-name am-text-truncate">{{name}}</div>
 			  	<div class="p-desc am-text-truncate">{{sku_desc}}</div>
@@ -244,7 +245,7 @@
               
               {{#eq pay_status 5}}
               
-              <span class="am-text-xs">您选择了货到付款,请准备好现金，送货员马上就到！</span>
+              <span class="am-text-xs">您选择了货到付款,请准备好现金，送货员马上就到！</span><br/>
               {{/eq}}
               
               {{#eq order_status 3}}

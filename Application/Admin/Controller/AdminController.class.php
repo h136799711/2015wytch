@@ -16,14 +16,15 @@ class AdminController extends CheckLoginController {
 	protected $appsecret = "";
 	protected function _initialize() {
 		parent::_initialize();
+		
 		// 当前一级导航激活menu
-		if (I('get.activemenuid', 0) !== 0) {
-			session('activemenuid', I('get.activemenuid'));
+		if (I('get.activemenuid', 0) != 0) {
+			session('activemenuid', I('get.activemenuid',0));
 			session('activesubmenuid', 0);
 		}
 		// 当前三级导航
-		if (I('get.activesubmenuid', 0) !== 0) {
-			session('activesubmenuid', I('get.activesubmenuid'));
+		if (I('get.activesubmenuid', 0) != 0) {
+			session('activesubmenuid', I('get.activesubmenuid',0));
 		}
 		// 获取配置
 		$this -> getConfig();

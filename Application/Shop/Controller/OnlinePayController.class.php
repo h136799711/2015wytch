@@ -92,7 +92,7 @@ class OnlinePayController extends ShopController {
 
 //			addWeixinLog($payConfig, 'payConfig');
 			$items = array();
-			$total_fee = 0.0;
+			$total_fee = 0;
 			$total_express = 0.0;
 			$body = "";
 			$attach = "";
@@ -115,8 +115,8 @@ class OnlinePayController extends ShopController {
 			if ($total_fee <= 0) {
 				$this -> error("支付金额不能小于0！");
 			}
-
-			$total_fee = 1;
+			
+//			$total_fee = 1;
 			
 			//测试时
 			$this -> setWxpayConfig($payConfig, $trade_no, $body, $total_fee,$attach);

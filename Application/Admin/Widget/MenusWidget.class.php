@@ -23,7 +23,7 @@ class MenusWidget extends AdminController {
 			//缓存，activesubmenuid
 			$list = session('left_menu'. session('activemenuid'));
 			
-			session('left_menu'. session('activemenuid'),null);
+//			session('left_menu'. session('activemenuid'),null);
 			if ($list === false || is_null($list)) {//未缓存、或过期
 				
 				$map = array('pid' => session('activemenuid'));
@@ -82,7 +82,7 @@ class MenusWidget extends AdminController {
 	 * 顶部
 	 */
 	public function topbar() {
-		session('topbar_menu',null);
+//		session('topbar_menu',null);
 		$list = session('topbar_menu');
 		if ($list === false || is_null($list)) {
 			$develop_mode = C('DEVELOP_MODE');
@@ -91,7 +91,7 @@ class MenusWidget extends AdminController {
 				$map['is_dev'] = 0;
 			}
 			$result = apiCall('Admin/Menu/queryShowingMenu', array($map, ' sort desc '));
-
+			
 			if ($result['status']) {
 				$list = $result['info'];
 				$current_menus = session("CURRENT_USER_".UID."_MENU");	
@@ -110,9 +110,11 @@ class MenusWidget extends AdminController {
 				return;
 			}
 		}
-		if (!is_null($list) && count($list) > 0 && !session('?activemenuid') && I('get.activemenuid', 0) === 0) {
+		
+		if (!is_null($list) && (count($list) > 0) && session('?activemenuid') === false && I('get.activemenuid', 0) === 0) {
 			for($k=0;$k<count($list);$k++){
 				if(!isset($list[$k]['dynamic_hide'])){
+					dump("testasdddddddddddddddds");
 					session('activemenuid', $list[$k]['id']);
 				}
 			}

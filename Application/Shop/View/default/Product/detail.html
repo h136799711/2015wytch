@@ -232,8 +232,9 @@
 				<div class="sku-count am-cf">
 				<span class="am-fl">购买数量</span> 
 				<div class="am-fr am-form-group">
-				    <i class="js_minus am-icon-minus am-fl am-disabled" disabled="disabled" ></i>
-					<input type="text" name="sku_count" disabled="disabled" class="am-fl am-form-field am-disabled" value="1" />
+				    <i class="js_minus am-icon-minus am-fl am-disabled"  ></i>
+					<input type="hidden" name="sku_count" autocomplete="off"  class="am-fl am-form-field" value="1" />
+					<span class="sku_count am-fl " style="width: 48px;float: left;text-align: center;padding: 4px;border: 1px solid #DFADAD;">1</span>
 				    <i class="js_plus am-icon-plus am-fl"></i>
 				 </div>
 			</div>
@@ -593,31 +594,37 @@
 			</eq>
 			
 			//绑定数量加减
-			$(".sku-count .js_minus").on("tap",function(){
-				var curCnt = parseInt($(".sku-count input[name='sku_count']").val());
-				if(curCnt - 1 >= 1){
-					$(".sku-count input[name='sku_count']").val(curCnt - 1);
-				}
-				if(curCnt - 1 == 1){
-					$(".sku-count input[name='sku_count']").addClass("am-diabled");
-				}
-			});
-			$(".sku-count .js_plus").on("tap",function(){
-				var curCnt = parseInt($(".sku-count input[name='sku_count']").val());
-				$(".sku-count input[name='sku_count']").val(curCnt + 1);
-				$(".sku-count input[name='sku_count']").removeClass("am-diabled");
-				
-			});
+//			$(".sku-count .js_minus").on("tap",function(){
+//				var curCnt = parseInt($(".sku-count input[name='sku_count']").val());
+//				if(curCnt - 1 >= 1){
+//					$(".sku-count input[name='sku_count']").val(curCnt - 1);
+//					$(".sku-count label").text(curCnt - 1);
+//					$("#count").val(curCnt - 1);
+//				}
+//				if(curCnt - 1 == 1){
+//					$(".sku-count input[name='sku_count']").addClass("am-diabled");
+//				}
+//			});
+//			$(".sku-count .js_plus").on("tap",function(){
+//				var curCnt = parseInt($(".sku-count input[name='sku_count']").val());
+//				$(".sku-count input[name='sku_count']").val(curCnt + 1);
+//					$(".sku-count label").text(curCnt + 1);
+//					$("#count").val(curCnt + 1);
+//				$(".sku-count input[name='sku_count']").removeClass("am-diabled");
+//				
+//			});
 			$(".sku-count .js_minus").click(function(){
 				var curCnt = parseInt($(".sku-count input[name='sku_count']").val());
 				if(curCnt - 1 >= 1){
 					$(".sku-count input[name='sku_count']").val(curCnt - 1);
+					$(".sku-count span.sku_count").text(curCnt - 1);
 				}
 			});
 			$(".sku-count .js_plus").click(function(){
 				var curCnt = parseInt($(".sku-count input[name='sku_count']").val());				
 				$(".sku-count input[name='sku_count']").val(curCnt + 1);
 				$(".sku-count input[name='sku_count']").removeClass("am-diabled");
+					$(".sku-count span.sku_count").text(curCnt + 1);
 			});
 			
 			

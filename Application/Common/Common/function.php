@@ -341,8 +341,12 @@ function getDatatree($code) {
  * @param $cookie
  * @param $repeat TODO: 重复次数
  */
-function fsockopenRequest($url, $post_data = array(), $cookie = array(), $repeat = 1) {
-	$method = "GET";
+function fsockopenRequest($url,$post_data = array(),$method="POST", $cookie = array(), $repeat = 1) {
+	if($method == "POST"){
+		
+	}else{
+		$method = "GET";
+	}
 	//通过POST或者GET传递一些参数给要触发的脚本
 	$url_array = parse_url($url);
 	//获取URL信息
@@ -351,14 +355,12 @@ function fsockopenRequest($url, $post_data = array(), $cookie = array(), $repeat
 	$fp = @fsockopen($url_array['host'], $port, $errno, $errstr, 5);
 	if (!$fp) {
 		//连接失败
-		return FALSE;
+		return 0;
 	}
 	//非阻塞设置
 	stream_set_blocking($fp, FALSE);
 	$getPath = $url_array['path'] . "?" . $url_array['query'];
-	if (!empty($post_data)) {
-		$method = "POST";
-	}
+	
 	$header = $method . " " . $getPath;
 	$header .= " HTTP/1.1\r\n";
 	$header .= "Host: " . $url_array['host'] . "\r\n";
@@ -366,14 +368,15 @@ function fsockopenRequest($url, $post_data = array(), $cookie = array(), $repeat
 	/*以下头信息域可以省略 */
 
 	$header .= "Referer:http://" . $url_array['host'] . " \r\n";
-	//		$header .= "User-Agent:Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X; en-us) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 \r\n";
-	//		$header .= "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 \r\n";
-	//		$header .= "Accept-Language:zh-CN,zh;q=0.8,en;q=0.6 \r\n";
-	//		$header .= "Accept-Encoding:gzip, deflate, sdch \r\n";
+//	$header .= "User-Agent:Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X; en-us) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 \r\n";
+//	$header .= "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 \r\n";
+//	$header .= "Accept-Language:zh-CN,zh;q=0.8,en;q=0.6 \r\n";
+//	$header .= "Accept-Encoding:gzip, deflate, sdch \r\n";
 
 	$header .= "Connection:Close\r\n";
-	//		$header .= "Keep-Alive: 3\r\n";
-	//		$header .= "Connection: keep-alive\r\n";
+//			$header .= "Keep-Alive: 3\r\n";
+//			$header .= "Connection: keep-alive\r\n";
+			
 	//需要重复2次
 	if (!empty($cookie)) {
 		$_cookie = strval(NULL);
@@ -405,8 +408,10 @@ function fsockopenRequest($url, $post_data = array(), $cookie = array(), $repeat
 		$post_str .= $_post;
 		//传递POST数据
 		$header .= $post_str;
+	}else{
+		$header .= "\r\n";
 	}
-
+	dump($header);
 	fwrite($fp, $header);
 	//TODO: 从返回结果来判断是否成功
 	//		$result = "";
@@ -420,7 +425,7 @@ function fsockopenRequest($url, $post_data = array(), $cookie = array(), $repeat
 	//		}
 
 	fclose($fp);
-	return true;
+	return 1;
 }
 /**
  * 获取当前完整url

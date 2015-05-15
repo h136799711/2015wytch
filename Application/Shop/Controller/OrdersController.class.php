@@ -183,6 +183,12 @@ class OrdersController extends ShopController {
 
 	}
 
+	private function toArray($param){
+		if(!is_array($param)){
+			return array($param);
+		}
+		return $param;
+	}
 	/**
 	 * 订单确认
 	 * 运费的计算规则，
@@ -195,14 +201,20 @@ class OrdersController extends ShopController {
 		$sku_id_arr = I('post.sku_id', array());
 		$price_arr = I('post.price', array());
 		$count_arr = I('post.count', array());
-
+		$p_id_arr = $this->toArray($p_id_arr);
+		$sku_id_arr = $this->toArray($sku_id_arr);
+		$price_arr = $this->toArray($price_arr);
+		$count_arr = $this->toArray($count_arr);
+		
+		
 		//针对多规格商品的立即购买操作
 		$hebidu_skuchecked = I('post.hebidu_skuchecked', '');
 		if (!empty($hebidu_skuchecked)) {
 			array_push($sku_id_arr, $hebidu_skuchecked);
 			$count_arr[0] = I('post.sku_count', 1);
+//			dump($count_arr[0]);
 		}
-
+//		dump($count_arr);
 		if (intval($fromsession) == 1) {
 			if (session("?confirm_order_info")) {
 				$this -> redirect('Shop/Index/index');
