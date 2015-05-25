@@ -99,7 +99,7 @@ class OnlinePayController extends ShopController {
 			
 			foreach ($order_list as $order) {
 				$trade_no = $order['orderid'];
-				$total_fee += $order['price'];
+				$total_fee +=($order['price']);
 				
 				$products = $this -> getProducts($order[id]);
 				foreach ($products as $vo) {

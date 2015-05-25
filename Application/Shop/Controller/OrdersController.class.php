@@ -374,7 +374,7 @@ class OrdersController extends ShopController {
 			$i = 0;
 			$ids = '';
 			$orderid = $this -> getOrderID();
-			//			addWeixinLog($buyProductList['list'],'订单');
+//			addWeixinLog($buyProductList['list'],'订单');
 			//分店铺保存订单，每个店铺一张订单
 			foreach ($buyProductList['list'] as $key => $vo) {
 				//店铺ID
@@ -384,7 +384,8 @@ class OrdersController extends ShopController {
 				//
 				$price = 0.0;
 				foreach ($vo['products'] as $item) {
-					$price += $item['price'];
+//					addWeixinLog($item,'订单［test］');
+					$price += ($item['price'] * intval($item['count']));
 				}
 
 				$entity['price'] = $price;
