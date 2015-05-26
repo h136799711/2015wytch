@@ -34,7 +34,7 @@
 			return $this->apiReturnErr($this->model->getError());
 		}
 		$result = $this->model->where($map)->lock(true)->save();
-		addWeixinLog($this->model->getLastSql(),"[自动变更订单待确认、待支付为已取消SQL]");
+//		addWeixinLog($this->model->getLastSql(),"[自动变更订单待确认、待支付为已取消SQL]");
 		if($result === FALSE){
 			$error = $this->model->getDbError();
 			return $this->apiReturnErr($error);
@@ -57,7 +57,7 @@
 			return $this->apiReturnErr($this->model->getError());
 		}
 		$result = $this->model->where($map)->lock(true)->save();
-		addWeixinLog($this->model->getLastSql(),"[自动变更订单已发货为已收货SQL]");
+//		addWeixinLog($this->model->getLastSql(),"[自动变更订单已发货为已收货SQL]");
 		if($result === FALSE){
 			$error = $this->model->getDbError();
 			return $this->apiReturnErr($error);
@@ -82,7 +82,7 @@
 			return $this->apiReturnErr($this->model->getError());
 		}
 		$result = $this->model->where($map)->lock(true)->save();
-		addWeixinLog($this->model->getLastSql(),"[自动变更订单已收货为已完成SQL]");
+//		addWeixinLog($this->model->getLastSql(),"[自动变更订单已收货为已完成SQL]");
 		if($result === FALSE){
 			$error = $this->model->getDbError();
 			return $this->apiReturnErr($error);

@@ -144,6 +144,27 @@
 			/*display:none;*/
 			opacity: 0;
 		}
+		.grid .col-3.grid-2{
+			border: 1px solid #F0F0EE; 
+			border-width: 0px 2px 2px 2px; 
+			height: 2rem; background: #FFFFFF;
+		}
+		.grid .col-3.grid-3{
+			border: 0px solid #F0F0EE;
+			border-width: 0px 0px 2px 0px;
+			height: 2rem;
+			background: #FFFFFF;
+			margin-left: 0px;
+		}
+		.grid .col-6.grid-4{
+			border: 0px solid #F0F0EE;
+			border: 0px solid #F0F0EE;
+			border-width: 0px 0px 2px 2px;
+			height: 2rem;
+			background: #FFFFFF;
+			height: 2rem;
+			background: #FFFFFF;
+		}
 	</style>
 	<script type="text/javascript">
 		
@@ -207,25 +228,26 @@
 	</div>
 	<div class="grid activity">
 		<if condition="count($fourgrid) gt 3"> 
-		<div class="col-6 text-center" style="border: 1px solid #F0F0EE;height: 4rem;  border-left: 0px;background: #FFFFFF;">
+		<div class="col-6 text-center grid-1" style="border: 1px solid #F0F0EE;height: 4rem;  border-left: 0px;background: #FFFFFF;">
 			<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[0]['notes']))}">
 			<img src="{$fourgrid[0]['iconurl']}" alt="{$fourgrid[0]['name']}" class="am-responsive-width lazy"/>
 			</a>
 		</div>
 		<div class=" text-center" >			
-			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
+  
+			<div class="col-3 text-center grid-2" >
 				<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[1]['notes']))}">
 				<img  src="{$fourgrid[1]['iconurl']}" alt="{$fourgrid[1]['name']}" class="am-responsive-width lazy" />
 				</a>
 			</div>
-			<div class="col-3 text-center"  style="border: 0px solid #F0F0EE;height: 2rem;background: #FFFFFF;">
+			<div class="col-3 text-center grid-3"  >
 				<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[2]['notes']))}">
 				<img src="{$fourgrid[2]['iconurl']}" alt="{$fourgrid[2]['name']}" class="am-responsive-width lazy" />
 				</a>
 			</div>
 		</div>
 		<div class=" text-center" >			
-			<div class="col-6 text-center"  style="border: 0px solid #F0F0EE;border-top:1px;height: 2rem;background: #FFFFFF;">
+			<div class="col-6 text-center grid-4"  >
 				<a href="{:U('Shop/Product/group',array('id'=>$fourgrid[3]['notes']))}">
 				<img  src="{$fourgrid[3]['iconurl']}" alt="{$fourgrid[3]['name']}" class="am-responsive-width lazy" />
 				</a>

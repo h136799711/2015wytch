@@ -72,7 +72,9 @@ class TaskController extends Controller{
 		if(!$result['status']){
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}else{
-			addWeixinLog("更新订单为取消影响记录数：".$result['info'],'0');
+			if($result['info'] > 0){
+				addWeixinLog("更新订单为取消影响记录数：".$result['info'],'0');
+			}
 		}
 	}
 	
@@ -87,7 +89,9 @@ class TaskController extends Controller{
 		if(!$result['status']){
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}else{
-			addWeixinLog("更新订单为已收货影响记录数：".$result['info'],'0');
+			if($result['info'] > 0){
+				addWeixinLog("更新订单为已收货影响记录数：".$result['info'],'0');
+			}
 		}
 	}
 	
@@ -101,7 +105,9 @@ class TaskController extends Controller{
 		if(!$result['status']){
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}else{
-			addWeixinLog("更新订单为已完成影响记录数：".$result['info'],'3');
+			if($result['info'] > 0){
+				addWeixinLog("更新订单为已完成影响记录数：".$result['info'],'3');
+			}
 		}
 	}
 	

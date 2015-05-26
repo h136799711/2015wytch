@@ -40,8 +40,10 @@ class ShopController extends  Controller {
 			$url = getCurrentURL();
 			$this->getWxuser($url);
 		}
+		
 		if(empty($this->userinfo)){
-			$this->error("无法获取到用户信息！");
+			$this->display("Error:please_subscribe");
+//			$this->error("请先关注公众号，无法获取到用户信息！");
 			exit();
 		}
 		$this->assign("userinfo",$this->userinfo);
@@ -104,6 +106,7 @@ class ShopController extends  Controller {
 	 */
 	private function refreshWxuser($userinfo) {
 		$wxuser = array();
+		
 //		$wxuser['wxaccount_id'] = intval($this -> wxaccount['id']);
 		$wxuser['nickname'] = $userinfo['nickname'];
 		$wxuser['province'] = $userinfo['province'];
@@ -112,7 +115,7 @@ class ShopController extends  Controller {
 		$wxuser['sex'] = $userinfo['sex'];
 		$wxuser['avatar'] = $userinfo['headimgurl'];
 		$wxuser['subscribe_time'] = $userinfo['subscribe_time'];
-
+		
 		if (!empty($this -> openid) && is_array($this -> wxaccount)) {
 			
 			$map = array('openid' => $this -> openid, 'wxaccount_id' => $this -> wxaccount['id']);
