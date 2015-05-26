@@ -26,11 +26,18 @@ class CategoryController extends AdminController{
 			$params['name'] = $name;
 		}
 		
+		$result = apiCall("Admin/Category/getInfo", array(array('id'=>$parent)));
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		$parent_vo = $result['info'];
+		
 		$result = apiCall("Admin/Category/getInfo", array(array('id'=>$preparent)));
 		$prepreparent = "";
 		if($result['status']){
 			$prepreparent = $result['info']['parent'];
 		}
+		
 		
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		
@@ -41,6 +48,7 @@ class CategoryController extends AdminController{
 		//
 		if($result['status']){
 			$this->assign('level',$level);
+			$this->assign('parent_vo',$parent_vo);
 			$this->assign('prepreparent',$prepreparent);
 			$this->assign('preparent',$preparent);
 			$this->assign('parent',$parent);

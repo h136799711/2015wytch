@@ -24,12 +24,22 @@ class CategoryPropController extends AdminController{
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		
 		$order = " id asc ";
+		
+		$result = apiCall("Admin/Category/getInfo", array(array("id"=>$cate_id)));
+		
+		if(!$result['status']){
+			$this->error($result['info']);
+		}
+		
+		$cate_vo = $result['info'];
+		
 		//
 		$result = apiCall("Admin/CategoryProp/query",array($map,$page,$order,$params));
 		
 		//
 		if($result['status']){
 			$this->assign('cate_id',$cate_id);
+			$this->assign('cate_vo',$cate_vo);
 			$this->assign('show',$result['info']['show']);
 			$this->assign('list',$result['info']['list']);
 			$this->display();

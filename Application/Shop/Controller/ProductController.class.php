@@ -182,7 +182,6 @@ class ProductController extends ShopController {
 			} else {
 				$this -> assign("sku_list", json_encode(array()));
 			}
-
 			$this -> assign("properties", $this -> getProperties($result['info']['properties']));
 			$details = htmlspecialchars_decode($result['info']['detail']);
 			$this -> assign("details", json_decode($details));
@@ -331,22 +330,23 @@ class ProductController extends ShopController {
 
 		$map = array();
 		$map['id'] = array("in", $prop_ids);
-		$prop_result = apiCall("Admin/CategoryProp/queryNoPaging", array($map));
+		$order =  " id asc ";
+		$prop_result = apiCall("Admin/CategoryProp/queryNoPaging", array($map,$order));
 		if (!$prop_result) {
 			$this -> error($prop_result['info']);
 		}
-
+		
 		$prop_result = $prop_result['info'];
-
+		
 		$map = array();
 		$map['id'] = array("in", $propvalue_ids);
-		$propvalue_result = apiCall("Admin/CategoryPropvalue/queryNoPaging", array($map));
+		$order =  " prop_id asc ";
+		$propvalue_result = apiCall("Admin/CategoryPropvalue/queryNoPaging", array($map,$order));
 		if (!$propvalue_result) {
 			$this -> error($propvalue_result['info']);
 		}
-
+		
 		$propvalue_result = $propvalue_result['info'];
-
 		for ($i = 0; $i < count($prop_result); $i++) {
 			$p = $prop_result[$i];
 			$pv = $propvalue_result[$i];
@@ -354,7 +354,6 @@ class ProductController extends ShopController {
 			array_push($result, array('name' => $p['propname'], 'value' => $pv['valuename']));
 
 		}
-
 		return $result;
 	}
 

@@ -114,7 +114,7 @@ class MenusWidget extends AdminController {
 		if (!is_null($list) && (count($list) > 0) && session('?activemenuid') === false && I('get.activemenuid', 0) === 0) {
 			for($k=0;$k<count($list);$k++){
 				if(!isset($list[$k]['dynamic_hide'])){
-					dump("testasdddddddddddddddds");
+//					dump("testasdddddddddddddddds");
 					session('activemenuid', $list[$k]['id']);
 				}
 			}

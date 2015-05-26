@@ -321,7 +321,35 @@
 		function buyProduct(){
 			
 			if(checkHasSku(1)){
-				$(".js_product_form").submit();
+
+				var checked=false,that=".footer-menu .js_add_to_cart";
+				
+				//POST参数
+				var query = $(".js_product_form").serialize(); 
+				var lm;
+				$.ajax({
+					type:"POST",
+					url:"{:U('Shop/ShoppingCart/addItem')}",
+					data:query,
+					async:true,
+					beforeSend:function(){
+						lm = loadingMsg("请求中...");
+					}			
+				}).always(function() {
+					if(lm){
+						lm.modal("close");
+					}
+//					$(that).button("reset");
+				}).done(function(data) {
+					if (data.status == 1) {
+						window.location.href = "{:U('Shop/ShoppingCart/index')}";
+						hideSku();
+					} else {
+						alertMsg(data.info);				
+					}
+				});
+				
+//				$(".js_product_form").submit();
 			}
 		}
 		/**

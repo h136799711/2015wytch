@@ -13,6 +13,9 @@
 		{:W('Menus/left')}
 		<div class="admin-main-content">
 			{:W('Menus/breadcrumb')}
+			<notempty name="parent_vo">
+			<div class="text-center"><h4>上级类目: {$parent_vo.name} </h4></div>
+			</notempty>
 			<!-- 过滤\查询按钮 -->
 				<div class="filter-controls">
 					<!-- 日期查询 -->
