@@ -532,9 +532,9 @@ class WxshopProductController extends AdminController {
 			if(empty($buylimit)){
 				$buylimit = 0;
 			}
-			$price = I('price',0,'intval');
+			$price = I('price',0,'floatval');
 			$price = $price * 100.0;
-			$ori_price = I('ori_price',0,'intval');
+			$ori_price = I('ori_price',0,'floatval');
 			$ori_price = $ori_price * 100.0;
 			$entity = array(
 				'main_img'=>I('main_img',''),
@@ -542,7 +542,7 @@ class WxshopProductController extends AdminController {
 				'name'=>I('product_name',''),
 				'price'=>$price,
 				'ori_price'=>$ori_price,
-				'quantity'=>I('quantity',0),
+				'quantity'=>I('quantity',0,'intval'),
 				'buy_limit'=>$buylimit,
 				'attrext_ishasreceipt'=>I('ishasreceipt',0),
 				'attrext_isunderguaranty'=>I('isunderguaranty',0),
