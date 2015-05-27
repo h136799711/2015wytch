@@ -346,15 +346,17 @@ class WxshopProductController extends AdminController {
 	 */
 	public function index() {
 		$onshelf = I('onshelf', 0);
+		
 		$storeid = I('storeid', 0, "intval");
 		if (empty($storeid)) {
 			$this -> error("缺少店铺ID参数！");
 		}
 		//get.startdatetime
 		//分页时带参数get参数
-		$params = array('onshelf' => $onself);
+		$params = array('onshelf' => $onshelf,'storeid'=>$storeid);
+//		dump($params);
 		$name = I('post.name', '');
-
+		
 		$map = array();
 		if (!empty($name)) {
 			$map['name'] = array('like', '%'.$name.'%');

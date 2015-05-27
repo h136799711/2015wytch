@@ -30,7 +30,6 @@ class WxstoreController extends ShopController{
 		
 		
 		
-		
 		$this->assign("products",$this->listProduts());
 		
 		$this->display();
@@ -42,7 +41,8 @@ class WxstoreController extends ShopController{
 		
 		$map = array();
 		$map['storeid'] = $store_id;		
-		$page  = array('curpage'=>$p,'size'=>10);
+		//TODO: 商品展示要进行分页处理
+		$page  = array('curpage'=>$p,'size'=>100);
 		$order = " price desc";
 		$result = apiCall("Shop/Wxproduct/query", array($map,$page,$order));
 		
