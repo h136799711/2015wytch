@@ -16,7 +16,7 @@
 				<form class="form form-inline">				
 					<div class="col-lg-12 col-md-12">
 						<label for="ss_keyword" class="control-label">首次关注时响应关键词：</label>
-						<select id="ss_keyword" name="ss_keyword" data-href="{:U('Admin/Wxaccount/saveFirstResp')}" class="sle_ajax_post form-control input-normal select2">
+						<select id="ss_keyword" name="ss_keyword" style="width: 120px;" data-href="{:U('Admin/Wxaccount/saveFirstResp')}" class="sle_ajax_post form-control input-normal select2">
 									<option value="">=无=</option>
 								<volist name="keywords" id="vo">
 									<option value="{$vo.keyword}" <if condition=" C('SS_KEYWORD') eq $vo['keyword'] ">selected="selected"</if> >{$vo.keyword}</option>
