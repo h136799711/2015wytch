@@ -9,7 +9,7 @@
 			overflow: hidden;
 		}
 		.background{
-			background:url(__IMG__/bg.jpg?v=1.0) no-repeat 50% 50%;
+			background:url(__IMG__/bg001.jpg?v=1.0) no-repeat 50% 50%;
 			background-size: cover;
 			
 		}
@@ -23,47 +23,60 @@
 			height: 50%;
 		}
 		.category-list .category-item a{
-			color:#FFFFFF;
+			width: 72px;
+			height: 72px;
+			display: block;
+			margin: 0 auto;
+			line-height: 32px;
+			color:#000;
 			font-weight: bold;
-			text-shadow: rgb(255,255,250);
-			
+			border-radius: 50%;
+			background: #FFFFFF;
+			background: rgba(240, 235, 235, 0.74);
 		}
 		.category-list .category-item{
 			  width: 33%;
 			  padding: 1rem;
-			  color: #fff;
-			  font-size: 16px;
+			  font-size: 12px;
 			  text-align: center;
 		}
 		
-		@media only screen (max-width: 640px) {			
-			.category-list .category-item{
-			  width: 33%;
-			}
-		}
-		
-		@media only screen (max-width: 480px) {
-			.category-list .category-item{
-			  width: 33%;
-			}
-			.category-list{
-				top: 10%;
-				height: 70%;
-			}
-		}
-		
-		@media only screen (max-width: 320px) {
-			.category-list .category-item{
-			  width: 33%;
-			}
-			.category-list{
-				top: 10%;
-				height: 70%;
-			}
-		}
 		.category-item img{
-			width:64px;
-			height:64px;
+			width:24px;
+			height:24px;
+		}
+		
+		@media only screen (min-width: 480px) {
+			.category-list .category-item a{
+			  width: 96px;
+			  height: 96px;
+			  margin: 0px 10px;
+			}
+			.category-item img{
+				width:32px;
+				height:32px;
+			}
+			.category-list{
+				top: 10%;
+				height: 70%;
+			}
+		}
+		
+		@media only screen (min-width: 320px) {
+			
+			.category-list .category-item a{
+			  width: 72px;
+			  height: 72px;
+			  margin: 0px 5px;
+			}
+			.category-item img{
+				width:24px;
+				height:24px;
+			}
+			.category-list{
+				top: 10%;
+				height: 70%;
+			}
 		}
 		
 	</style>
@@ -89,7 +102,6 @@
 		</div>
 		
 	</div>
-	
 	
 </block>
 

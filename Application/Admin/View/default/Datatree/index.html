@@ -45,12 +45,12 @@
 							<th>
 								名称
 							</th>
-							<th>
+							<!--<th>
 								父级路径
-							</th>
-							<th>
+							</th>-->
+							<!--<th>
 								所处层级
-							</th>
+							</th>-->
 							<th>
 								添加时间
 							</th>
@@ -72,12 +72,12 @@
 									<td>
 										<a href="{:U('Admin/Datatree/index',array('parent'=>$vo['id']))}">{$vo.name}</a>
 									</td>
-									<td>
+									<!--<td>
 										{$vo.parents}
-									</td>
-									<td>
+									</td>-->
+									<!--<td>
 										{$vo.level}
-									</td>
+									</td>-->
 									<td>
 										{$vo.createtime|date='Y-m-d h:i:s',###}
 									</td>

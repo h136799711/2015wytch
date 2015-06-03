@@ -11,27 +11,21 @@ namespace Admin\Controller;
 class PostController extends  AdminController{
 	
 	public function index(){
+		$name = I("name",'');
 		//get.startdatetime
-		$startdatetime = I('startdatetime',date('Y/m/d H:i',time()-24*3600),'urldecode');
-		$enddatetime = I('enddatetime',date('Y/m/d H:i',time()+24*3600),'urldecode');
+//		$startdatetime = I('startdatetime',date('Y/m/d H:i',time()-24*3600),'urldecode');
+//		$enddatetime = I('enddatetime',date('Y/m/d H:i',time()+24*3600),'urldecode');
 		
 		//分页时带参数get参数
 		$params = array(
-			'startdatetime'=>$startdatetime,
-			'enddatetime'=>$enddatetime
+			'name'=>$name,
 		);
 		
-		$startdatetime = strtotime($startdatetime);
-		$enddatetime = strtotime($enddatetime);
-				
-		if($startdatetime === FALSE || $enddatetime === FALSE){
-			LogRecord('INFO:'.$result['info'],'[FILE] '.__FILE__.' [LINE] '.__LINE__);
-			$this->error(L('ERR_DATE_INVALID'));
-		}
 		
 		$map = array();
 		
-		$map['post_modified'] = array(array('EGT',$startdatetime),array('elt',$enddatetime),'and'); 
+		$map['post_author'] = UID; 
+		$map['name'] = array('like', '%'.$name.'%'); 
 		
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " post_modified desc ";
@@ -39,8 +33,7 @@ class PostController extends  AdminController{
 		$result = apiCall('Admin/Post/query',array($map,$page,$order,$params));
 		//
 		if($result['status']){
-			$this->assign('startdatetime',$startdatetime);
-			$this->assign('enddatetime',$enddatetime);
+			$this->assign('name',$name);
 			$this->assign('show',$result['info']['show']);
 			$this->assign('list',$result['info']['list']);
 			$this->display();

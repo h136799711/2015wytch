@@ -1,0 +1,13 @@
+<!-- 侧边栏内容 -->
+<div id="offcanvas" class="am-offcanvas">
+  <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+    <div class="am-offcanvas-content">
+    		<ul class="am-list">
+    			<volist name="cates" id="vo">
+    				
+    				<li><a class="am-text-truncate" href="{:U('Cms/Post/cate',array('cateid'=>$vo['id']))}">{$vo.name}</a></li>
+    			</volist>
+    		</ul>
+    </div>
+  </div>
+</div>

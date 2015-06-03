@@ -46,6 +46,15 @@ class PostController extends CmsController {
 		
 		$this->assign("list",$result['info']['list']);
 		$this->assign("show",$result['info']['show']);
+		
+    		$map = array('parentid'=>getDatatree("POST_CATEGORY"));
+		$cates = apiCall("Cms/Datatree/queryNoPaging",array($map));
+		if(!$cates['status']){
+			$this->error($cates['info']);
+		}
+		
+		$this->assign("cates",$cates['info']);
+		
 		$this->display("list");
 		
 	}

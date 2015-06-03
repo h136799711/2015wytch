@@ -1,6 +1,7 @@
 <extend name="template/base_index" />
 
 <block name="area_header">
+	<script type="text/javascript" src="__CDN__/amazeui/2.3.0/js/amazeui.min.js"></script>
 	<style type="text/css">
 		.article-list{
 			background: #F5F5F5;
@@ -18,12 +19,25 @@
 		.am-list .am-list-item-dated a{
 			padding: 10px;
 		}
+		#offcanvas .am-offcanvas-content{
+			padding: 15px 0px;
+		}
+		
+		#offcanvas .am-list>li>a {
+		  color: #F0D7D7;
+		  background: #4C4444;
+		  width: 100%;
+		  border: 0px;
+		  padding-left: 12px;
+		  padding: 10px 12px;
+  		}
 	</style>
 	
 </block>
 
 
 <block name="area_body">
+	<include file="template/header" title="{$title}" />
 	<div class="article-list am-padding-sm">
 		<h2>{$title}</h2>
 		<ul class="am-list ">
@@ -43,9 +57,14 @@
 		<div>{$show}</div>
 	</div>
 	
+	<include file="template/offcanvas"  />
 </block>
 
 <block name="area_footer">
-	
+	<script type="text/javascript">
+		$(function(){
+		})
+		
+	</script>
 </block>
 	
