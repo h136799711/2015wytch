@@ -1,3 +1,7 @@
 .am-article{
 	max-width: 640px;
 }
+.am-article-bd img{
+	width:100%;
+	max-width: 640px;
+}
