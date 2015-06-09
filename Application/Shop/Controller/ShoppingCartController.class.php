@@ -27,7 +27,7 @@ class ShoppingCartController extends ShopController{
 	public function index(){
 		session("confirm_order_info",null);
 		$store = $this->getStoreInfo();
-		
+//		dump($this->cart);
 		$this->assign("stores",$store);
 		$this->assign("cart",$this->cart);
 		$this->display();
@@ -73,13 +73,14 @@ class ShoppingCartController extends ShopController{
 				LogRecord($result['info'], __FILE__.__LINE__);
 				$this->error($result['info']);
 			}
+			
 			if(is_null($result['info'])){
 				$this->error("商品信息获取失败！");
 			}
 			$product = $result['info'];
 			
 //			dump($sku_id);
-			$result = apiCall("Admin/WxproductSku/getInfo", array(array('sku_id'=>$sku_id)));
+			$result = apiCall("Admin/WxproductSku/getInfo", array(array('product_id'=>$id,'sku_id'=>$sku_id)));
 			
 			if(!$result['status']){
 				$this->error($result['info']);
@@ -138,6 +139,7 @@ class ShoppingCartController extends ShopController{
 //		}elseif($product['delivery_type'] == 1){
 //			//TODO:使用运费模板的情况下
 //		}
+		
 		if($sku === false){
 			//统一规格下
 			$item['price'] = $product['price'];
@@ -151,8 +153,8 @@ class ShoppingCartController extends ShopController{
 				$item['icon_url'] = $sku['icon_url'];//商品图片
 			}
 		}
-		
-		
+//		
+//		dump($item);
 		$exsit = false;
 		//检测购物车是否有同样的商品
 		foreach($this->cart[$item['storeid']] as &$vo){				
@@ -182,6 +184,7 @@ class ShoppingCartController extends ShopController{
 				array_push($this->cart[$product['storeid']],$item);
 			}
 		}
+		
 		session("shoppingcart",$this->cart);
 	}
 	
