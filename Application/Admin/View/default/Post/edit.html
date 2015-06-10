@@ -81,7 +81,8 @@
 					<div class="form-group">
 						<label for="inputpost_excerpt" class="col-md-2 col-lg-2 control-label">文章摘要</label>
 						<div class="col-md-10 col-lg-10">
-							<textarea name="post_excerpt" rows="5"  class="required form-control input-normal">{$vo.post_excerpt}</textarea>
+							<!--<textarea name="post_excerpt" rows="5"  class="required form-control input-normal"></textarea>-->
+							 <script id="ueditor_excerpt" name="post_excerpt" type="text/plain" style="height: 280px;" ></script>
 							<div class="help-block">(请输入文章摘要)</div>
 						</div>
 					</div>
@@ -89,7 +90,7 @@
 					<div class="form-group">
 						<label for="inputpost_excerpt" class="col-md-2 col-lg-2 control-label">文章分类</label>
 						<div class="col-md-10 col-lg-10">
-							<select name="post_category" >
+							<select name="post_category" class="form-control" >
 								{:W("Partials/datatree",array(getDatatree('POST_CATEGORY'),true,$vo['post_category']))}
 							</select>
 							<div class="help-block">(请选择文章分类)</div>
@@ -125,12 +126,24 @@
     var ue = UE.getEditor('ueditor',{
     	toolbars:[
         ['fullscreen', 'source', 'undo', 'redo', 'bold','italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|','lineheight'
-       , 'fontsize', 'insertimage','emotion','link', 'unlink', 'anchor', '|','map','print', 'preview',  'drafts'
+       , 'fontsize', 'insertimage','emotion','forecolor', 'backcolor',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|','link', 'unlink', 'anchor', '|','map','print', 'preview',  'drafts'
         ]
     ]});
     ue.ready(function(){
     		var cont = '{:htmlspecialchars_decode($vo['post_content'])}';
     		ue.setContent(cont);
+    });
+    var ue2 = UE.getEditor('ueditor_excerpt',{
+    	toolbars:[
+        ['fullscreen', 'source', 'undo', 'redo', 'bold','italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|','lineheight'
+       , 'fontsize', 'insertimage','emotion','forecolor', 'backcolor',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|','link', 'unlink', 'anchor', '|','map','print', 'preview',  'drafts'
+        ]
+    ]});
+    ue2.ready(function(){
+    		var cont = '{:htmlspecialchars_decode($vo['post_excerpt'])}';
+    		ue2.setContent(cont);
     });
 	</script>
 	<script type="text/javascript">

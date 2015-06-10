@@ -14,8 +14,10 @@
 		</div>
 		
 		<div class="am-article-divider"></div>
-		<div class="am-article-lead">{$post.post_excerpt}</div>
-		<div class="am-margin-top-xl"><img src="{$post.main_img}" class="am-thumbnail am-responsive-width" style="height: 160px;width: 100%;" />		</div>
+		<div class="am-article-lead">{:htmlspecialchars_decode($post['post_excerpt'])}</div>
+		<notempty name="$post['main_img']">
+		<div class="am-margin-top-xl"><img src="{$post.main_img}" class="am-thumbnail am-responsive-width" style="height: 160px;width: 100%;" /></div>
+		</notempty>
 		<div class="am-article-divider"></div>
 		<div class="am-article-bd am-padding-sm">
 			{$content}
