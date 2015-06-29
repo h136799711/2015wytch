@@ -21,7 +21,6 @@ class WxuserModel extends Model{
 		array('openid','require','openid参数必须！'),
 		array('wxaccount_id','require','公众号ID参数必须！'),
 		
-		array('sex', 'require','性别必须！'), 
 		array('subscribe_time', 'require','关注时间必须！'), 
 		
 	);

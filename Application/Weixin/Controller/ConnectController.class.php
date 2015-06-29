@@ -450,8 +450,8 @@ class ConnectController extends WeixinController {
 		$wxuser = array();
 		$wxuser['wxaccount_id'] = intval($this->wxaccount['id']);
 		$wxuser['openid'] = $openid;
-		$wxuser['nickname'] = '';
-		$wxuser['avatar'] = '';
+		$wxuser['nickname'] = '#';
+		$wxuser['avatar'] = '#';
 		$wxuser['referrer'] = $referrer;
 		$wxuser['sex'] = 0;
 		$wxuser['province'] = '';
@@ -473,10 +473,12 @@ class ConnectController extends WeixinController {
 						
 		//判断是否已记录
 		if (is_array($result['info'])) {
+			addWeixinLog($result,"更新用户信息");
 			//更新
 			$result = apiCall('Weixin/Wxuser/save', array($map, $wxuser));
 		} else {
 			//新增
+			addWeixinLog($wxuser,"新增用户信息");
 			$result = apiCall('Weixin/Wxuser/add', array($wxuser));
 		}
 		
